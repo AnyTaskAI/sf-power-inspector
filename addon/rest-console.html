@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>REST Console — SF Power Inspector</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <script type="module" src="rest-console.js"></script>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>🌐 REST API Console</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 500; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta">
+      <select id="preset-endpoints" class="select">
+        <option value="">⚡ Load Preset API Endpoint...</option>
+        <option value="GET:/services/data/v62.0/limits">Org Limits (GET)</option>
+        <option value="GET:/services/data/v62.0/sobjects">All SObjects Describe (GET)</option>
+        <option value="GET:/services/oauth2/userinfo">Current User Info (GET)</option>
+        <option value="GET:/services/data/v62.0/tooling/query/?q=SELECT+Id,Name,ApiVersion+FROM+ApexClass">Apex Classes (GET)</option>
+        <option value="GET:/services/data/v62.0/tooling/query/?q=SELECT+Id,MasterLabel+FROM+FlowDefinition">Flow Definitions (GET)</option>
+        <option value="GET:/services/data/v62.0/tooling/query/?q=SELECT+Id,FullName+FROM+CustomField">Custom Fields (GET)</option>
+        <option value="POST:/services/data/v62.0/composite">Composite API (POST)</option>
+      </select>
+      <button class="btn btn-primary" id="btn-send">▶ Send Request</button>
+    </div>
+  </header>
+
+  <main class="tool-workspace">
+    <!-- Request Bar -->
+    <div class="tool-card" style="padding: 12px; gap: 8px;">
+      <div style="display: flex; gap: 8px;">
+        <select id="http-method" class="select" style="font-weight: 700; width: 110px;">
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+          <option value="PATCH">PATCH</option>
+          <option value="PUT">PUT</option>
+          <option value="DELETE">DELETE</option>
+        </select>
+        <input type="text" id="api-url" class="input-text" style="flex: 1; font-family: var(--font-mono);" value="/services/data/v62.0/limits">
+      </div>
+      <div>
+        <label style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Request Body (JSON):</label>
+        <textarea id="request-body" class="code-editor" rows="3" placeholder="{ ... }"></textarea>
+      </div>
+    </div>
+
+    <!-- Response Panel -->
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div class="tool-tabs" id="response-tabs">
+        <button class="tool-tab active" data-tab="json">Response JSON</button>
+        <button class="tool-tab" data-tab="table">Visual Table View (<span id="table-record-count">0</span>)</button>
+        <div style="margin-left: auto; display: flex; gap: 8px; align-items: center; padding-right: 12px;">
+          <button class="btn btn-secondary" id="btn-copy-resp" style="font-size: 11px; padding: 2px 8px;">📋 Copy JSON</button>
+          <button class="btn btn-secondary" id="btn-download-resp" style="font-size: 11px; padding: 2px 8px;">📥 Download</button>
+          <span id="response-status" style="font-size: 12px; font-weight: 600; color: var(--text-muted);">
+            Status: Ready
+          </span>
+        </div>
+      </div>
+
+      <!-- JSON View with Interactive Clickable IDs -->
+      <div class="table-container" id="json-view-container" style="padding: 14px; overflow: auto; background: #fafafa;">
+        <div id="response-output" style="font-family: var(--font-mono); font-size: 12px; white-space: pre-wrap; word-break: break-all; line-height: 1.5;"></div>
+      </div>
+
+      <!-- Visual Table View -->
+      <div class="table-container" id="table-view-container" style="display: none; flex-direction: column;">
+        <div style="padding: 8px 12px; background: #f8fafc; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+          <input type="text" id="table-search-input" class="input-text" placeholder="🔍 Search table rows..." style="width: 260px; font-size: 12px; padding: 4px 8px;">
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span id="table-type-badge" class="autocomplete-badge">TABULAR DATA</span>
+            <button class="btn btn-secondary" id="btn-export-table-csv" style="font-size: 11px; padding: 2px 8px;">📥 Export CSV</button>
+          </div>
+        </div>
+        <div style="flex: 1; overflow: auto;">
+          <table class="data-table" id="visual-data-table">
+            <thead id="visual-table-head">
+              <tr><th>Run a request to view formatted table records</th></tr>
+            </thead>
+            <tbody id="visual-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

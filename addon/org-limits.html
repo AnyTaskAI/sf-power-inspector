@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Org Limits — SF Power Inspector</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <script type="module" src="org-limits.js"></script>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>📈 Org Limits & Governor Quotas</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 500; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta">
+      <input type="text" id="limits-search" class="input-text" placeholder="Filter limits..." style="width: 200px;">
+      <button class="btn btn-secondary" id="btn-refresh">🔄 Refresh Limits</button>
+      <a href="storage-cleaner.html" class="btn btn-primary" id="btn-clean-storage-link" style="text-decoration:none; display:inline-flex; align-items:center; gap:4px;">🧹 Clean Storage</a>
+    </div>
+  </header>
+
+  <main class="tool-workspace">
+    <div class="tool-card" style="flex: 1; overflow: hidden;">
+      <div class="table-container">
+        <table class="data-table" id="limits-table">
+          <thead>
+            <tr>
+              <th style="width: 250px;">Limit Name</th>
+              <th style="width: 250px;">Utilization Bar</th>
+              <th style="width: 80px;">% Used</th>
+              <th style="width: 120px;">Remaining</th>
+              <th style="width: 120px;">Max Limit</th>
+            </tr>
+          </thead>
+          <tbody id="limits-body">
+            <tr><td colspan="5" style="text-align:center; padding: 30px;">Loading org limits...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
+

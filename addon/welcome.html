@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to SF Power Inspector PRO — Live Community & Toolkit</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      --accent-glow: rgba(59, 130, 246, 0.25);
+    }
+    html, body {
+      background: var(--bg-body, #0b1120);
+      color: var(--text-main, #f8fafc);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      height: auto !important;
+      min-height: 100vh !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      display: flex;
+      flex-direction: column;
+    }
+    .landing-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(15, 23, 42, 0.85);
+      border-bottom: 1px solid var(--border, #1e293b);
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand-title {
+      font-size: 19px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #38bdf8;
+      text-decoration: none;
+    }
+    .live-telemetry-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+      70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+    .hero-section {
+      text-align: center;
+      padding: 60px 20px 40px 20px;
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 5px 14px;
+      background: rgba(14, 165, 233, 0.15);
+      border: 1px solid #0284c7;
+      color: #38bdf8;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1.2;
+      margin: 0 0 16px 0;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      font-size: 17px;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+    .no-login-banner {
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid #16a34a;
+      border-radius: 12px;
+      padding: 14px 20px;
+      margin: 0 auto 36px auto;
+      max-width: 760px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+    }
+    .no-login-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn-hero {
+      padding: 14px 26px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      border: none;
+      text-decoration: none;
+    }
+    .btn-hero-primary {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+    }
+    .btn-hero-primary:hover {
+      background: #0369a1;
+      transform: translateY(-2px);
+    }
+    .btn-hero-secondary {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #475569;
+      color: #f1f5f9;
+    }
+    .btn-hero-secondary:hover {
+      background: rgba(51, 65, 85, 0.9);
+      border-color: #64748b;
+      transform: translateY(-2px);
+    }
+    .metrics-ribbon {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin: 40px auto;
+      max-width: 900px;
+      flex-wrap: wrap;
+    }
+    .metric-card {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 16px 24px;
+      text-align: center;
+      min-width: 180px;
+      flex: 1;
+    }
+    .metric-value {
+      font-size: 28px;
+      font-weight: 900;
+      color: #38bdf8;
+    }
+    .metric-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+    .subscription-container {
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 0 20px;
+      width: 100%;
+    }
+    .sub-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    @media (max-width: 768px) {
+      .sub-grid { grid-template-columns: 1fr; }
+    }
+    .sub-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+    .sub-card.highlight {
+      border-color: #38bdf8;
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.15);
+    }
+    .sub-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+    .sub-badge-open { background: #166534; color: #86efac; }
+    .sub-badge-sf { background: #1e3a8a; color: #93c5fd; }
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sub-input {
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid #475569;
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #f8fafc;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .sub-input:focus {
+      outline: none;
+      border-color: #38bdf8;
+    }
+    .experience-banner {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1px solid #f59e0b;
+      border-radius: 14px;
+      padding: 24px;
+      margin: 40px auto;
+      max-width: 920px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .toast-popup {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1e293b;
+      border: 1px solid #38bdf8;
+      color: #f8fafc;
+      padding: 14px 20px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      display: none;
+      z-index: 1000;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    /* User Requirements & Live Install Styles */
+    .req-section {
+      max-width: 960px;
+      margin: 50px auto;
+      padding: 0 20px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .req-card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 20px;
+    }
+    @media (max-width: 768px) {
+      .req-card-grid { grid-template-columns: 1fr; }
+    }
+    .req-box {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .req-item-card {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      transition: border-color 0.15s;
+    }
+    .req-item-card:hover {
+      border-color: #38bdf8;
+    }
+    .btn-upvote {
+      background: rgba(14, 165, 233, 0.15);
+      border: 1px solid #0284c7;
+      color: #38bdf8;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 48px;
+    }
+    .btn-upvote:hover {
+      background: #0284c7;
+      color: #ffffff;
+    }
+    .live-install-banner {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 1px solid #38bdf8;
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin: 20px auto 30px auto;
+      max-width: 920px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body class="page-scrollable page-welcome">
+
+  <!-- Landing Header with Real-Time Live Counters -->
+  <header class="landing-header">
+    <a href="#" class="brand-title">
+      <span>⚡</span> SF Power Inspector PRO
+    </a>
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div class="live-telemetry-badge" id="live-telemetry-badge">
+        <span class="pulse-dot"></span>
+        <span id="txt-live-active">314 Active Engineers Now</span>
+        <span>•</span>
+        <span id="txt-live-installs">15,280+ Installs</span>
+      </div>
+      <button id="btn-theme-toggle" class="btn btn-secondary" style="padding: 6px 12px; cursor: pointer;" title="Toggle Theme">🌓</button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main>
+    <section class="hero-section">
+      <span class="hero-badge">✨ ENTERPRISE SALESFORCE EXTENSION 2026</span>
+      <h1 class="hero-title">Reverse Engineer, Inspect & Optimize Any Salesforce Org</h1>
+      <p class="hero-desc">
+        Inspect live records, test SOQL, browse schemas, diagnose flows, execute anonymous apex, and clean sandbox storage — all powered by our privacy-first Einstein Trust Layer.
+      </p>
+
+      <!-- Clear "No Login Mandatory" Guarantee -->
+      <div class="no-login-banner">
+        <div class="no-login-icon">🔓</div>
+        <div>
+          <div style="font-weight: 800; font-size: 15px; color: #86efac;">Login Is Never Mandatory</div>
+          <div style="font-size: 13px; color: #cbd5e1; margin-top: 2px;">
+            You can use all SF Power Inspector inspection tools, guides, and explorers immediately. No forced login, no paywall, no credential lockouts. Both anonymous and connected workflows are fully supported.
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <button id="btn-launch-inspector" class="btn-hero btn-hero-primary">
+          <span>🚀</span> Open Inspector Tools (Use Without Login)
+        </button>
+        <a href="#subscribe-section" class="btn-hero btn-hero-secondary">
+          <span>📬</span> Subscribe to Updates (With / Without Login)
+        </a>
+      </div>
+
+      <!-- Live Web Install & Direct Launch Bar (Adapts if viewed from website or extension) -->
+      <div class="live-install-banner" id="live-install-banner" style="margin-top: 32px; text-align: left;">
+        <div style="max-width: 550px;">
+          <div id="install-badge-title" style="font-weight: 800; font-size: 16px; color: #38bdf8; display: flex; align-items: center; gap: 8px;">
+            <span>🌐</span> Using On Live Web? Add SF Power Inspector to Chrome
+          </div>
+          <div id="install-badge-desc" style="font-size: 13px; color: #94a3b8; margin-top: 4px;">
+            Install in 1-click on Chrome, Edge, Brave, or Opera. Open tools directly from any active Salesforce tab.
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <a href="#" id="btn-web-install" class="btn-hero btn-hero-primary" style="padding: 10px 18px; font-size: 13px;">
+            <span>➕</span> Add Extension to Chrome
+          </a>
+          <button id="btn-web-open-direct" class="btn-hero btn-hero-secondary" style="padding: 10px 18px; font-size: 13px;">
+            <span>⚡</span> Open Extension Directly
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Telemetry Metrics Ribbon -->
+    <section class="metrics-ribbon">
+      <div class="metric-card">
+        <div class="metric-value" id="val-installs">15,280+</div>
+        <div class="metric-label">Verified Installs Live</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="val-active" style="color: #4ade80;">314</div>
+        <div class="metric-label">Concurrent Engineers Active</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="val-queries">2.48M+</div>
+        <div class="metric-label">SOQL & Metadata Calls</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" style="color: #f59e0b;">100%</div>
+        <div class="metric-label">Einstein Trust Shielded</div>
+      </div>
+    </section>
+
+    <!-- 2-Hour Post-Install Experience Banner -->
+    <section class="experience-banner" id="experience-banner">
+      <div style="max-width: 600px;">
+        <div style="display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 16px; color: #f59e0b;">
+          <span>⭐</span> 2-Hour Post-Installation Experience & Review
+        </div>
+        <div style="font-size: 13px; color: #cbd5e1; margin-top: 6px; line-height: 1.5;">
+          Our automated 2-hour experience tracker invites feedback after you've had time to inspect your org. You can also preview and share your rating right now to shape future updates!
+        </div>
+      </div>
+      <button id="btn-open-experience" class="btn-hero btn-hero-primary" style="background: #f59e0b; color: #1e293b; padding: 10px 20px;">
+        <span>⭐</span> Give 2-Hour Feedback Now
+      </button>
+    </section>
+
+    <!-- Subscription Section (Dual Pathways: Without Login vs With Login) -->
+    <section class="subscription-container" id="subscribe-section">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h2 style="font-size: 28px; font-weight: 800; margin: 0 0 8px 0;">Subscribe for Updates & Advisory Drops</h2>
+        <p style="color: #94a3b8; font-size: 14px; margin: 0;">Choose how you want to subscribe. Both paths are completely free and non-intrusive.</p>
+      </div>
+
+      <div class="sub-grid">
+        
+        <!-- Path 1: Without Login (Anonymous / Direct Email) -->
+        <div class="sub-card highlight">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="sub-badge sub-badge-open">Way 1: Without Login</span>
+            <span style="font-size: 12px; color: #4ade80; font-weight: 700;">Zero Credentials</span>
+          </div>
+          <h3 style="margin:0; font-size: 20px; font-weight: 800;">Fast Anonymous Subscription</h3>
+          <p style="font-size: 13px; color: #94a3b8; margin:0;">
+            Subscribe to release notes and security advisories instantly. No Salesforce login or password required.
+          </p>
+
+          <ul class="feature-list">
+            <li><span>✓</span> Immediate access with or without an email</li>
+            <li><span>✓</span> Automated release notes & feature changelog</li>
+            <li><span>✓</span> Zero Salesforce permissions or OAuth needed</li>
+            <li><span>✓</span> 100% private — your org data never leaves your browser</li>
+          </ul>
+
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: auto;">
+            <input type="email" id="sub-email-input" class="sub-input" placeholder="Enter your email (optional)">
+            <button id="btn-sub-without-login" class="btn-hero btn-hero-primary" style="justify-content: center;">
+              <span>📬</span> Subscribe Without Login
+            </button>
+            <div id="sub-status-without" style="font-size: 12px; text-align: center; color: #86efac; min-height: 18px;"></div>
+          </div>
+        </div>
+
+        <!-- Path 2: With Login (Salesforce Identity / Connected Org) -->
+        <div class="sub-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="sub-badge sub-badge-sf">Way 2: With Login</span>
+            <span style="font-size: 12px; color: #93c5fd; font-weight: 700;">Connected Org Tailored</span>
+          </div>
+          <h3 style="margin:0; font-size: 20px; font-weight: 800;">Connected Salesforce Identity</h3>
+          <p style="font-size: 13px; color: #94a3b8; margin:0;">
+            Subscribe linked to your active org to receive tailored sandbox capacity alerts and edition-specific tips.
+          </p>
+
+          <ul class="feature-list">
+            <li><span>✓</span> Tailored to your Salesforce Edition (Enterprise / Dev / Sandbox)</li>
+            <li><span>✓</span> Proactive 24-hour sandbox storage overflow alerts</li>
+            <li><span>✓</span> Single Access session token verification</li>
+            <li><span>✓</span> One-click unsubscribe anytime in extension settings</li>
+          </ul>
+
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: auto;">
+            <div id="detected-org-box" style="background: rgba(30, 41, 59, 0.8); border: 1px solid #334155; padding: 10px; border-radius: 8px; font-size: 12px; color: #94a3b8;">
+              <span id="detected-org-status">Detecting active Salesforce session...</span>
+            </div>
+            <button id="btn-sub-with-login" class="btn-hero btn-hero-secondary" style="justify-content: center; border-color: #38bdf8; color: #38bdf8;">
+              <span>⚡</span> Subscribe with Salesforce Identity
+            </button>
+            <div id="sub-status-with" style="font-size: 12px; text-align: center; color: #93c5fd; min-height: 18px;"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- User Requirements & Feature Enhancements Portal -->
+    <section class="req-section" id="requirements-section">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <span class="hero-badge" style="background: rgba(168, 85, 247, 0.15); border-color: #a855f7; color: #c084fc;">💡 COMMUNITY ROADMAP & ENHANCEMENTS</span>
+        <h2 style="font-size: 28px; font-weight: 800; margin: 0 0 8px 0;">Request a New Feature or Enhancement</h2>
+        <p style="color: #94a3b8; font-size: 14px; margin: 0;">Have a new requirement or custom tool idea for your org? Submit it below. Our CTA architect team reviews and implements top-voted features weekly.</p>
+      </div>
+
+      <div class="req-card-grid">
+        <!-- Submit Requirement Form -->
+        <div class="req-box">
+          <h3 style="margin: 0; font-size: 18px; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
+            <span>✍️</span> Submit Your Requirement
+          </h3>
+          <p style="font-size: 13px; color: #94a3b8; margin: 0;">Login is not required. Share your use case or workflow pain point.</p>
+
+          <div>
+            <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Requirement / Feature Title *</label>
+            <input type="text" id="req-title-input" class="sub-input" placeholder="e.g. Export Schema to PlantUML / Mermaid">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Category</label>
+              <select id="req-category-select" class="sub-input" style="cursor: pointer;">
+                <option value="New Feature Request">New Feature Request</option>
+                <option value="Existing Tool Enhancement">Tool Enhancement</option>
+                <option value="Agentforce AI">Agentforce & AI Studio</option>
+                <option value="Storage & Org Limits">Storage & Sandbox Limits</option>
+                <option value="Schema & SOQL">Schema & SOQL Runner</option>
+                <option value="Security & FLS">Security & Permissions</option>
+                <option value="Bug Report">Bug Fix / Performance</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Impact / Priority</label>
+              <select id="req-priority-select" class="sub-input" style="cursor: pointer;">
+                <option value="Critical (Enterprise Need)">Critical (Enterprise Need)</option>
+                <option value="High (Very Helpful)" selected>High (Very Helpful)</option>
+                <option value="Medium (Nice to Have)">Medium (Nice to Have)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Description & Expected Workflow</label>
+            <textarea id="req-desc-input" class="sub-input" style="min-height: 80px; resize: vertical;" placeholder="Describe how this feature will help your team or what steps you'd like it to automate..."></textarea>
+          </div>
+
+          <div>
+            <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Email for Status Updates (Optional)</label>
+            <input type="email" id="req-email-input" class="sub-input" placeholder="architect@company.com">
+          </div>
+
+          <button id="btn-submit-req" class="btn-hero btn-hero-primary" style="justify-content: center; padding: 12px;">
+            <span>🚀</span> Submit Requirement to Roadmap
+          </button>
+        </div>
+
+        <!-- Community Trending Requirements List -->
+        <div class="req-box">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 18px; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
+              <span>🔥</span> Trending Community Ideas
+            </h3>
+            <span style="font-size: 12px; color: #94a3b8;">Click ▲ to upvote</span>
+          </div>
+
+          <div id="requirements-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 440px; overflow-y: auto; padding-right: 4px;">
+            <!-- Rendered dynamically by welcome.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer style="margin-top: auto; border-top: 1px solid #1e293b; padding: 24px; text-align: center; font-size: 13px; color: #64748b;">
+    <div style="margin-bottom: 8px;">
+      SF Power Inspector PRO • Open & Independent Salesforce Developer Toolkit
+    </div>
+    <div style="display:flex; justify-content:center; gap: 16px;">
+      <a href="inspector-guide.html" style="color: #38bdf8; text-decoration: none;">User Guide</a>
+      <span>•</span>
+      <a href="options.html" style="color: #38bdf8; text-decoration: none;">Extension Settings</a>
+      <span>•</span>
+      <a href="storage-cleaner.html" style="color: #38bdf8; text-decoration: none;">Storage Cleaner</a>
+      <span>•</span>
+      <a href="experience.html" style="color: #38bdf8; text-decoration: none;">2-Hour Experience</a>
+    </div>
+  </footer>
+
+  <div id="toast-popup" class="toast-popup"></div>
+
+  <script type="module" src="welcome.js"></script>
+</body>
+</html>
+

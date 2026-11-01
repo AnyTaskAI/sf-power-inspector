@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Security, Permissions & Sharing Studio — SF Power Inspector PRO</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <script type="module" src="permission-analyzer.js"></script>
+  <style>
+    .verdict-box {
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .verdict-box.granted {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #15803d;
+    }
+    .verdict-box.denied {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+    }
+    .step-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .status-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .status-pill.pass { background: #dcfce7; color: #15803d; }
+    .status-pill.fail { background: #fee2e2; color: #dc2626; }
+    .status-pill.warn { background: #fef3c7; color: #b45309; }
+  </style>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>🔐 Security, Permissions & Sharing Studio</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 600; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta" style="display: flex; gap: 8px; align-items: center;">
+      <button class="btn btn-secondary" id="btn-export-perm-report" style="font-size: 11px;">📋 Copy Report</button>
+      <button class="btn btn-primary" id="btn-save-crud-matrix" style="display: none; font-size: 11px;">💾 Save Object CRUD Changes</button>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="tool-tabs" id="perm-tabs" style="margin: 0 20px; background: #fff; border-bottom: 1px solid var(--border);">
+    <button class="tool-tab active" data-tab="tab-diagnostics" id="btn-tab-diag">🔍 "Why Can/Can't User See This?"</button>
+    <button class="tool-tab" data-tab="tab-crud" id="btn-tab-crud">🛡️ Object CRUD Security Matrix</button>
+    <button class="tool-tab" data-tab="tab-owd" id="btn-tab-owd">🌐 Org-Wide Defaults (OWD) & Sharing</button>
+    <button class="tool-tab" data-tab="tab-org-sec" id="btn-tab-sec">🏢 Org & App Security Settings</button>
+  </div>
+
+  <!-- TAB 1: DIAGNOSTIC EVALUATOR -->
+  <main class="tool-workspace perm-tab-view" id="tab-diagnostics" style="display: flex; flex-direction: column;">
+    <!-- Configuration Panel -->
+    <div class="tool-card" style="padding: 14px; background: #fafafa; border-bottom: 1px solid var(--border); border-radius: 0;">
+      <div style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 2fr auto; gap: 10px; align-items: flex-end;">
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Target User:</label>
+          <select id="select-user" class="select" style="width: 100%; font-weight: 600;">
+            <option value="">📂 Loading active users...</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">SObject Entity:</label>
+          <input type="text" id="input-sobject" class="input-text" value="Account" style="width: 100%; font-weight: 600;">
+        </div>
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Field API Name (Optional):</label>
+          <input type="text" id="input-field" class="input-text" placeholder="e.g. AnnualRevenue" style="width: 100%;">
+        </div>
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Record ID (Optional for Sharing):</label>
+          <input type="text" id="input-record-id" class="input-text" placeholder="e.g. 001..." style="width: 100%;">
+        </div>
+        <div>
+          <button class="btn btn-primary" id="btn-run-analysis" style="width: 100%; height: 32px;">🔍 Analyze Access</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analysis Results -->
+    <div class="table-container" style="flex: 1; overflow-y: auto; padding: 16px; background: #f8fafc;" id="analysis-container">
+      <div style="padding: 50px 20px; text-align: center; color: var(--text-muted);">
+        <div style="font-size: 36px; margin-bottom: 10px;">🔐</div>
+        <strong style="font-size: 15px; color: #0f172a;">Salesforce Access & Security Diagnostic Engine</strong>
+        <div style="font-size: 12px; margin-top: 6px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.5;">
+          Select a user, an object, and optionally a field or record ID above to evaluate the complete authorization chain across Profiles, Permission Sets, FLS, OWD, and Sharing Rules.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 2: OBJECT CRUD SECURITY MATRIX -->
+  <main class="tool-workspace perm-tab-view" id="tab-crud" style="display: none; flex-direction: column;">
+    <div class="tool-card" style="padding: 12px 16px; background: #fafafa; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-radius: 0;">
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <label style="font-size: 12px; font-weight: 700;">Object:</label>
+        <input type="text" id="crud-obj-input" class="input-text" value="Account" style="width: 180px; font-weight: 600;">
+        <button class="btn btn-secondary" id="btn-load-crud" style="font-size: 11px;">🔄 Load Matrix</button>
+        <input type="text" id="crud-filter-input" class="input-text" placeholder="Filter Profiles & Permission Sets..." style="width: 240px; font-size: 12px;">
+      </div>
+      <div style="display: flex; gap: 6px;">
+        <button class="btn btn-secondary" id="btn-crud-all-read" style="font-size: 11px;">Read-Only for All</button>
+        <button class="btn btn-secondary" id="btn-crud-all-full" style="font-size: 11px;">Full Access for All</button>
+        <button class="btn btn-primary" id="btn-save-crud" style="font-size: 11px;">💾 Save Object Permissions</button>
+      </div>
+    </div>
+
+    <div class="table-container" style="flex: 1; overflow-y: auto;">
+      <table class="data-table" id="crud-matrix-table">
+        <thead>
+          <tr>
+            <th>Profile / Permission Set Name</th>
+            <th style="width: 120px;">Type</th>
+            <th style="width: 75px; text-align: center;">Create</th>
+            <th style="width: 75px; text-align: center;">Read</th>
+            <th style="width: 75px; text-align: center;">Edit</th>
+            <th style="width: 75px; text-align: center;">Delete</th>
+            <th style="width: 85px; text-align: center;">View All</th>
+            <th style="width: 85px; text-align: center;">Modify All</th>
+          </tr>
+        </thead>
+        <tbody id="crud-matrix-body">
+          <tr><td colspan="8" style="text-align: center; padding: 30px;">Loading ObjectPermissions matrix...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- TAB 3: ORG-WIDE DEFAULTS & SHARING OVERVIEW -->
+  <main class="tool-workspace perm-tab-view" id="tab-owd" style="display: none; flex-direction: column;">
+    <div class="tool-card" style="padding: 12px 16px; background: #fafafa; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; border-radius: 0;">
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <input type="text" id="owd-search" class="input-text" placeholder="Filter objects by name, sharing model..." style="width: 300px; font-size: 12px;">
+        <span id="owd-count-badge" style="font-size: 12px; font-weight: 600; color: var(--text-muted);">0 objects</span>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <a href="#" id="link-sf-sharing-setup" target="_blank" class="btn btn-secondary" style="font-size: 11px; text-decoration: none;">↗ Setup Sharing Settings</a>
+        <button class="btn btn-secondary" id="btn-refresh-owd" style="font-size: 11px;">🔄 Refresh OWD</button>
+      </div>
+    </div>
+
+    <div class="table-container" style="flex: 1; overflow-y: auto;">
+      <table class="data-table" id="owd-table">
+        <thead>
+          <tr>
+            <th>Object Label</th>
+            <th>API Name</th>
+            <th style="width: 170px;">Internal Sharing Model</th>
+            <th style="width: 170px;">External Sharing Model</th>
+            <th style="width: 110px;">Custom / Standard</th>
+            <th style="width: 140px;">Risk Level</th>
+            <th style="width: 140px; text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="owd-body">
+          <tr><td colspan="7" style="text-align: center; padding: 30px;">Loading Organization-Wide Defaults...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- TAB 4: ORG & APP SECURITY SETTINGS -->
+  <main class="tool-workspace perm-tab-view" id="tab-org-sec" style="display: none; flex-direction: column; padding: 16px; overflow-y: auto; gap: 16px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <!-- Password Policies -->
+      <div class="tool-card" style="padding: 16px;">
+        <h2 style="font-size: 13px; font-weight: 700; color: #0176d3; margin-bottom: 10px;">🔑 Password Security Policies</h2>
+        <div id="sec-password-policies" style="font-size: 12px; display: flex; flex-direction: column; gap: 8px;">
+          <div>Fetching password policies from SecuritySettings...</div>
+        </div>
+      </div>
+
+      <!-- Session Policies -->
+      <div class="tool-card" style="padding: 16px;">
+        <h2 style="font-size: 13px; font-weight: 700; color: #0176d3; margin-bottom: 10px;">⏱️ Session & Login Policies</h2>
+        <div id="sec-session-policies" style="font-size: 12px; display: flex; flex-direction: column; gap: 8px;">
+          <div>Fetching session settings...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Connected Apps -->
+    <div class="tool-card" style="padding: 16px;">
+      <h2 style="font-size: 13px; font-weight: 700; color: #0176d3; margin-bottom: 10px;">📱 Connected Apps & OAuth Integrations</h2>
+      <div id="sec-connected-apps" style="font-size: 12px;">
+        <div>Loading Connected Apps inventory...</div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
+

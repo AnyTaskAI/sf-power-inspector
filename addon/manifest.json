@@ -1,0 +1,234 @@
+{
+  "name": "SF Power Inspector PRO - Salesforce Toolkit",
+  "description": "Inspect Salesforce records & fields, run SOQL, clean sandbox storage, export data, and login as any user without leaving your tab.",
+  "version": "1.0.0",
+  "version_name": "1.0",
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
+  "action": {
+    "default_title": "SF Power Inspector PRO",
+    "default_icon": {
+      "16": "images/icon16.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    }
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "minimum_chrome_version": "88",
+  "permissions": [
+    "cookies",
+    "storage",
+    "clipboardWrite",
+    "notifications",
+    "alarms"
+  ],
+  "host_permissions": [
+    "https://*.salesforce.com/*",
+    "https://*.salesforce-setup.com/*",
+    "https://*.force.com/*",
+    "https://*.cloudforce.com/*",
+    "https://*.visualforce.com/*",
+    "https://*.sfcrmapps.cn/*",
+    "https://*.sfcrmproducts.cn/*",
+    "https://*.salesforce.mil/*",
+    "https://*.force.mil/*",
+    "https://*.cloudforce.mil/*",
+    "https://*.visualforce.mil/*",
+    "https://*.crmforce.mil/*",
+    "https://*.force.com.mcas.ms/*",
+    "https://*.salesforce-experience.com/*",
+    "https://*.builder.salesforce-experience.com/*",
+    "https://*.site.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.salesforce.com/*",
+        "https://*.salesforce-setup.com/*",
+        "https://*.visual.force.com/*",
+        "https://*.vf.force.com/*",
+        "https://*.lightning.force.com/*",
+        "https://*.cloudforce.com/*",
+        "https://*.visualforce.com/*",
+        "https://*.sfcrmapps.cn/*",
+        "https://*.sfcrmproducts.cn/*",
+        "https://*.salesforce.mil/*",
+        "https://*.visual.force.mil/*",
+        "https://*.vf.force.mil/*",
+        "https://*.lightning.force.mil/*",
+        "https://*.cloudforce.mil/*",
+        "https://*.visualforce.mil/*",
+        "https://*.crmforce.mil/*",
+        "https://*.lightning.force.com.mcas.ms/*",
+        "https://*.force.com/*",
+        "https://*.salesforce-experience.com/*",
+        "https://*.builder.salesforce-experience.com/*",
+        "https://*.site.com/*"
+      ],
+      "exclude_matches": [
+        "https://status.salesforce.com/*",
+        "https://trust.salesforce.com/*",
+        "https://help.salesforce.com/*",
+        "https://trailhead.salesforce.com/*",
+        "https://developer.salesforce.com/*",
+        "https://appexchange.salesforce.com/*",
+        "https://www.salesforce.com/*",
+        "https://trailblazer.me/*"
+      ],
+      "all_frames": true,
+      "run_at": "document_start",
+      "js": [
+        "sf-org-darkmode.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.salesforce.com/*",
+        "https://*.salesforce-setup.com/*",
+        "https://*.visual.force.com/*",
+        "https://*.vf.force.com/*",
+        "https://*.lightning.force.com/*",
+        "https://*.cloudforce.com/*",
+        "https://*.visualforce.com/*",
+        "https://*.sfcrmapps.cn/*",
+        "https://*.sfcrmproducts.cn/*",
+        "https://*.salesforce.mil/*",
+        "https://*.visual.force.mil/*",
+        "https://*.vf.force.mil/*",
+        "https://*.lightning.force.mil/*",
+        "https://*.cloudforce.mil/*",
+        "https://*.visualforce.mil/*",
+        "https://*.crmforce.mil/*",
+        "https://*.lightning.force.com.mcas.ms/*",
+        "https://*.force.com/*",
+        "https://*.salesforce-experience.com/*",
+        "https://*.builder.salesforce-experience.com/*",
+        "https://*.site.com/*"
+      ],
+      "exclude_matches": [
+        "https://status.salesforce.com/*",
+        "https://trust.salesforce.com/*",
+        "https://help.salesforce.com/*",
+        "https://trailhead.salesforce.com/*",
+        "https://developer.salesforce.com/*",
+        "https://appexchange.salesforce.com/*",
+        "https://www.salesforce.com/*",
+        "https://trailblazer.me/*"
+      ],
+      "all_frames": true,
+      "css": [
+        "styles/content.css"
+      ],
+      "js": [
+        "content-script.js"
+      ]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "popup.html",
+        "data-explorer.html",
+        "data-import.html",
+        "inspect-record.html",
+        "metadata-browser.html",
+        "rest-console.html",
+        "dependencies.html",
+        "org-limits.html",
+        "flow-analyzer.html",
+        "debug-console.html",
+        "event-monitor.html",
+        "field-manager.html",
+        "object-scanner.html",
+        "schema-viewer.html",
+        "apex-runner.html",
+        "permission-analyzer.html",
+        "org-health.html",
+        "ai-analyzer.html",
+        "agentforce-studio.html",
+        "learning-hub.html",
+        "storage-cleaner.html",
+        "welcome.html",
+        "experience.html",
+        "changeset.html",
+        "options.html",
+        "inject.js",
+        "sf-org-darkmode.js",
+        "styles/*",
+        "images/*"
+      ],
+      "matches": [
+        "https://*.salesforce.com/*",
+        "https://*.salesforce-setup.com/*",
+        "https://*.visual.force.com/*",
+        "https://*.vf.force.com/*",
+        "https://*.lightning.force.com/*",
+        "https://*.cloudforce.com/*",
+        "https://*.visualforce.com/*",
+        "https://*.sfcrmapps.cn/*",
+        "https://*.sfcrmproducts.cn/*",
+        "https://*.salesforce.mil/*",
+        "https://*.visual.force.mil/*",
+        "https://*.vf.force.mil/*",
+        "https://*.lightning.force.mil/*",
+        "https://*.cloudforce.mil/*",
+        "https://*.visualforce.mil/*",
+        "https://*.crmforce.mil/*",
+        "https://*.lightning.force.com.mcas.ms/*",
+        "https://*.force.com/*",
+        "https://*.builder.salesforce-experience.com/*"
+      ]
+    }
+  ],
+  "incognito": "spanning",
+  "manifest_version": 3,
+  "commands": {
+    "open-popup": {
+      "suggested_key": { "default": "Alt+Shift+I" },
+      "description": "Open SF Power Inspector"
+    },
+    "data-explorer": {
+      "suggested_key": { "default": "Alt+Shift+E" },
+      "description": "Open Data Explorer (SOQL)"
+    },
+    "data-import": {
+      "description": "Data Import"
+    },
+    "rest-console": {
+      "suggested_key": { "default": "Alt+Shift+R" },
+      "description": "REST API Console"
+    },
+    "dependencies": {
+      "description": "Dependencies Explorer"
+    },
+    "flow-analyzer": {
+      "description": "Flow Analyzer"
+    },
+    "debug-console": {
+      "description": "Debug Log Console"
+    },
+    "schema-viewer": {
+      "description": "Schema Viewer"
+    },
+    "apex-runner": {
+      "description": "Anonymous Apex Runner"
+    },
+    "ai-analyzer": {
+      "suggested_key": { "default": "Alt+Shift+A" },
+      "description": "AI & Security Architect Hub"
+    },
+    "org-health": {
+      "description": "Org Health Check"
+    }
+  }
+}

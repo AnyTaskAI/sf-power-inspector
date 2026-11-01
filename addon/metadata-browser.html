@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Metadata Browser & Component Explorer — SF Power Inspector PRO</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <style>
+    .meta-type-row {
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .meta-type-row:hover {
+      background: #f8fafc;
+    }
+    [data-theme="dark"] .meta-type-row:hover {
+      background: #1e293b !important;
+    }
+    .meta-type-row.is-expanded {
+      background: #eff6ff !important;
+      border-left: 4px solid #0176d3;
+    }
+    [data-theme="dark"] .meta-type-row.is-expanded {
+      background: #1e293b !important;
+      border-left: 4px solid #38bdf8;
+    }
+    .meta-sub-row td {
+      padding: 0 !important;
+      background: #f8fafc;
+    }
+    [data-theme="dark"] .meta-sub-row td {
+      background: #0b1120 !important;
+    }
+    .sub-panel-box {
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-bottom: 2px solid var(--border);
+      background: #f8fafc;
+    }
+    [data-theme="dark"] .sub-panel-box {
+      background: #0f172a;
+    }
+    .sub-components-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .sub-components-table th {
+      background: #e2e8f0;
+      color: #334155;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 7px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    [data-theme="dark"] .sub-components-table th {
+      background: #1e293b !important;
+      color: #94a3b8 !important;
+    }
+    .sub-components-table td {
+      padding: 7px 10px !important;
+      font-size: 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .sub-components-table tr:hover td {
+      background: rgba(1, 118, 211, 0.05);
+    }
+    [data-theme="dark"] .sub-components-table tr:hover td {
+      background: rgba(56, 189, 248, 0.08) !important;
+    }
+    .toggle-arrow {
+      display: inline-block;
+      transition: transform 0.18s ease-in-out;
+      font-size: 11px;
+      margin-right: 8px;
+      color: #0176d3;
+      user-select: none;
+    }
+    .toggle-arrow.rotated {
+      transform: rotate(90deg);
+    }
+    [data-theme="dark"] .toggle-arrow {
+      color: #38bdf8;
+    }
+    .cat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .cat-pill-standard {
+      background: #ede9fe;
+      color: #6d28d9;
+    }
+    [data-theme="dark"] .cat-pill-standard {
+      background: #3b0764;
+      color: #d8b4fe;
+    }
+    .cat-pill-code {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+    [data-theme="dark"] .cat-pill-code {
+      background: #082f49;
+      color: #7dd3fc;
+    }
+    .cat-pill-objects {
+      background: #dcfce7;
+      color: #15803d;
+    }
+    [data-theme="dark"] .cat-pill-objects {
+      background: #052e16;
+      color: #86efac;
+    }
+    .cat-pill-automation {
+      background: #fef3c7;
+      color: #b45309;
+    }
+    [data-theme="dark"] .cat-pill-automation {
+      background: #451a03;
+      color: #fde68a;
+    }
+    .cat-pill-security {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+    [data-theme="dark"] .cat-pill-security {
+      background: #450a0a;
+      color: #fca5a5;
+    }
+    .router-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+      background: #e2e8f0;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .router-pill:hover {
+      background: #0176d3;
+      color: #fff;
+      border-color: #0176d3;
+    }
+    [data-theme="dark"] .router-pill {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #334155;
+    }
+    [data-theme="dark"] .router-pill:hover {
+      background: #38bdf8;
+      color: #0b1120;
+      border-color: #38bdf8;
+    }
+    .org-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .org-link-btn:hover {
+      background: #1d4ed8;
+      color: #fff;
+    }
+    [data-theme="dark"] .org-link-btn {
+      background: #172554;
+      color: #93c5fd;
+      border-color: #1e3a8a;
+    }
+    [data-theme="dark"] .org-link-btn:hover {
+      background: #2563eb;
+      color: #fff;
+    }
+    .action-links-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+    }
+    .sub-ctrl-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .sub-ctrl-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .meta-summary-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .btn-xs {
+      padding: 3px 8px;
+      font-size: 11px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .copy-chip {
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 1px 4px;
+      border-radius: 3px;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    [data-theme="dark"] .copy-chip {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.15);
+      color: #cbd5e1;
+    }
+    .copy-chip:hover {
+      background: #0176d3;
+      color: #fff;
+    }
+    [data-theme="dark"] .copy-chip:hover {
+      background: #38bdf8;
+      color: #0b1120;
+    }
+  </style>
+  <script type="module" src="metadata-browser.js"></script>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>📦 Metadata Browser & Package Explorer</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 500; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta">
+      <input type="text" id="meta-filter" class="input-text" placeholder="Filter metadata types..." style="width: 220px;">
+      <button class="btn btn-secondary btn-xs" id="btn-expand-all" title="Expand all metadata types">Expand All</button>
+      <button class="btn btn-secondary btn-xs" id="btn-collapse-all" title="Collapse all metadata types">Collapse All</button>
+      <button class="btn btn-primary" id="btn-refresh">🔄 Refresh Counts</button>
+    </div>
+  </header>
+
+  <main class="tool-workspace">
+    <!-- Category Filter Tabs -->
+    <div class="tool-tabs" id="meta-cat-tabs" style="margin-bottom: 0;">
+      <button class="tool-tab active" data-cat="all">All Metadata (<span id="tab-count-all">31</span>)</button>
+      <button class="tool-tab" data-cat="standard">Standard Metadata (<span id="tab-count-standard">6</span>)</button>
+      <button class="tool-tab" data-cat="code">Custom Code & LWC (<span id="tab-count-code">7</span>)</button>
+      <button class="tool-tab" data-cat="objects">Objects & Schema (<span id="tab-count-objects">8</span>)</button>
+      <button class="tool-tab" data-cat="automation">Automation & Flows (<span id="tab-count-automation">4</span>)</button>
+      <button class="tool-tab" data-cat="security">Security & Access (<span id="tab-count-security">6</span>)</button>
+    </div>
+
+    <!-- Summary Bar -->
+    <div class="meta-summary-bar">
+      <div>
+        Showing <strong id="visible-types-count">31</strong> metadata types &bull; Total Org Components: <strong id="total-components-sum" style="color:var(--primary);">Counting...</strong>
+      </div>
+      <div>
+        <span style="font-size:11px;">Click any row to toggle and inspect underlying components</span>
+      </div>
+    </div>
+
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div class="table-container" style="flex: 1; overflow-y: auto;">
+        <table class="data-table" id="meta-table">
+          <thead>
+            <tr>
+              <th style="width: 280px;">Metadata Type</th>
+              <th style="width: 150px;">Category</th>
+              <th style="width: 140px; text-align: center;">Component Count</th>
+              <th>Description / Tooling Entity</th>
+              <th style="width: 200px; text-align: center;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="meta-body">
+            <tr><td colspan="5" style="text-align:center; padding:30px;">Loading metadata catalog...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Salesforce Trailhead Help & Learning Center — SF Power Inspector PRO</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <style>
+    .guide-tool-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.15s ease;
+    }
+    .guide-tool-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+    }
+    .guide-tool-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .guide-feature-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .guide-feature-list li strong {
+      color: var(--text-main);
+    }
+    .sf-site-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.15s ease;
+    }
+    .sf-site-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .sf-site-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .sf-site-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sf-site-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .sf-site-url {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: #64748b;
+    }
+    .error-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .error-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+    .tag-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+    .tag-dml { background: #fee2e2; color: #dc2626; }
+    .tag-gov { background: #fef3c7; color: #b45309; }
+    .tag-sec { background: #e0f2fe; color: #0284c7; }
+    .tag-ai { background: #ede9fe; color: #7c3aed; }
+    .tag-schema { background: #f3f4f6; color: #374151; }
+    
+    .roadmap-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .roadmap-link {
+      color: #0176d3;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .roadmap-link:hover {
+      text-decoration: underline;
+    }
+    .cheat-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .cheat-table th, .cheat-table td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .cheat-table th {
+      background: rgba(0,0,0,0.03);
+      font-weight: 700;
+    }
+    .category-header {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--primary);
+      margin: 12px 0 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .guide-pill {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: rgba(1, 118, 211, 0.1);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    [data-theme="dark"] .guide-pill {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+    }
+  </style>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>🎓 Salesforce Trailhead Help & Learning Center</h1>
+      <span class="badge" id="env-badge" style="display:none;"></span>
+      <span id="org-name" style="font-weight: 600; font-size: 13px;"></span>
+      <span class="badge badge-sandbox" style="background: #e0f2fe; color: #0369a1;">OFFICIAL KNOWLEDGE SUITE</span>
+    </div>
+    <div class="tool-meta" style="display: flex; gap: 8px; align-items: center;">
+      <a href="inspector-guide.html" id="link-nav-guide" class="btn btn-primary" style="font-size: 11px; text-decoration: none;">📖 Inspector User Guide</a>
+      <a href="https://workbench.developerforce.com" target="_blank" class="btn btn-secondary" style="font-size: 11px; text-decoration: none;">↗ Workbench</a>
+      <a href="https://developer.salesforce.com/docs" target="_blank" class="btn btn-secondary" style="font-size: 11px; text-decoration: none;">↗ Developer Docs</a>
+      <a href="https://trailhead.salesforce.com" target="_blank" class="btn btn-secondary" style="font-size: 11px; text-decoration: none;">↗ Trailhead</a>
+      <a href="https://salesforce.stackexchange.com" target="_blank" class="btn btn-secondary" style="font-size: 11px; text-decoration: none;">↗ StackExchange</a>
+      <a href="https://status.salesforce.com" target="_blank" class="btn btn-secondary" style="font-size: 11px; text-decoration: none;">↗ SF Trust</a>
+    </div>
+  </header>
+
+  <main class="tool-workspace">
+    <!-- Hub Navigation Tabs -->
+    <div class="tool-tabs" id="learning-tabs" style="border-radius:var(--radius) var(--radius) 0 0;">
+      <button class="tool-tab active" data-tab="roadmaps" id="tab-btn-roadmaps">🎓 Trailhead Paths & Certifications</button>
+      <button class="tool-tab" data-tab="sf-tools" id="tab-btn-sf-tools">🛠️ Official Salesforce Tools & Developer Sites</button>
+      <button class="tool-tab" data-tab="debugger" id="tab-btn-debugger">🚨 Instant Error Debugger (50+ Errors)</button>
+      <button class="tool-tab" data-tab="cheat-sheets" id="tab-btn-cheat-sheets">⚡ Architecture Cheat Sheets & Limits</button>
+      <button class="tool-tab" data-tab="community" id="tab-btn-community">🌐 Multi-Engine Search Launchpad</button>
+    </div>
+
+    <!-- Tab 1: Trailhead Role Roadmaps & Certifications -->
+    <div class="tool-card tab-content" id="view-roadmaps" style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column;">
+      <div style="max-width: 960px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 16px;">
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-size: 15px; font-weight: 800; color: var(--primary);">🎓 Official Trailhead Learning Paths & Superbadge Masterclasses</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Direct links to certified badges, hands-on project walkthroughs, and exam preparation guides.</div>
+          </div>
+          <select id="select-role-roadmap" class="select" style="font-size: 12px; font-weight: 600;">
+            <option value="ai">🤖 Agentforce & AI Specialist</option>
+            <option value="dev">💻 Salesforce Platform Developer & Architect</option>
+            <option value="admin">🏢 Salesforce Administrator</option>
+            <option value="cta">🛡️ Certified Technical Architect (CTA) & Security</option>
+          </select>
+        </div>
+
+        <div id="roadmaps-list-container" style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- Dynamically populated by learning-hub.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Official Salesforce Tools & Developer Sites -->
+    <div class="tool-card tab-content" id="view-sf-tools" style="flex: 1; overflow-y: auto; padding: 18px; display: none;">
+      <div style="max-width: 960px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-size: 16px; font-weight: 800; color: var(--primary);">🛠️ Official Salesforce Developer Tools & Reference Ecosystem</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+              Quick-access directory of official Salesforce developer portals, documentation manuals, API guides, community forums, and diagnostic tools.
+            </div>
+          </div>
+          <input type="text" id="sf-tools-search" class="input-text" placeholder="🔍 Search sites, guides & tools..." style="width: 240px; font-size: 12px; padding: 5px 10px;">
+        </div>
+
+        <div id="sf-sites-list" style="display: flex; flex-direction: column; gap: 16px;">
+          <!-- Populated by learning-hub.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Instant Error Debugger -->
+    <div class="tool-card tab-content" id="view-debugger" style="flex: 1; overflow: hidden; display: none; flex-direction: column;">
+      <div style="padding: 10px 14px; background: rgba(0,0,0,0.02); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <div style="display: flex; gap: 8px; align-items: center; flex: 1;">
+          <input type="text" id="search-errors" class="input-text" placeholder="🔍 Search any Salesforce error code (e.g. UNABLE_TO_LOCK_ROW, SOQL 101, MIXED_DML, STRING_TOO_LONG)..." style="width: 100%; max-width: 500px; font-weight: 500;">
+          <select id="filter-error-category" class="select" style="font-size: 12px; min-width: 160px;">
+            <option value="ALL">All Error Domains</option>
+            <option value="DML">DML & Record Locking</option>
+            <option value="GOV">Governor Limit Exceptions</option>
+            <option value="SEC">Security & Sharing</option>
+            <option value="SCHEMA">Data & Schema Validation</option>
+            <option value="AI">Agentforce & GenAI</option>
+          </select>
+        </div>
+        <span id="error-count-badge" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Showing 16 Errors</span>
+      </div>
+
+      <div class="table-container" style="flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px;" id="error-cards-container">
+        <!-- Rendered dynamically by learning-hub.js -->
+      </div>
+    </div>
+
+    <!-- Tab 4: Architecture Cheat Sheets & Limits -->
+    <div class="tool-card tab-content" id="view-cheat-sheets" style="flex: 1; overflow-y: auto; padding: 16px; display: none;">
+      <div style="max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px;">
+        <!-- Card 1: Governor Limits -->
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;">
+          <h3 style="font-size: 14px; font-weight: 800; margin-bottom: 8px; color:var(--text-main);">⚡ Salesforce Governor Limits Complete Matrix</h3>
+          <table class="cheat-table">
+            <thead>
+              <tr>
+                <th>Limit Metric</th>
+                <th>Synchronous Apex</th>
+                <th>Asynchronous (Batch / Queueable)</th>
+                <th>Architectural Mitigation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Total SOQL Queries</strong></td>
+                <td>100</td>
+                <td>200</td>
+                <td>Bulkify collections with <code>Map&lt;Id, sObject&gt;</code>; avoid queries in loops.</td>
+              </tr>
+              <tr>
+                <td><strong>Total SOQL Query Rows</strong></td>
+                <td>50,000</td>
+                <td>50,000</td>
+                <td>Use SOQL for-loops or Batch Apex <code>Database.getQueryLocator()</code> (up to 50 million).</td>
+              </tr>
+              <tr>
+                <td><strong>Total DML Statements</strong></td>
+                <td>150</td>
+                <td>150</td>
+                <td>Accumulate records in <code>List&lt;sObject&gt;</code> and perform 1 DML call.</td>
+              </tr>
+              <tr>
+                <td><strong>Total DML Rows Modified</strong></td>
+                <td>10,000</td>
+                <td>10,000</td>
+                <td>Split into Batch Apex chunks with <code>scope = 200</code>.</td>
+              </tr>
+              <tr>
+                <td><strong>Maximum CPU Time</strong></td>
+                <td>10,000 ms (10s)</td>
+                <td>60,000 ms (60s)</td>
+                <td>Offload intensive processing to <code>Queueable</code> or <code>@future</code>.</td>
+              </tr>
+              <tr>
+                <td><strong>Maximum Heap Size</strong></td>
+                <td>6 MB</td>
+                <td>12 MB</td>
+                <td>Nullify large collections after use; avoid keeping full record payloads in memory.</td>
+              </tr>
+              <tr>
+                <td><strong>Callout Limits</strong></td>
+                <td>100 callouts (120s total)</td>
+                <td>100 callouts (120s total)</td>
+                <td>Use Composite REST API or Continuation for asynchronous callouts.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Card 2: Order of Execution -->
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;">
+          <h3 style="font-size: 14px; font-weight: 800; margin-bottom: 8px; color:var(--text-main);">🔄 Triggers & Record Save Order of Execution</h3>
+          <ol style="font-size: 12px; line-height: 1.8; color: var(--text-muted); padding-left: 20px;">
+            <li>System Validation (Field types, maximum lengths, required fields).</li>
+            <li><strong>Before Triggers (Apex <code>before insert</code> / <code>before update</code>)</strong> — ideal for field defaulting without extra DML.</li>
+            <li>Custom Validation Rules (Formulas) and system validation checks.</li>
+            <li>Duplicate Rules.</li>
+            <li>Record saved to DB (not committed yet, ID generated).</li>
+            <li><strong>After Triggers (Apex <code>after insert</code> / <code>after update</code>)</strong> — ideal for child record creation & cross-object DML.</li>
+            <li>Assignment Rules.</li>
+            <li>Auto-Response Rules.</li>
+            <li>Workflow Rules (if field updates run, before/after triggers fire one more time).</li>
+            <li>Escalation Rules.</li>
+            <li>Processes and Record-Triggered Flows.</li>
+            <li>Roll-up Summary calculations on parent records.</li>
+            <li>Database Commit & Post-commit logic (emails sent, EnqueueJobs executed).</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 6: Live Community Search Launchpad -->
+    <div class="tool-card tab-content" id="view-community" style="flex: 1; overflow-y: auto; padding: 16px; display: none;">
+      <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;">
+          <h3 style="font-size: 15px; font-weight: 800; color: var(--primary); margin-bottom: 8px;">🌐 Multi-Engine Salesforce Community Search</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Type your problem or inquiry and click to search directly across official and community knowledge bases:</p>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="community-search-input" class="input-text" placeholder="e.g. Apex CPU time limit in Batch Apex with rollups" style="flex: 1; font-size: 13px;">
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+            <button class="btn btn-secondary btn-comm-search" data-site="stackexchange">🔍 Search Salesforce StackExchange</button>
+            <button class="btn btn-secondary btn-comm-search" data-site="trailhead">🔍 Search Trailhead Modules</button>
+            <button class="btn btn-secondary btn-comm-search" data-site="trailblazer">🔍 Search Trailblazer Community</button>
+            <button class="btn btn-secondary btn-comm-search" data-site="docs">🔍 Search Official Documentation</button>
+            <button class="btn btn-secondary btn-comm-search" data-site="issues">🔍 Search Known Issues</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="learning-hub.js"></script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Data Loader & Import Studio — SF Power Inspector</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <script type="module" src="data-import.js"></script>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>📥 Data Loader & Import Studio</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 500; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta">
+      <button class="btn btn-secondary" id="btn-export-results" style="display:none;">📥 Export Results CSV</button>
+      <button class="btn btn-primary" id="btn-run-import">▶ Execute Import</button>
+    </div>
+  </header>
+
+  <main class="tool-workspace">
+    <!-- Configuration Card -->
+    <div class="tool-card" style="padding: 14px; gap: 12px;">
+      <div style="display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap;">
+        <div>
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Target SObject:</label>
+          <div style="position: relative; width: 220px;">
+            <input type="text" id="target-sobject" class="input-text" placeholder="Search SObject (e.g. Account)" value="Account" style="width: 100%;">
+            <div id="sobject-suggestions" class="autocomplete-dropdown" style="display:none; max-height:180px;"></div>
+          </div>
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Operation:</label>
+          <select id="import-action" class="select" style="font-weight: 600; height: 32px;">
+            <option value="insert">Insert (Create New)</option>
+            <option value="update">Update (Requires Id)</option>
+            <option value="upsert">Upsert (External ID)</option>
+            <option value="delete">Delete (Requires Id)</option>
+          </select>
+        </div>
+        <div id="upsert-field-container" style="display:none;">
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">External ID Field:</label>
+          <select id="upsert-ext-id" class="select" style="width: 180px; height: 32px;">
+            <option value="">Select External ID field...</option>
+          </select>
+        </div>
+        <div style="margin-left: auto; display: flex; gap: 8px; align-items: center;">
+          <input type="file" id="file-upload-input" accept=".csv,.json" style="display:none;">
+          <button class="btn btn-secondary" id="btn-browse-file">📁 Upload CSV / JSON</button>
+          <button class="btn btn-secondary" id="btn-sample-data">Generate Sample</button>
+        </div>
+      </div>
+
+      <!-- File Drag & Drop Zone / Raw Text Area -->
+      <div style="display: flex; gap: 10px; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+            <span>📋 Paste or Upload Data (Excel TSV, CSV, JSON):</span>
+            <span id="data-format-badge" style="font-size: 11px; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 4px; font-weight: 700; display: none;"></span>
+          </div>
+          <span style="font-size: 11px; color: var(--text-muted);">Directly copy & paste spreadsheet tables from Excel or Google Sheets</span>
+        </div>
+        <div id="drop-zone" style="border: 2px dashed var(--border); border-radius: 6px; padding: 10px; text-align: center; background: #fafafa; cursor: pointer; font-size: 12px; color: var(--text-muted);">
+          Drag & drop your Excel/CSV/JSON file here, or click to browse. You can also directly paste spreadsheet data below.
+        </div>
+        <textarea id="import-data" class="code-editor" rows="5" placeholder='Name	Type	Phone	Industry
+Acme Corporation	Customer - Direct	(555) 000-1111	Technology
+Global Media Inc	Customer - Channel	(555) 000-2222	Media'></textarea>
+      </div>
+
+      <!-- Field Mapping Accordion -->
+      <div id="mapping-container" style="display: none; background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-weight: 600; font-size: 12px; color: #0176d3;">📋 Field Mapping Matrix (<span id="mapping-col-count">0</span> columns detected)</span>
+          <span style="font-size: 11px; color: var(--text-muted);">Verify CSV header matching with Salesforce fields</span>
+        </div>
+        <div style="max-height: 140px; overflow-y: auto;">
+          <table class="data-table" style="background:#fff;">
+            <thead>
+              <tr>
+                <th style="width: 30px;">Use</th>
+                <th style="width: 180px;">Source Column (CSV/JSON)</th>
+                <th style="width: 220px;">Target SObject Field</th>
+                <th>Sample Row 1 Value</th>
+              </tr>
+            </thead>
+            <tbody id="mapping-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div id="progress-container" style="display: none; width: 100%; background: #e2e8f0; border-radius: 4px; height: 6px; overflow: hidden;">
+        <div id="progress-bar" style="width: 0%; height: 100%; background: #0176d3; transition: width 0.2s ease;"></div>
+      </div>
+    </div>
+
+    <!-- Execution Results -->
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div class="tool-tabs" id="import-tabs">
+        <button class="tool-tab active" data-tab="preview" id="tab-btn-preview">📊 Data Preview (<span id="preview-count">0</span>)</button>
+        <button class="tool-tab" data-tab="grid" id="tab-btn-grid">⚡ Results Grid (<span id="results-count">0</span>)</button>
+        <button class="tool-tab" data-tab="log" id="tab-btn-log">📜 Execution Log</button>
+        <span id="import-summary" style="margin-left: auto; padding: 6px 14px; font-size: 12px; font-weight: 600;">Ready</span>
+      </div>
+
+      <!-- Preview View -->
+      <div class="table-container" id="results-preview-view" style="flex: 1; overflow: auto;">
+        <table class="data-table" id="preview-table">
+          <thead id="preview-head">
+            <tr><th style="width: 50px;">#</th><th>Parsed Columns</th></tr>
+          </thead>
+          <tbody id="preview-body">
+            <tr><td colspan="2" style="text-align:center; padding:30px; color:var(--text-muted);">Paste data or upload a file to preview parsed rows.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Results Grid View -->
+      <div class="table-container" id="results-grid-view" style="display: none; flex: 1; overflow: auto;">
+        <table class="data-table" id="results-table">
+          <thead>
+            <tr>
+              <th style="width: 50px;">Row #</th>
+              <th style="width: 90px;">Status</th>
+              <th style="width: 180px;">Salesforce Record ID</th>
+              <th>Errors & Messages</th>
+            </tr>
+          </thead>
+          <tbody id="results-body">
+            <tr><td colspan="4" style="text-align:center; padding:30px; color:var(--text-muted);">Load or paste data and click "Execute Import" to begin.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Raw Log View -->
+      <div class="table-container" id="results-log-view" style="display: none; padding: 12px; flex: 1; overflow: auto;">
+        <pre id="import-output" style="font-family: var(--font-mono); font-size: 12px; white-space: pre-wrap; margin: 0;"></pre>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

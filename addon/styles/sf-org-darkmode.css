@@ -1,0 +1,848 @@
+/**
+ * SF Power Inspector — Salesforce Org Dark Mode
+ * Comprehensive dark theme for all Salesforce Lightning Experience pages.
+ * Strategy: Override SLDS design tokens (CSS custom properties) first,
+ * then scoped selectors for components that ignore hooks.
+ *
+ * Applied via content script at document_start to prevent white flash.
+ * Only active when user enables "Org Dark Mode" in extension settings.
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 1: Override SLDS Global Design Tokens (CSS Custom Properties)
+   These are the cleanest, most upgrade-safe overrides.
+   ═══════════════════════════════════════════════════════════════════════ */
+:root,
+html,
+body {
+  /* Core Backgrounds */
+  --lwc-colorBackground: #0d1117 !important;
+  --lwc-colorBackgroundAlt: #161b22 !important;
+  --lwc-colorBackgroundAlt2: #1c2333 !important;
+  --lwc-colorBackgroundRowHover: #1e2a3a !important;
+  --lwc-colorBackgroundRowSelected: #1a2744 !important;
+  --lwc-colorBackgroundRowActive: #162040 !important;
+  --lwc-colorBackgroundStencil: #21262d !important;
+  --lwc-colorBackgroundStencilAlt: #2d333b !important;
+  --lwc-colorBackgroundHighlight: #1e293b !important;
+  --lwc-pageColorBackgroundPrimary: #0d1117 !important;
+  --lwc-pageColorBackgroundSecondary: #161b22 !important;
+
+  /* Surface / Card Backgrounds */
+  --lwc-colorBackgroundInput: #0d1117 !important;
+  --lwc-colorBackgroundInputActive: #161b22 !important;
+  --lwc-colorBackgroundInputCheckbox: #0d1117 !important;
+  --lwc-colorBackgroundInputDisabled: #21262d !important;
+  --lwc-colorBackgroundToast: #1c2333 !important;
+  --lwc-colorBackgroundModal: #161b22 !important;
+  --lwc-colorBackgroundModalBrand: #161b22 !important;
+  --lwc-colorBackgroundPath: #161b22 !important;
+  --lwc-colorBackgroundPathExpanded: #1c2333 !important;
+  --lwc-colorBackgroundIndicatorDot: #58a6ff !important;
+  --lwc-colorBackgroundScrollbar: #21262d !important;
+  --lwc-colorBackgroundScrollbarTrack: #0d1117 !important;
+
+  /* Text Colors */
+  --lwc-colorTextDefault: #e6edf3 !important;
+  --lwc-colorTextLabel: #c9d1d9 !important;
+  --lwc-colorTextPlaceholder: #6e7681 !important;
+  --lwc-colorTextWeak: #8b949e !important;
+  --lwc-colorTextInverse: #0d1117 !important;
+  --lwc-colorTextLink: #58a6ff !important;
+  --lwc-colorTextLinkHover: #79c0ff !important;
+  --lwc-colorTextLinkActive: #58a6ff !important;
+  --lwc-colorTextLinkFocus: #79c0ff !important;
+  --lwc-colorTextActionLabel: #c9d1d9 !important;
+  --lwc-colorTextActionLabelActive: #e6edf3 !important;
+  --lwc-colorTextHeading: #e6edf3 !important;
+  --lwc-colorTextIconDefault: #8b949e !important;
+  --lwc-colorTextBrand: #58a6ff !important;
+  --lwc-colorTextBrandPrimary: #58a6ff !important;
+  --lwc-pageColorTextPrimary: #e6edf3 !important;
+  --lwc-pageColorTextSecondary: #8b949e !important;
+
+  /* Borders */
+  --lwc-colorBorder: #30363d !important;
+  --lwc-colorBorderInput: #30363d !important;
+  --lwc-colorBorderSeparator: #21262d !important;
+  --lwc-colorBorderSeparatorAlt: #30363d !important;
+  --lwc-colorBorderSeparatorAlt2: #30363d !important;
+  --lwc-colorBorderRow: #21262d !important;
+  --lwc-colorBorderRowSelected: #1f6feb !important;
+  --lwc-colorBorderRowSelectedHover: #388bfd !important;
+  --lwc-colorBorderBrand: #1f6feb !important;
+  --lwc-colorBorderInputActive: #58a6ff !important;
+  --lwc-colorBorderTabSelected: #58a6ff !important;
+
+  /* Brand Colors */
+  --lwc-colorBrand: #1f6feb !important;
+  --lwc-colorBrandDark: #58a6ff !important;
+  --lwc-brandPrimaryTransparent: rgba(31, 111, 235, 0.15) !important;
+
+  /* Shadows */
+  --lwc-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+  --lwc-shadowCard: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+
+  /* SLDS Gen2 global tokens */
+  --slds-g-color-neutral-base-100: #0d1117 !important;
+  --slds-g-color-neutral-base-95: #161b22 !important;
+  --slds-g-color-neutral-base-90: #1c2333 !important;
+  --slds-g-color-neutral-base-80: #21262d !important;
+  --slds-g-color-neutral-base-70: #30363d !important;
+  --slds-g-color-neutral-base-60: #484f58 !important;
+  --slds-g-color-neutral-base-50: #6e7681 !important;
+  --slds-g-color-neutral-base-40: #8b949e !important;
+  --slds-g-color-neutral-base-30: #c9d1d9 !important;
+  --slds-g-color-neutral-base-20: #e6edf3 !important;
+  --slds-g-color-neutral-base-10: #f0f6fc !important;
+  --slds-g-color-neutral-base-1: #ffffff !important;
+
+  --slds-g-color-border-base-1: #30363d !important;
+  --slds-g-color-border-base-2: #21262d !important;
+  --slds-g-color-border-base-3: #484f58 !important;
+  --slds-g-color-border-base-4: #6e7681 !important;
+
+  /* Force backgrounds */
+  --slds-c-card-color-background: #161b22 !important;
+  --slds-c-input-color-background: #0d1117 !important;
+  --slds-c-button-neutral-color-background: #21262d !important;
+  --slds-c-button-neutral-color-border: #30363d !important;
+  --slds-c-button-neutral-text-color: #c9d1d9 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 2: Scoped Selectors for Major Salesforce Components
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Body & Global Background */
+html, body,
+.desktop.container,
+.oneConsoleLayoutManager,
+.oneAlohaPage,
+div.slds-page-header,
+.slds-template_default,
+.slds-template__container,
+.forceBaseVirtualListOuter,
+.slds-card,
+.slds-global-header_container {
+  background-color: #0d1117 !important;
+  color: #e6edf3 !important;
+}
+
+/* Global Header / Navigation Bar */
+.slds-global-header,
+.slds-global-header_container,
+.globalHeaderDesktop,
+.oneGlobalNav,
+header.slds-global-header_container,
+.forceHeaderBar {
+  background-color: #161b22 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+.slds-global-header .slds-global-header__item,
+.slds-global-header .slds-context-bar__label-action,
+.slds-global-header button,
+.globalHeaderDesktop a {
+  color: #c9d1d9 !important;
+}
+
+/* App Launcher */
+.slds-icon-waffle,
+.slds-icon-waffle_container {
+  background: transparent !important;
+}
+
+/* Context Bar / App Navigation */
+.slds-context-bar,
+.tabBarItems,
+.slds-context-bar__item,
+.slds-context-bar__primary,
+.slds-context-bar__secondary,
+.slds-context-bar__tertiary,
+.tabBar,
+.slds-context-bar__label-action,
+.oneAppNavContainer {
+  background-color: #161b22 !important;
+  border-color: #30363d !important;
+  color: #c9d1d9 !important;
+}
+
+.slds-context-bar__item.slds-is-active,
+.slds-context-bar__item:hover {
+  background-color: #1c2333 !important;
+  border-color: #58a6ff !important;
+}
+
+.slds-context-bar__item.slds-is-active .slds-context-bar__label-action {
+  color: #58a6ff !important;
+}
+
+/* Page Workspace / Content Area */
+.slds-template_default .slds-col,
+.slds-template__container,
+.mainContentMark,
+main.stage,
+.stageLeft,
+.stageRight,
+.oneWorkspace,
+.oneContent,
+.oneFlexipage,
+.forceRecordLayout,
+.container .content,
+.layoutBody {
+  background-color: #0d1117 !important;
+}
+
+/* Cards */
+.slds-card,
+.slds-card__body,
+.slds-card__header,
+.slds-card__footer,
+article.slds-card,
+.forceBaseCard,
+.forceRelatedListCardHeader,
+.forceRelatedListSingleContainer,
+.highlights,
+.slds-page-header,
+.slds-page-header__detail,
+.flexipageComponent,
+.forceHighlightsPanel,
+.forceHighlightsPanelTopPanel {
+  background-color: #161b22 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+/* Tables & Lists */
+.slds-table,
+table.slds-table,
+table.list,
+.slds-table thead th,
+.slds-table tbody td,
+.slds-table tbody tr,
+.forceListViewManager,
+.forceListViewManagerGrid,
+.listViewContent,
+.slds-table_header-fixed_container,
+.uiVirtualDataTable,
+.slds-scrollable_y {
+  background-color: #161b22 !important;
+  color: #e6edf3 !important;
+  border-color: #30363d !important;
+}
+
+.slds-table thead th {
+  background-color: #1c2333 !important;
+  color: #c9d1d9 !important;
+}
+
+.slds-table tbody tr:hover,
+.slds-table tbody tr:hover td {
+  background-color: #1e2a3a !important;
+}
+
+.slds-table tbody tr:nth-child(even) {
+  background-color: #131921 !important;
+}
+
+/* Related Lists */
+.slds-related-list-container,
+.forceRelatedListContainer,
+.forceRelatedListPreview {
+  background-color: #161b22 !important;
+  border-color: #30363d !important;
+}
+
+/* Forms & Inputs */
+.slds-form-element,
+.slds-form-element__label,
+.slds-form-element__control,
+.slds-form-element__help,
+.slds-input,
+.slds-textarea,
+.slds-select,
+.slds-combobox__input,
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="number"],
+input[type="date"],
+input[type="password"],
+textarea,
+select {
+  background-color: #0d1117 !important;
+  color: #e6edf3 !important;
+  border-color: #30363d !important;
+}
+
+.slds-input:focus,
+.slds-textarea:focus,
+.slds-select:focus,
+textarea:focus,
+input:focus {
+  border-color: #58a6ff !important;
+  box-shadow: 0 0 0 1px #58a6ff !important;
+}
+
+.slds-form-element__label,
+label {
+  color: #c9d1d9 !important;
+}
+
+/* Buttons */
+.slds-button:not(.slds-button_brand):not(.slds-button_destructive):not(.slds-button_success),
+.slds-button_neutral {
+  background-color: #21262d !important;
+  border-color: #30363d !important;
+  color: #c9d1d9 !important;
+}
+
+.slds-button:not(.slds-button_brand):not(.slds-button_destructive):hover,
+.slds-button_neutral:hover {
+  background-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+.slds-button_brand {
+  background-color: #1f6feb !important;
+  border-color: #1f6feb !important;
+  color: #ffffff !important;
+}
+
+.slds-button_brand:hover {
+  background-color: #388bfd !important;
+}
+
+/* Modals & Dropdowns */
+.slds-modal__container,
+.slds-modal__content,
+.slds-modal__header,
+.slds-modal__footer,
+.slds-popover,
+.slds-dropdown,
+.slds-dropdown__item,
+.slds-listbox,
+.slds-listbox__option,
+.slds-combobox_container .slds-listbox,
+.forceActionPanel,
+.uiMenuList,
+.panel-content {
+  background-color: #161b22 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+.slds-dropdown__item:hover,
+.slds-listbox__option:hover,
+.slds-has-focus {
+  background-color: #1c2333 !important;
+}
+
+.slds-modal__header h2,
+.slds-modal__header .slds-modal__title {
+  color: #e6edf3 !important;
+}
+
+.slds-backdrop_open,
+.slds-backdrop--open {
+  background-color: rgba(0, 0, 0, 0.65) !important;
+}
+
+/* Tabs */
+.slds-tabs_default__item,
+.slds-tabs_scoped__item,
+.slds-tabs--default__item,
+.slds-tabs--scoped__item {
+  background-color: transparent !important;
+  color: #8b949e !important;
+  border-color: #30363d !important;
+}
+
+.slds-tabs_default__item.slds-is-active,
+.slds-tabs_scoped__item.slds-is-active,
+.slds-tabs--default__item.slds-active,
+.slds-tabs--scoped__item.slds-active,
+.slds-tabs_default__item.slds-is-active .slds-tabs_default__link,
+.slds-tabs_scoped__item.slds-is-active .slds-tabs_scoped__link {
+  background-color: #161b22 !important;
+  color: #58a6ff !important;
+  border-bottom-color: #58a6ff !important;
+}
+
+.slds-tabs_default__content,
+.slds-tabs_scoped__content,
+.slds-tabs--default__content,
+.slds-tabs--scoped__content {
+  background-color: #161b22 !important;
+  color: #e6edf3 !important;
+}
+
+/* Path / Sales Path */
+.slds-path__track,
+.slds-path__nav,
+.slds-path__link {
+  background-color: #1c2333 !important;
+  color: #c9d1d9 !important;
+  border-color: #30363d !important;
+}
+
+.slds-is-current .slds-path__link {
+  background-color: #1f6feb !important;
+  color: #fff !important;
+}
+
+/* Toasts & Notifications */
+.slds-notify,
+.slds-notify_toast,
+.slds-notification-body,
+.forceToastMessage {
+  border-color: #30363d !important;
+}
+
+/* Badges & Pills */
+.slds-badge,
+.slds-pill,
+.slds-pill_link {
+  background-color: #21262d !important;
+  border-color: #30363d !important;
+  color: #c9d1d9 !important;
+}
+
+/* Links */
+a,
+.slds-text-link,
+.outputLookupLink,
+.forceOutputLookup a,
+.slds-truncate a {
+  color: #58a6ff !important;
+}
+
+a:hover {
+  color: #79c0ff !important;
+}
+
+/* Text Elements */
+.slds-text-title,
+.slds-text-title_caps,
+.slds-text-title--caps {
+  color: #8b949e !important;
+}
+
+.slds-text-heading_small,
+.slds-text-heading_medium,
+.slds-text-heading_large,
+.slds-text-heading--small,
+.slds-text-heading--medium,
+.slds-text-heading--large,
+h1, h2, h3, h4, h5, h6 {
+  color: #e6edf3 !important;
+}
+
+.slds-text-body_regular,
+.slds-text-body_small,
+.slds-text-body--regular,
+.slds-text-body--small,
+p, span, div {
+  color: inherit;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 3: Setup Pages
+   ═══════════════════════════════════════════════════════════════════════ */
+.setupcontent,
+.setup-content,
+.bSetup,
+.setupBody,
+.setupTab,
+.setupContent,
+.bodyDiv,
+.pbBody,
+.pbHeader,
+.pbSubheader,
+.zen-page,
+.slds-setup-assistant,
+.onesetup,
+.setupTabContainer {
+  background-color: #0d1117 !important;
+  color: #e6edf3 !important;
+}
+
+.pbHeader,
+.pbSubheader,
+.bPageTitle {
+  background-color: #1c2333 !important;
+  color: #e6edf3 !important;
+  border-color: #30363d !important;
+}
+
+/* Setup sidebar */
+.setupLeftNav,
+.slds-nav-vertical,
+.slds-tree,
+.slds-tree__item {
+  background-color: #161b22 !important;
+  color: #c9d1d9 !important;
+  border-color: #30363d !important;
+}
+
+.slds-tree__item:hover,
+.slds-nav-vertical__item:hover {
+  background-color: #1c2333 !important;
+}
+
+.slds-tree__item.slds-is-selected,
+.slds-nav-vertical__item.slds-is-active {
+  background-color: #1a2744 !important;
+  color: #58a6ff !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 4: Visualforce Pages (injected via all_frames)
+   ═══════════════════════════════════════════════════════════════════════ */
+body.sfdcBody,
+body.ApexCSIPage,
+.bPageBlock,
+.bEditBlock,
+.apexp,
+.apexPageBlock {
+  background-color: #0d1117 !important;
+  color: #e6edf3 !important;
+}
+
+.bPageBlock .pbHeader,
+.bPageBlock .pbBody,
+.bPageBlock .pbBottomButtons,
+.apext {
+  background-color: #161b22 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+.bPageBlock .dataCol,
+.bPageBlock .labelCol {
+  color: #e6edf3 !important;
+}
+
+.bPageBlock .labelCol {
+  color: #c9d1d9 !important;
+}
+
+.bPageBlock input,
+.bPageBlock textarea,
+.bPageBlock select {
+  background-color: #0d1117 !important;
+  color: #e6edf3 !important;
+  border-color: #30363d !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 5: Reports & Dashboards
+   ═══════════════════════════════════════════════════════════════════════ */
+.reportContainer,
+.slds-page-header,
+.reportsTable,
+.reports-setup,
+.dashboard-panel,
+.dashboardComponent,
+.slds-docked-composer,
+.slds-docked-composer__body {
+  background-color: #161b22 !important;
+  color: #e6edf3 !important;
+  border-color: #30363d !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 6: Flow Builder & App Builder
+   ═══════════════════════════════════════════════════════════════════════ */
+.builder_platform_interaction-container,
+.flexipageEditor,
+.builder-stage,
+.canvas-body,
+.toolbox,
+.propertyEditor,
+.builderNavBar,
+.flowBuilderCanvas,
+.flowBuilderToolbar,
+.flowBuilderInteraction {
+  background-color: #0d1117 !important;
+  color: #e6edf3 !important;
+  border-color: #30363d !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 7: Developer Console
+   ═══════════════════════════════════════════════════════════════════════ */
+body.ApexCSIPage {
+  background-color: #0d1117 !important;
+  color: #e6edf3 !important;
+}
+
+.CodeMirror,
+.CodeMirror-scroll,
+.CodeMirror-sizer {
+  background-color: #0d1117 !important;
+  color: #e6edf3 !important;
+}
+
+.CodeMirror-gutters {
+  background-color: #161b22 !important;
+  border-color: #30363d !important;
+}
+
+.CodeMirror-linenumber {
+  color: #6e7681 !important;
+}
+
+.CodeMirror-cursor {
+  border-color: #e6edf3 !important;
+}
+
+.CodeMirror-selected,
+.CodeMirror-line::selection,
+.CodeMirror-line > span::selection,
+.CodeMirror-line > span > span::selection {
+  background-color: #1a2744 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 8: Canvas / SVG Chart Handling
+   ═══════════════════════════════════════════════════════════════════════ */
+/* Use CSS filter to invert charts but NOT images/avatars/logos */
+canvas:not(.chatterPhoto):not(.profileImg):not(.userProfilePhoto) {
+  filter: invert(0.88) hue-rotate(180deg) !important;
+}
+
+/* SVG chart text */
+.slds-chart text,
+.dashboard-chart text,
+svg.chart text,
+.highcharts-root text {
+  fill: #c9d1d9 !important;
+}
+
+/* Don't invert user photos, avatars, brand logos, and images */
+img,
+.slds-avatar img,
+.slds-avatar,
+.forceEntityIcon,
+.uiImage,
+.profilePhoto,
+.photoContainer img,
+.brandLogoImage,
+[data-aura-rendered-by] img,
+.chatterPhoto,
+.userProfilePhoto {
+  filter: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 9: Icons & Utility Icons
+   ═══════════════════════════════════════════════════════════════════════ */
+.slds-icon-text-default {
+  fill: #8b949e !important;
+}
+
+.slds-icon-text-warning {
+  fill: #d29922 !important;
+}
+
+.slds-icon-text-error {
+  fill: #f85149 !important;
+}
+
+.slds-icon-text-success {
+  fill: #3fb950 !important;
+}
+
+/* Standard / Custom object icons: keep their brand colors */
+.slds-icon-standard-account,
+.slds-icon-standard-contact,
+.slds-icon-standard-opportunity,
+.slds-icon-standard-lead,
+.slds-icon-standard-case,
+.slds-icon_container {
+  /* Don't alter icon container colors, they're brand-coded */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 10: Scrollbars
+   ═══════════════════════════════════════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 6px;
+  border: 2px solid #0d1117;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+::-webkit-scrollbar-corner {
+  background: #0d1117;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 11: Activity Timeline / Feed
+   ═══════════════════════════════════════════════════════════════════════ */
+.slds-timeline__item,
+.slds-timeline__item_expandable,
+.forceChatterFeedItem,
+.chatter-feed,
+.feedContainer,
+.activityTimeline,
+.cuf-feedItemBody {
+  background-color: #161b22 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 12: Utility Bar (Bottom Bar)
+   ═══════════════════════════════════════════════════════════════════════ */
+.slds-utility-bar_container,
+.slds-utility-bar,
+.slds-utility-panel,
+.slds-utility-panel__body,
+.oneUtilityBar {
+  background-color: #161b22 !important;
+  border-color: #30363d !important;
+  color: #c9d1d9 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 13: Loading / Spinner backgrounds
+   ═══════════════════════════════════════════════════════════════════════ */
+.slds-spinner_container,
+.loadingBox,
+#auraLoadingBox {
+  background-color: rgba(13, 17, 23, 0.8) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 14: Compact Layout / Highlights Panel
+   ═══════════════════════════════════════════════════════════════════════ */
+.forceHighlightsPanel,
+.forceHighlightsStencilDesktop,
+.highlights,
+.highlightsPanel {
+  background-color: #161b22 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+.slds-media__body,
+.slds-media__figure {
+  color: #e6edf3 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PHASE 15: Kanban View
+   ═══════════════════════════════════════════════════════════════════════ */
+.forceKanbanBoard,
+.slds-kanban__column,
+.slds-kanban__record {
+  background-color: #161b22 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SAFETY: Print Mode — Disable dark mode for printing
+   ═══════════════════════════════════════════════════════════════════════ */
+@media print {
+  html, body, * {
+    background-color: #fff !important;
+    color: #000 !important;
+    border-color: #ccc !important;
+    filter: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SAFETY: Preserve and enhance SF Power Inspector UI in Org Dark Mode
+   ═══════════════════════════════════════════════════════════════════════ */
+#sfpi-root {
+  position: fixed !important;
+  right: 0 !important;
+  top: 120px !important;
+  z-index: 2147483647 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+#sfpi-root .sfpi-btn {
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: 36px !important;
+  height: 36px !important;
+  border: 1px solid #38bdf8 !important;
+  border-right: none !important;
+  border-radius: 8px 0 0 8px !important;
+  background: #161b22 !important;
+  box-shadow: -2px 2px 14px rgba(0, 0, 0, 0.6), 0 0 10px rgba(56, 189, 248, 0.3) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 2147483647 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+#sfpi-root .sfpi-btn:hover {
+  background: #1f293d !important;
+  width: 44px !important;
+  box-shadow: -3px 3px 18px rgba(56, 189, 248, 0.5) !important;
+}
+
+#sfpi-root .sfpi-btn svg {
+  display: block !important;
+  width: 20px !important;
+  height: 20px !important;
+  stroke: #38bdf8 !important;
+  fill: none !important;
+  filter: none !important;
+}
+
+#sfpi-root .sfpi-popup {
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: 350px !important;
+  height: 80vh !important;
+  max-height: 700px !important;
+  border: none !important;
+  border-radius: 12px 0 0 12px !important;
+  box-shadow: -4px 4px 24px rgba(0, 0, 0, 0.6) !important;
+  background: transparent !important;
+  filter: none !important;
+}
+
+#sfpi-root.sfpi-active .sfpi-popup {
+  display: block !important;
+  transform: translateX(0) !important;
+}
+

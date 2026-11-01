@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Apex Runner & Dev Console — SF Power Inspector</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <script type="module" src="apex-runner.js"></script>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>⚡ Anonymous Apex & Dev Console</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 500; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta" style="display: flex; gap: 8px; align-items: center;">
+      <select id="select-history" class="select" style="font-size: 12px; max-width: 170px;">
+        <option value="">Recent Scripts...</option>
+      </select>
+      <button class="btn btn-secondary" id="btn-sample-code">Sample Scripts</button>
+      <button class="btn btn-secondary" id="btn-enable-trace" title="Enable 24-hour FINEST debug logging for your user">⚡ Enable TraceFlag</button>
+      <a href="https://" target="_blank" class="btn btn-secondary" id="link-dev-console" style="text-decoration: none;" title="Open Salesforce Developer Console in new tab">↗ Dev Console</a>
+      <button class="btn btn-primary" id="btn-execute">▶ Execute Apex (Ctrl+Enter)</button>
+    </div>
+  </header>
+
+  <main class="tool-workspace" style="display: flex; flex-direction: column; gap: 12px; padding: 12px 20px 16px;">
+    
+    <!-- Code Editor Area -->
+    <div class="tool-card" style="padding: 12px; gap: 8px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <label style="font-size: 12px; font-weight: 700; color: #0176d3;">Apex Script:</label>
+          <span style="font-size: 11px; color: var(--text-muted);">(Executes synchronously with FINEST logging via SOAP Apex API)</span>
+        </div>
+        <div id="execution-stats" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Ready</div>
+      </div>
+      <textarea id="apex-code" class="code-editor" rows="9" placeholder="// Type Anonymous Apex here
+List<Account> accs = [SELECT Id, Name FROM Account LIMIT 5];
+for (Account a : accs) {
+    System.debug('Account: ' + a.Name);
+}"></textarea>
+    </div>
+
+    <!-- Execution Results & Mini Dev Console -->
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div class="tool-tabs" style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; gap: 4px;">
+          <button class="tool-tab active" data-tab="summary">Execution Summary & Limits</button>
+          <button class="tool-tab" data-tab="log">Debug Log Output (<span id="log-line-count">0 lines</span>)</button>
+        </div>
+        <div id="log-toolbar" style="display: none; padding-right: 12px; gap: 8px; align-items: center;">
+          <label style="font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+            <input type="checkbox" id="chk-user-debug" checked> Show USER_DEBUG Only
+          </label>
+          <button class="btn btn-secondary" id="btn-copy-log" style="font-size: 11px; padding: 2px 8px;">📋 Copy</button>
+          <button class="btn btn-secondary" id="btn-download-log" style="font-size: 11px; padding: 2px 8px;">📥 Download .log</button>
+        </div>
+      </div>
+
+      <!-- Tab 1: Execution Summary & Governor Limits Dashboard -->
+      <div class="table-container" id="summary-view" style="padding: 16px; overflow-y: auto;">
+        
+        <div id="status-card" style="padding: 14px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; margin-bottom: 16px;">
+          <div style="font-weight: 600; font-size: 13px; color: var(--text-main);">Press "Execute Apex" to run script against your Salesforce org.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+            The script will run synchronously and return full debug output and governor limit usage metrics.
+          </div>
+        </div>
+
+        <div id="error-details" style="display:none; color: #dc2626; font-family: var(--font-mono); font-size: 12px; background: #fef2f2; border: 1px solid #fecaca; padding: 12px; border-radius: 6px; margin-bottom: 16px; white-space: pre-wrap;"></div>
+
+        <!-- Governor Limits Meter -->
+        <div id="limits-container" style="display: none;">
+          <h3 style="font-size: 13px; font-weight: 700; color: #0176d3; margin-bottom: 10px;">📊 Transaction Governor Limits Consumed</h3>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;" id="limits-grid">
+            <!-- Dynamic Limit Bars populated by JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Tab 2: Debug Log Output -->
+      <div class="table-container" id="log-view" style="display: none; padding: 12px; overflow-y: auto; background: #fafafa;">
+        <pre id="log-output" style="font-family: var(--font-mono); font-size: 12px; line-height: 1.5; white-space: pre-wrap; color: #1e293b;"></pre>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

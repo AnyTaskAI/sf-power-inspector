@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Agentforce & GenAI Studio — SF Power Inspector PRO</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <style>
+    .ai-badge-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .topic-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+    .action-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .action-pill.flow { background: #e0f2fe; color: #0284c7; border-color: #bae6fd; }
+    .action-pill.apex { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+    .action-pill.prompt { background: #ede9fe; color: #7c3aed; border-color: #ddd6fe; }
+    .grounding-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.5;
+      color: #1e293b;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>🤖 Agentforce & GenAI Studio</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 600; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta" style="display: flex; gap: 8px; align-items: center;">
+      <a href="https://" target="_blank" class="btn btn-secondary" id="link-copilot-setup" style="font-size: 11px; text-decoration: none;" title="Open Agentforce & Copilot Setup in Salesforce">↗ Agentforce Setup</a>
+      <a href="https://" target="_blank" class="btn btn-secondary" id="link-prompt-builder" style="font-size: 11px; text-decoration: none;" title="Open Prompt Builder in Salesforce">↗ Prompt Builder</a>
+      <a href="https://" target="_blank" class="btn btn-secondary" id="link-einstein-studio" style="font-size: 11px; text-decoration: none;" title="Open Model Builder in Salesforce">↗ Einstein Studio</a>
+      <a href="https://" target="_blank" class="btn btn-secondary" id="link-trust-layer" style="font-size: 11px; text-decoration: none;" title="Open Einstein Trust Layer">↗ Trust Layer</a>
+    </div>
+  </header>
+
+  <main class="tool-workspace">
+    <!-- Hub Navigation Tabs -->
+    <div class="tool-tabs" id="agent-tabs" style="background:#fff; border-radius:var(--radius) var(--radius) 0 0;">
+      <button class="tool-tab active" data-tab="agents" id="tab-btn-agents">🤖 Agents & Topics</button>
+      <button class="tool-tab" data-tab="prompts" id="tab-btn-prompts">✍️ Prompt Templates & Playground</button>
+      <button class="tool-tab" data-tab="trust" id="tab-btn-trust">🛡️ Models & Einstein Trust Layer</button>
+      <button class="tool-tab" data-tab="actions" id="tab-btn-actions">⚡ Invocable Action Validator</button>
+    </div>
+
+    <!-- Tab 1: Agents & Topics Explorer -->
+    <div class="tool-card tab-content" id="view-agents" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div style="padding: 10px 14px; background: #fafafa; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <label style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Active Agent / Copilot:</label>
+          <select id="select-agent" class="select" style="min-width: 240px; font-weight: 600;">
+            <option value="">📂 Loading Agents from Org...</option>
+          </select>
+          <button class="btn btn-secondary" id="btn-refresh-agents" style="font-size: 11px;">🔄 Refresh</button>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="filter-topics" class="input-text" placeholder="Filter topics & actions..." style="font-size: 12px; width: 180px;">
+          <button class="btn btn-primary" id="btn-audit-agent-descriptions">🔍 Audit Action Semantic Quality</button>
+        </div>
+      </div>
+
+      <div style="flex: 1; display: grid; grid-template-columns: 320px 1fr; overflow: hidden;">
+        <!-- Left Column: Agent Details & Topics Tree -->
+        <div style="border-right: 1px solid var(--border); padding: 12px; overflow-y: auto; background: #fff; display: flex; flex-direction: column; gap: 10px;">
+          <div id="agent-kpis" style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="ai-badge-card">
+              <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Agent Status</span>
+              <span id="agent-status-val" style="font-size: 16px; font-weight: 800; color: #16a34a;">Active</span>
+            </div>
+            <div class="ai-badge-card">
+              <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Configured Topics</span>
+              <span id="agent-topics-count" style="font-size: 16px; font-weight: 800; color: #0176d3;">0 Topics</span>
+            </div>
+            <div class="ai-badge-card">
+              <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Total Invocable Actions</span>
+              <span id="agent-actions-count" style="font-size: 16px; font-weight: 800; color: #7c3aed;">0 Actions</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 8px;">
+            <strong style="font-size: 12px; color: var(--text-main);">Agent Instructions & Guardrails:</strong>
+            <div id="agent-instructions-val" style="font-size: 12px; color: #475569; margin-top: 4px; background: #f8fafc; padding: 8px; border-radius: 4px; line-height: 1.5; border: 1px solid #e2e8f0; max-height: 200px; overflow-y: auto;">
+              Select an Agentforce agent above to inspect its configured reasoning instructions and guardrails.
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Topics & Actions Detail -->
+        <div style="padding: 14px; overflow-y: auto; background: #f8fafc; display: flex; flex-direction: column; gap: 10px;" id="topics-list-container">
+          <div style="padding: 40px 20px; text-align: center; color: var(--text-muted);">
+            <div style="font-size: 32px; margin-bottom: 8px;">🤖</div>
+            <strong>Agentforce Agent & Topic Explorer</strong>
+            <div style="font-size: 12px; margin-top: 4px;">Select an agent to inspect its topics, actions, grounding queries, and reasoning triggers.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Prompt Builder & Playground -->
+    <div class="tool-card tab-content" id="view-prompts" style="flex: 1; overflow: hidden; display: none; flex-direction: column;">
+      <div style="padding: 10px 14px; background: #fafafa; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <select id="select-prompt-template" class="select" style="min-width: 250px; font-weight: 600;">
+            <option value="">📂 Load Prompt Template from Org...</option>
+          </select>
+          <select id="select-sample-prompt" class="select" style="min-width: 180px;">
+            <option value="">💡 Sample GenAI Prompts...</option>
+            <option value="sales_email">📧 Sales Outreach Email (Account & Contact Grounding)</option>
+            <option value="case_summary">📋 Case Escalation Executive Summary</option>
+            <option value="oppty_risk">⚠️ Opportunity Deal Risk & Next Best Action</option>
+          </select>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="prompt-record-id" class="input-text" placeholder="Record ID (e.g. 001...)" style="font-size: 12px; width: 180px;">
+          <button class="btn btn-secondary" id="btn-ground-prompt">🔍 Ground with Live Record</button>
+          <button class="btn btn-primary" id="btn-simulate-prompt">⚡ Test & Simulate Prompt</button>
+        </div>
+      </div>
+
+      <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden;">
+        <!-- Left: Template Editor / Prompt Body -->
+        <div style="display: flex; flex-direction: column; border-right: 1px solid var(--border); padding: 12px; background: #fff;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Prompt Template Definition (with Merge Syntax):</label>
+            <span id="prompt-meta-badge" style="font-size: 11px; background: #ede9fe; color: #6d28d9; padding: 2px 6px; border-radius: 3px; font-weight: 600;">Flex Template</span>
+          </div>
+          <textarea id="prompt-template-input" class="code-editor" style="flex: 1; resize: none;" placeholder="Write or load a Prompt Builder template with merge fields like {!$Input:Account.Name}, {!$Input:Account.Industry}..."></textarea>
+        </div>
+
+        <!-- Right: Grounded Output / Execution Simulation -->
+        <div style="display: flex; flex-direction: column; padding: 12px; overflow-y: auto; background: #f8fafc; gap: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Grounded Payload & Foundation Model Simulation:</label>
+            <button class="btn btn-secondary" id="btn-copy-prompt-output" style="font-size: 11px;">📋 Copy Payload</button>
+          </div>
+          <div id="prompt-simulation-output" class="grounding-box" style="flex: 1; overflow-y: auto;">
+Enter a Record ID and click "Ground with Live Record" or "Test & Simulate Prompt" to view the exact payload passed through the Einstein Trust Layer to the LLM.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Models & Einstein Trust Layer -->
+    <div class="tool-card tab-content" id="view-trust" style="flex: 1; overflow-y: auto; padding: 16px; background: #f8fafc; display: none;">
+      <div style="max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px;">
+        <!-- Trust Layer Summary Header -->
+        <div style="background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 15px; font-weight: 800; color: #0176d3; display: flex; align-items: center; gap: 8px;">
+              🛡️ Einstein Trust Layer & Foundation Model Governance
+            </div>
+            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">
+              Verifies Zero Data Retention (ZDR), dynamic PII masking, toxicity monitoring, and secure grounding architecture.
+            </div>
+          </div>
+          <button class="btn btn-secondary" id="btn-refresh-models">🔄 Audit Models</button>
+        </div>
+
+        <!-- Trust Pillars Grid -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+          <div class="ai-badge-card" style="border-left: 4px solid #16a34a;">
+            <span style="font-size: 11px; font-weight: 700; color: #16a34a;">ZERO DATA RETENTION</span>
+            <span style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 2px;">Enforced ✓</span>
+            <span style="font-size: 11px; color: #64748b;">Customer data is never stored or used to train third-party LLMs.</span>
+          </div>
+          <div class="ai-badge-card" style="border-left: 4px solid #0284c7;">
+            <span style="font-size: 11px; font-weight: 700; color: #0284c7;">DYNAMIC PII MASKING</span>
+            <span style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 2px;">Active (12 Rules)</span>
+            <span style="font-size: 11px; color: #64748b;">SSN, credit cards, emails, and phone numbers replaced with tokens.</span>
+          </div>
+          <div class="ai-badge-card" style="border-left: 4px solid #7c3aed;">
+            <span style="font-size: 11px; font-weight: 700; color: #7c3aed;">TOXICITY DETECTION</span>
+            <span style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 2px;">Score & Filter Active</span>
+            <span style="font-size: 11px; color: #64748b;">Blocks profanity, hate speech, and hallucinated security breaches.</span>
+          </div>
+          <div class="ai-badge-card" style="border-left: 4px solid #eab308;">
+            <span style="font-size: 11px; font-weight: 700; color: #b45309;">AUDIT TRAIL</span>
+            <span style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 2px;">Data Cloud Grounded</span>
+            <span style="font-size: 11px; color: #64748b;">Every prompt and response is logged securely with feedback scores.</span>
+          </div>
+        </div>
+
+        <!-- Org Foundation Models List -->
+        <div style="background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;">
+          <h3 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 10px;">Org Configured Models (Einstein Studio / Model Builder):</h3>
+          <div id="models-list-container" style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="padding: 16px; text-align: center; color: var(--text-muted); font-size: 12px;">
+              Querying `GenAiModel` configurations...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 4: Invocable Action Validator -->
+    <div class="tool-card tab-content" id="view-actions" style="flex: 1; overflow-y: auto; padding: 16px; background: #f8fafc; display: none;">
+      <div style="max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 14px; font-weight: 700; color: #0176d3;">⚡ Invocable Action & Agentforce Readiness Scanner</div>
+            <div style="font-size: 12px; color: #64748b; margin-top: 2px;">
+              Scans Apex `@InvocableMethod` classes and Autolaunched Flows for Agentforce semantic description clarity and required inputs.
+            </div>
+          </div>
+          <button class="btn btn-primary" id="btn-scan-invocable-actions">🔍 Scan Invocable Components</button>
+        </div>
+
+        <div id="invocable-scan-results" style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="padding: 40px 20px; text-align: center; color: var(--text-muted);">
+            Click <strong>"Scan Invocable Components"</strong> to audit all Autolaunched Flows and Invocable Apex methods in your org for Agentforce compatibility.
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="agentforce-studio.js"></script>
+</body>
+</html>
+

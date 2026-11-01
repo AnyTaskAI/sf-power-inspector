@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Change Set & Deployment Studio — SF Power Inspector</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <script type="module" src="changeset.js"></script>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>📦 Change Set & Deployment Studio</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 500; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta" style="display: flex; gap: 8px;">
+      <a href="https://" target="_blank" class="btn btn-secondary" id="btn-open-outbound" style="text-decoration: none;">↗ Outbound Change Sets</a>
+      <a href="https://" target="_blank" class="btn btn-secondary" id="btn-open-inbound" style="text-decoration: none;">↗ Inbound Change Sets</a>
+      <a href="https://" target="_blank" class="btn btn-secondary" id="btn-open-deploy-settings" style="text-decoration: none;">↗ Deployment Connections</a>
+      <button class="btn btn-secondary" id="btn-copy-package-xml">📋 Copy package.xml</button>
+      <button class="btn btn-primary" id="btn-download-package-xml">📥 Download package.xml</button>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs: Outbound Studio vs Inbound / History -->
+  <div style="background: #ffffff; border-bottom: 1px solid var(--border); padding: 0 20px;">
+    <div class="tool-tabs" id="main-cs-tabs" style="background: transparent; padding-top: 8px;">
+      <button class="tool-tab active" data-tab="outbound">📦 Outbound Change Set Builder</button>
+      <button class="tool-tab" data-tab="inbound">📥 Inbound Change Sets & Deployment History (<span id="inbound-count">0</span>)</button>
+    </div>
+  </div>
+
+  <!-- TAB 1: OUTBOUND CHANGE SET BUILDER -->
+  <div id="tab-content-outbound" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+    <!-- Change Set Container Bar -->
+    <div class="tool-card" style="margin: 12px 20px 0; padding: 10px 16px; border-radius: 6px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <label style="font-size: 12px; font-weight: 700; color: #0176d3;">Active Change Set:</label>
+          <select id="select-active-changeset" class="select" style="font-weight: 600; min-width: 240px; border-color: #0176d3;">
+            <option value="">-- No Change Set Active --</option>
+            <option value="__NEW__">➕ Create New Change Set...</option>
+          </select>
+          <button class="btn btn-secondary" id="btn-new-changeset" style="font-size: 12px; padding: 4px 10px;">➕ New</button>
+          <button class="btn btn-secondary" id="btn-clone-changeset" style="font-size: 12px; padding: 4px 10px; display: none;">📋 Clone</button>
+          <button class="btn btn-secondary" id="btn-edit-changeset" style="font-size: 12px; padding: 4px 10px; display: none;">✏️ Edit</button>
+          <button class="btn btn-secondary" id="btn-delete-changeset" style="font-size: 12px; padding: 4px 10px; color: #dc2626; display: none;">🗑️ Delete</button>
+        </div>
+
+        <div id="changeset-meta-bar" style="display: none; align-items: center; gap: 12px; font-size: 12px;">
+          <span style="color: var(--text-muted);">Target: <strong id="cs-target-label" style="color: var(--text-main);">Production</strong></span>
+          <span class="badge" style="background:#f0fdf4; color:#16a34a;">DRAFT</span>
+          <button class="btn btn-secondary" id="btn-check-deps" style="font-size: 11px; padding: 3px 8px; color: #7c3aed; border-color: #7c3aed44;">
+            🔍 Check Dependencies
+          </button>
+          <button class="btn btn-primary" id="btn-open-deploy-modal" style="font-size: 12px; padding: 4px 12px; background: #0284c7;">
+            🚀 Deploy / Validate
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <main class="tool-workspace" style="display: flex; flex-direction: column; gap: 12px; padding: 12px 20px 16px;">
+      
+      <!-- View A: No Change Set Selected Onboarding -->
+      <div id="onboarding-view" class="tool-card" style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px;">
+        <div style="max-width: 580px; text-align: center; display: flex; flex-direction: column; gap: 16px;">
+          <div style="font-size: 40px;">📦</div>
+          <h2 style="font-size: 18px; font-weight: 700; color: #0176d3;">Select or Create a Change Set First</h2>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+            In Salesforce production and sandbox environments, components are bundled inside a named <strong>Outbound Change Set</strong>. 
+            Create your change set below to begin staging Apex classes, flows, fields, and layouts.
+          </p>
+
+          <!-- Inline Quick Create Card -->
+          <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: left; display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Change Set Name: <span style="color:red">*</span></label>
+              <input type="text" id="quick-cs-name" class="input-text" placeholder="e.g. Release_2026_Sprint10_Fixes" style="width: 100%;">
+            </div>
+            <div>
+              <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Target Deployment Environment:</label>
+              <select id="quick-cs-target" class="select" style="width: 100%;">
+                <option value="Production">Production Org</option>
+                <option value="UAT Sandbox">UAT Sandbox</option>
+                <option value="Staging Sandbox">Staging Sandbox</option>
+                <option value="QA Sandbox">QA Sandbox</option>
+                <option value="Custom Environment">Other Sandbox / Dev Hub</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Description (Optional):</label>
+              <input type="text" id="quick-cs-desc" class="input-text" placeholder="Summary of changes and sprint story" style="width: 100%;">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 6px;">
+              <button class="btn btn-primary" id="btn-quick-create" style="flex: 1; justify-content: center; padding: 8px;">
+                🚀 Create Change Set & Start Staging
+              </button>
+              <a href="https://" target="_blank" class="btn btn-secondary" id="btn-launch-sf-changeset" style="justify-content: center; padding: 8px; text-decoration: none;">
+                ↗ Open in Salesforce
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- View B: Active Change Set Staging Workspace -->
+      <div id="staging-view" style="display: none; flex: 1; flex-direction: row; gap: 14px; overflow: hidden;">
+        
+        <!-- Left Column: Component Explorer -->
+        <div class="tool-card" style="flex: 3; display: flex; flex-direction: column; overflow: hidden; padding: 12px; gap: 10px;">
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <div>
+              <label style="font-size: 11px; font-weight: 600; display: block; margin-bottom: 2px;">Metadata Type:</label>
+              <select id="select-meta-type" class="select" style="font-weight: 600; min-width: 180px;">
+                <option value="ApexClass">Apex Class</option>
+                <option value="ApexTrigger">Apex Trigger</option>
+                <option value="LightningComponentBundle">Lightning Web Component</option>
+                <option value="AuraDefinitionBundle">Aura Component</option>
+                <option value="FlowDefinition">Flow & Process</option>
+                <option value="CustomObject">Custom Object</option>
+                <option value="CustomField">Custom Field (Object.Field)</option>
+                <option value="ValidationRule">Validation Rule (Object.Rule)</option>
+                <option value="RecordType">Record Type (Object.RecordType)</option>
+                <option value="Layout">Page Layout (Object-Layout)</option>
+                <option value="PermissionSet">Permission Set</option>
+                <option value="PermissionSetGroup">Permission Set Group</option>
+                <option value="Profile">Profile</option>
+                <option value="ApexPage">Visualforce Page</option>
+                <option value="ApexComponent">Visualforce Component</option>
+                <option value="CustomMetadata">Custom Metadata</option>
+                <option value="CustomLabel">Custom Label</option>
+                <option value="EmailTemplate">Email Template</option>
+                <option value="QuickAction">Quick Action (Object.Action)</option>
+                <option value="Group">Public Group / Queue</option>
+              </select>
+            </div>
+
+            <div>
+              <label style="font-size: 11px; font-weight: 600; display: block; margin-bottom: 2px;">Modified In:</label>
+              <select id="select-date-filter" class="select" style="font-size: 12px;">
+                <option value="all" selected>All Time</option>
+                <option value="today">Today</option>
+                <option value="7days">Last 7 Days</option>
+                <option value="30days">Last 30 Days</option>
+              </select>
+            </div>
+
+            <div>
+              <label style="font-size: 11px; font-weight: 600; display: block; margin-bottom: 2px;">Namespace:</label>
+              <select id="select-namespace-filter" class="select" style="font-size: 12px;">
+                <option value="all" selected>All (Include Managed)</option>
+                <option value="unmanaged">Unmanaged Only</option>
+              </select>
+            </div>
+
+            <div style="flex: 1; min-width: 140px;">
+              <label style="font-size: 11px; font-weight: 600; display: block; margin-bottom: 2px;">Quick Search (Object or Component):</label>
+              <input type="text" id="input-search-components" class="input-text" placeholder="e.g. Account.Rating or MyClass..." style="width: 100%; font-size: 12px; padding: 5px 8px;">
+            </div>
+          </div>
+
+          <!-- Action Toolbar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button class="btn btn-secondary" id="btn-select-all" style="font-size: 11px; padding: 3px 8px;">Select All Visible</button>
+              <button class="btn btn-secondary" id="btn-deselect-all" style="font-size: 11px; padding: 3px 8px;">Deselect All</button>
+              <span id="components-stat" style="font-size: 12px; color: var(--text-muted);">Loading components...</span>
+            </div>
+            <button class="btn btn-primary" id="btn-add-to-changeset" style="font-size: 12px; padding: 4px 12px;">
+              ➕ Add to Change Set (<span id="selected-to-add-count">0</span>)
+            </button>
+          </div>
+
+          <!-- Component Table -->
+          <div class="table-container" style="flex: 1; overflow-y: auto;">
+            <table class="data-table" id="components-table">
+              <thead>
+                <tr>
+                  <th style="width: 30px;"><input type="checkbox" id="chk-master"></th>
+                  <th>Component Name (Object.Name)</th>
+                  <th style="width: 120px;">Last Modified</th>
+                  <th style="width: 140px;">Modified By</th>
+                  <th style="width: 100px; text-align: center;">In Change Set?</th>
+                </tr>
+              </thead>
+              <tbody id="components-body">
+                <tr><td colspan="5" style="text-align:center; padding:30px;">Loading metadata components...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right Column: Staged Change Set Manifest -->
+        <div class="tool-card" style="flex: 2; display: flex; flex-direction: column; overflow: hidden; padding: 12px; gap: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+            <div>
+              <h2 style="font-size: 14px; font-weight: 700; color: #0176d3; display: flex; align-items: center; gap: 6px;">
+                🛒 Staged Components
+                <span class="badge" id="staged-count-badge" style="background: #e0f2fe; color: #0284c7;">0 Items</span>
+              </h2>
+            </div>
+            <div style="display: flex; gap: 6px;">
+              <button class="btn btn-secondary" id="btn-clear-staged" style="font-size: 11px; padding: 2px 8px; color: #dc2626;">Clear All</button>
+            </div>
+          </div>
+
+          <!-- Staged Items Tree -->
+          <div id="staged-container" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
+            <div style="text-align: center; color: var(--text-muted); padding: 40px 20px; font-size: 13px;">
+              No components added to this change set yet.<br>
+              <span style="font-size: 11px;">Select components from the left panel and click "Add to Change Set".</span>
+            </div>
+          </div>
+
+          <!-- CLI Deploy Shortcut Generator -->
+          <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <span style="font-size: 11px; font-weight: 600; color: var(--text-muted);">Salesforce CLI Deploy Command:</span>
+              <button class="btn btn-secondary" id="btn-copy-cli" style="font-size: 10px; padding: 1px 6px;">Copy CLI</button>
+            </div>
+            <code id="cli-preview" style="font-size: 11px; font-family: var(--font-mono); color: #0f172a; word-break: break-all; display: block; max-height: 48px; overflow-y: auto;">sf project deploy start --metadata ...</code>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- TAB 2: INBOUND CHANGE SETS & DEPLOYMENT HISTORY -->
+  <div id="tab-content-inbound" style="display: none; flex-direction: column; flex: 1; overflow: hidden; padding: 12px 20px 16px;">
+    <div class="tool-card" style="padding: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h2 style="font-size: 14px; font-weight: 700; color: #0176d3;">📥 Org-Level Deployment History & Inbound Change Sets</h2>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+          Real-time audit log of all inbound change sets, VS Code, CI/CD, and metadata deployments to this org via Tooling API <code>DeployRequest</code>.
+        </p>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-secondary" id="btn-refresh-inbound">🔄 Refresh History</button>
+        <a href="https://" target="_blank" class="btn btn-primary" id="btn-open-deploy-monitor" style="text-decoration: none;">↗ Open Salesforce Deploy Status</a>
+      </div>
+    </div>
+
+    <!-- Deployment History Table -->
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div class="table-container" style="flex: 1; overflow-y: auto;">
+        <table class="data-table" id="inbound-table">
+          <thead>
+            <tr>
+              <th style="width: 140px;">Deployment ID</th>
+              <th style="width: 100px;">Status</th>
+              <th style="width: 100px;">Type</th>
+              <th style="width: 140px;">Start Time</th>
+              <th style="width: 140px;">Completed Time</th>
+              <th style="width: 120px;">Deployed By</th>
+              <th style="width: 140px;">Components</th>
+              <th style="width: 110px;">Unit Tests</th>
+              <th>Errors & Diagnostics</th>
+            </tr>
+          </thead>
+          <tbody id="inbound-body">
+            <tr><td colspan="9" style="text-align:center; padding:30px;">Loading deployment history...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Create / Edit Change Set -->
+  <div id="modal-changeset" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-cs-title">➕ Create New Outbound Change Set</h3>
+        <span id="btn-close-modal" style="cursor:pointer; font-size:18px; font-weight:bold; color:var(--text-muted);">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div>
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Change Set Name: <span style="color:red">*</span></label>
+          <input type="text" id="modal-cs-name" class="input-text" placeholder="e.g. Sprint_12_Lead_Automation" style="width: 100%;">
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Target Environment:</label>
+          <select id="modal-cs-target" class="select" style="width: 100%;">
+            <option value="Production">Production Org</option>
+            <option value="UAT Sandbox">UAT Sandbox</option>
+            <option value="Staging Sandbox">Staging Sandbox</option>
+            <option value="QA Sandbox">QA Sandbox</option>
+            <option value="Custom Environment">Other Sandbox / Dev Hub</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Description:</label>
+          <textarea id="modal-cs-desc" class="code-editor" rows="3" placeholder="Summary of sprint changes and dependencies..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-modal">Cancel</button>
+        <button class="btn btn-primary" id="btn-save-modal">Save Change Set</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Clone Change Set -->
+  <div id="modal-clone" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>📋 Clone Change Set</h3>
+        <span id="btn-close-clone-modal" style="cursor:pointer; font-size:18px; font-weight:bold; color:var(--text-muted);">&times;</span>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 12px; color: var(--text-muted);">
+          Duplicates this Change Set along with all currently staged components into a new Change Set container.
+        </p>
+        <div>
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">New Change Set Name: <span style="color:red">*</span></label>
+          <input type="text" id="clone-cs-name" class="input-text" placeholder="e.g. Release_2026_Sprint10_Fixes_v2" style="width: 100%;">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-clone">Cancel</button>
+        <button class="btn btn-primary" id="btn-confirm-clone">Confirm Clone</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Deploy to Org / Validation Wizard -->
+  <div id="modal-deploy" class="modal-overlay" style="display: none;">
+    <div class="modal-box" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3>🚀 Deploy / Validate Change Set</h3>
+        <span id="btn-close-deploy-modal" style="cursor:pointer; font-size:18px; font-weight:bold; color:var(--text-muted);">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 10px; font-size: 12px;">
+          <strong>Target Change Set:</strong> <span id="deploy-cs-title" style="font-weight: 700; color: #0176d3;">—</span>
+          (<span id="deploy-cs-count">0</span> components staged)
+        </div>
+
+        <div>
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Target Destination Org:</label>
+          <input type="text" id="deploy-target-org-input" class="input-text" placeholder="e.g. Production (parrotcodes) or sandbox alias" style="width: 100%;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Deployment Mode:</label>
+            <select id="deploy-mode-select" class="select" style="width: 100%;">
+              <option value="validate">Validation Only (CheckOnly - No Data Saved)</option>
+              <option value="deploy">Full Deployment (Commit Changes)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Apex Test Level:</label>
+            <select id="deploy-test-level" class="select" style="width: 100%;">
+              <option value="NoTestRun">No Test Run (Sandbox Default)</option>
+              <option value="RunSpecifiedTests">Run Specified Tests</option>
+              <option value="RunLocalTests">Run Local Tests (Prod Default)</option>
+              <option value="RunAllTestsInOrg">Run All Tests in Org</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Terminal CLI Deployment Command:</label>
+          <div style="display: flex; gap: 6px;">
+            <input type="text" id="deploy-cli-cmd" class="input-text" readonly style="flex: 1; font-family: var(--font-mono); font-size: 11px; background: #f8fafc;">
+            <button class="btn btn-secondary" id="btn-copy-deploy-cmd" style="font-size: 11px;">Copy</button>
+          </div>
+        </div>
+
+        <div style="font-size: 11px; color: var(--text-muted); line-height: 1.5; border-top: 1px solid var(--border); padding-top: 8px;">
+          💡 <strong>Salesforce Inbound/Outbound Rule:</strong> To upload directly from a sandbox into Production or another sandbox, ensure the destination environment has authorized upload permissions in 
+          <a href="https://" target="_blank" id="link-deploy-settings-inline" style="color:#0176d3; font-weight:600;">Deployment Settings</a>.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-deploy">Close</button>
+        <button class="btn btn-primary" id="btn-execute-deploy-action">🚀 Launch Deployment in Salesforce</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Missing Dependencies Checker -->
+  <div id="modal-deps" class="modal-overlay" style="display: none;">
+    <div class="modal-box" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3>🔍 Missing Dependencies Analysis</h3>
+        <span id="btn-close-deps-modal" style="cursor:pointer; font-size:18px; font-weight:bold; color:var(--text-muted);">&times;</span>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 12px; color: var(--text-muted);">
+          Scans all staged Apex classes, triggers, and fields for dependencies using the Tooling API <code>MetadataComponentDependency</code> to ensure no components are missing before deployment.
+        </p>
+        <div id="deps-results-container" style="max-height: 240px; overflow-y: auto; border: 1px solid var(--border); border-radius: 6px; padding: 10px; background: #f8fafc;">
+          Analyzing dependencies...
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-close-deps">Close</button>
+        <button class="btn btn-primary" id="btn-add-missing-deps" style="display:none;">➕ Add All Missing to Change Set</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

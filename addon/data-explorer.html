@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Data Explorer & Advanced Data Export — SF Power Inspector PRO</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <style>
+    .prompt-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .prompt-chip:hover {
+      background: #0176d3;
+      color: #fff;
+      border-color: #0176d3;
+    }
+    [data-theme="dark"] .prompt-chip {
+      background: #1e293b;
+      color: #cbd5e1;
+      border-color: #334155;
+    }
+    [data-theme="dark"] .prompt-chip:hover {
+      background: #38bdf8;
+      color: #0b1120;
+      border-color: #38bdf8;
+    }
+    .relation-card {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      background: var(--bg-card);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .relation-badge-parent {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      cursor: pointer;
+    }
+    .relation-badge-parent:hover {
+      background: #1d4ed8;
+      color: #fff;
+    }
+    [data-theme="dark"] .relation-badge-parent {
+      background: #1e3a8a;
+      color: #bfdbfe;
+      border-color: #2563eb;
+    }
+    [data-theme="dark"] .relation-badge-parent:hover {
+      background: #38bdf8;
+      color: #0b1120;
+    }
+    .relation-badge-child {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+      cursor: pointer;
+    }
+    .relation-badge-child:hover {
+      background: #15803d;
+      color: #fff;
+    }
+    [data-theme="dark"] .relation-badge-child {
+      background: #064e3b;
+      color: #a7f3d0;
+      border-color: #059669;
+    }
+    [data-theme="dark"] .relation-badge-child:hover {
+      background: #34d399;
+      color: #064e3b;
+    }
+    .palette-tab-btn {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .palette-tab-btn:hover {
+      border-color: var(--primary);
+      color: var(--text-main);
+    }
+    .palette-tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+    .btn-palette-chip {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.12s ease;
+      user-select: none;
+    }
+    .btn-palette-chip:hover {
+      border-color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .btn-palette-chip.active {
+      background: #0176d3 !important;
+      color: #fff !important;
+      border-color: #0176d3 !important;
+      font-weight: 700;
+      box-shadow: 0 1px 4px rgba(1, 118, 211, 0.4);
+    }
+    .btn-palette-chip.active .chip-type-tag {
+      color: #bfdbfe !important;
+    }
+    .btn-palette-chip.chip-lookup {
+      border-color: #c084fc;
+      background: rgba(192, 132, 252, 0.08);
+    }
+    .btn-palette-chip.chip-child {
+      border-color: #86efac;
+      background: rgba(134, 239, 172, 0.1);
+    }
+    .guide-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .guide-card h3 {
+      margin: 0;
+      font-size: 14px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .guide-card p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .guide-code {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      overflow-x: auto;
+    }
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #10b981;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 9999;
+      transition: opacity 0.3s, transform 0.3s;
+      transform: translateY(10px);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .toast-msg.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+  <script type="module" src="data-explorer.js"></script>
+</head>
+<body>
+  <div id="toast" class="toast-msg">Copied to clipboard!</div>
+
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 20px;">📊</span>
+        <div>
+          <h1 style="font-size: 15px; margin: 0; font-weight: 700; line-height: 1.2;">Data Export &amp; Query Explorer</h1>
+          <div style="font-size: 11px; color: var(--text-muted); font-weight: 500;">Salesforce Inspector Data Studio &bull; Realtime Streaming</div>
+        </div>
+      </div>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 500; font-size: 12px; color: var(--text-muted);"></span>
+    </div>
+    <div class="tool-meta" style="display: flex; align-items: center; gap: 8px;">
+      <button class="btn btn-primary" id="btn-run" style="font-weight: 700; padding: 7px 18px; box-shadow: 0 1px 3px rgba(1, 118, 211, 0.3);">
+        ▶ Run Query <kbd style="font-size: 10px; opacity: 0.8; margin-left: 4px; padding: 1px 4px; background: rgba(255,255,255,0.2); border-radius: 3px;">Ctrl+Enter</kbd>
+      </button>
+    </div>
+  </header>
+
+  <main class="tool-workspace">
+    <!-- Query Editor Panel -->
+    <div class="tool-card" style="padding: 12px; gap: 8px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <select id="query-type" class="select">
+            <option value="soql">SOQL Query</option>
+            <option value="tooling">Tooling SOQL</option>
+            <option value="graphql">GraphQL</option>
+          </select>
+          <label style="font-size: 12px; display: flex; align-items: center; gap: 4px; cursor: pointer;">
+            <input type="checkbox" id="auto-paginate" checked> Auto-paginate all records
+          </label>
+          <label style="font-size: 12px; display: flex; align-items: center; gap: 4px; cursor: pointer;" title="Query all records including soft-deleted and archived tasks/events">
+            <input type="checkbox" id="chk-query-all"> Include Deleted (queryAll)
+          </label>
+          <div style="display: flex; gap: 4px; align-items: center;">
+            <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Helpers:</span>
+            <button class="btn btn-secondary" style="font-size: 11px; padding: 2px 8px;" id="btn-helper-fields-all">FIELDS(ALL)</button>
+            <button class="btn btn-secondary" style="font-size: 11px; padding: 2px 8px;" id="btn-helper-fields-std">FIELDS(STANDARD)</button>
+            <button class="btn btn-secondary" style="font-size: 11px; padding: 2px 8px;" id="btn-helper-count">COUNT()</button>
+            <button class="btn btn-secondary" style="font-size: 11px; padding: 2px 8px;" id="btn-toggle-schema-panel">📖 Field Palette</button>
+          </div>
+        </div>
+        <div id="query-stats" style="font-size: 12px; color: var(--text-muted);">
+          Ready • Type for live Object & Field autocomplete suggestions
+        </div>
+      </div>
+      
+      <div class="autocomplete-container">
+        <textarea id="query-input" class="code-editor" rows="5" placeholder="SELECT Id, Name, CreatedDate FROM Account ORDER BY CreatedDate DESC LIMIT 50"></textarea>
+        <div id="autocomplete-dropdown" class="autocomplete-dropdown" style="display: none;"></div>
+      </div>
+
+      <!-- Quick Field / Object Palette (Collapsible) -->
+      <div id="schema-palette" style="display: none; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 12px; max-height: 240px; overflow-y: auto;">
+        <div style="display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 8px;">
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <input type="text" id="palette-obj-search" class="input-text" placeholder="Change target object..." style="width: 170px; font-size: 12px; padding: 4px 8px;">
+            <input type="text" id="palette-field-filter" class="input-text" placeholder="🔍 Fast filter fields, labels, relations..." style="width: 240px; font-size: 12px; padding: 4px 8px;">
+            <span id="palette-target-label" style="font-weight: 700; font-size: 12px; color: var(--primary);">No object selected</span>
+          </div>
+          <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <button class="btn btn-secondary" id="btn-quick-common-fields" style="font-size: 11px; padding: 2px 8px;" title="Insert recommended core fields for this object">⚡ Common Fields</button>
+            <button class="btn btn-secondary" id="btn-insert-all-fields" style="font-size: 11px; padding: 2px 8px;">+ All Fields</button>
+            <button class="btn btn-secondary" id="btn-clear-query-fields" style="font-size: 11px; padding: 2px 8px;" title="Reset SELECT fields to Id">Clear Fields</button>
+          </div>
+        </div>
+
+        <!-- Filter tabs for palette -->
+        <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 6px; flex-wrap: wrap;" id="palette-tabs">
+          <button class="palette-tab-btn active" data-tab="ALL">All Fields (<span id="palette-count-all">0</span>)</button>
+          <button class="palette-tab-btn" data-tab="STANDARD">Standard (<span id="palette-count-standard">0</span>)</button>
+          <button class="palette-tab-btn" data-tab="CUSTOM">Custom (<span id="palette-count-custom">0</span>)</button>
+          <button class="palette-tab-btn" data-tab="LOOKUPS">🔗 Parent Lookups (<span id="palette-count-lookups">0</span>)</button>
+          <button class="palette-tab-btn" data-tab="CHILDREN">🌲 Child Relations (<span id="palette-count-children">0</span>)</button>
+        </div>
+
+        <div id="palette-fields-list" style="display: flex; flex-wrap: wrap; gap: 4px; max-height: 180px; overflow-y: auto;">
+          <span style="font-size: 11px; color: var(--text-muted);">Type an object name above or type 'FROM Account' in the query editor to load fields.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Table & Multi-Tool Container -->
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div class="tool-tabs" id="result-tabs">
+        <button class="tool-tab active" data-tab="grid">📊 Data Grid (<span id="record-count">0</span>)</button>
+        <button class="tool-tab" data-tab="ai-prompt">🤖 AI Query Studio (Prompt-to-SOQL)</button>
+        <button class="tool-tab" data-tab="relations">🌲 Relations (Parent & Child)</button>
+        <button class="tool-tab" data-tab="json">Raw JSON</button>
+        <button class="tool-tab" data-tab="plan">Query Plan (Cost & Indexes)</button>
+        <button class="tool-tab" data-tab="history">Query History</button>
+        <button class="tool-tab" data-tab="guide">📚 Guide & Reference</button>
+      </div>
+
+      <!-- Tab 1: Data Grid View -->
+      <div class="table-container" id="grid-view" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-card); border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px;">
+          <!-- Left: Filter & Records Counter -->
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <input type="text" id="grid-filter" class="input-text" placeholder="🔍 Search in results..." style="width: 200px; font-size: 12px; padding: 4px 8px;">
+            <span id="grid-filter-status" style="font-size: 11px; color: var(--text-muted); font-weight: 600;"></span>
+            <span class="badge" id="grid-count-badge" style="font-size: 11px; font-weight: 700;">0 records</span>
+          </div>
+
+          <!-- Right: Headers switcher & grouped Copy / Export buttons -->
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 4px; font-size: 11px;">
+              <span style="color: var(--text-muted); font-weight: 600;">Headers:</span>
+              <select id="select-header-display" class="select" style="font-size: 11px; padding: 3px 6px;">
+                <option value="both">Both (Label + API)</option>
+                <option value="label">Label Only</option>
+                <option value="api">API Name Only</option>
+              </select>
+            </div>
+
+            <!-- Copy Action Button Group -->
+            <div style="display: inline-flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+              <button class="btn btn-secondary btn-sm" id="btn-copy-excel" title="Copy TSV with headers directly for Microsoft Excel & Google Sheets" style="border: none; border-radius: 0; border-right: 1px solid var(--border); font-size: 11px; padding: 4px 8px; font-weight: 600;">📋 Copy (Excel)</button>
+              <button class="btn btn-secondary btn-sm" id="btn-copy-csv" title="Copy RFC-4180 CSV to clipboard" style="border: none; border-radius: 0; border-right: 1px solid var(--border); font-size: 11px; padding: 4px 8px; font-weight: 600;">Copy (CSV)</button>
+              <button class="btn btn-secondary btn-sm" id="btn-copy-json" title="Copy formatted JSON records array" style="border: none; border-radius: 0; border-right: 1px solid var(--border); font-size: 11px; padding: 4px 8px; font-weight: 600;">Copy (JSON)</button>
+              <button class="btn btn-secondary btn-sm" id="btn-copy-in" title="Copy all IDs as a SOQL IN clause ('001...', '001...')" style="border: none; border-radius: 0; font-size: 11px; padding: 4px 8px; font-weight: 600;">Copy (IN clause)</button>
+            </div>
+
+            <!-- File Download Group -->
+            <div style="display: inline-flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+              <button class="btn btn-secondary btn-sm" id="btn-export-csv" title="Download CSV file" style="border: none; border-radius: 0; border-right: 1px solid var(--border); font-size: 11px; padding: 4px 8px; font-weight: 600;">📥 CSV</button>
+              <button class="btn btn-secondary btn-sm" id="btn-export-json" title="Download JSON file" style="border: none; border-radius: 0; font-size: 11px; padding: 4px 8px; font-weight: 600;">📥 JSON</button>
+            </div>
+          </div>
+        </div>
+        <div style="flex: 1; overflow-y: auto;">
+          <table class="data-table" id="data-table">
+            <thead>
+              <tr id="table-head"><th>Run a query to view records</th></tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 2: AI Query Studio -->
+      <div class="table-container" id="ai-prompt-view" style="display: none; padding: 16px; overflow-y: auto;">
+        <div style="max-width: 900px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <h2 style="font-size: 15px; margin: 0 0 4px 0; color: var(--primary);">🤖 AI Prompt-to-SOQL Studio (Free Multi-Object Generator)</h2>
+              <p style="font-size: 12px; color: var(--text-muted); margin: 0;">
+                Describe the data you need in plain English. The AI engine automatically inspects your org schema, joins parent lookups, and constructs child subqueries with 0 org cost!
+              </p>
+            </div>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <span class="badge" style="background:#10b981; color:#fff;">Free AI Active</span>
+              <select id="ai-model-provider" class="select" style="font-size:12px; padding:3px 8px;">
+                <option value="local">⚡ Free Built-in AI (No API Key Required)</option>
+                <option value="gemini">Google Gemini Free Tier</option>
+                <option value="openai">OpenAI (BYO Key)</option>
+                <option value="anthropic">Claude Anthropic (BYO Key)</option>
+                <option value="ollama">Ollama Local LLM</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Sample Prompts -->
+          <div>
+            <span style="font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 6px;">💡 Quick Sample Prompts:</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+              <button type="button" class="prompt-chip" data-prompt="Find all Accounts with open Opportunities over 50k and their primary Contact's email">Accounts with open Opps > $50k & Contacts</button>
+              <button type="button" class="prompt-chip" data-prompt="Show Contacts with their Account Name, Owner Email, and all related Cases">Contacts with Account, Owner & Cases</button>
+              <button type="button" class="prompt-chip" data-prompt="Find high-priority Cases created this month with their Account Industry and Owner Name">High priority Cases this month with Account & Owner</button>
+              <button type="button" class="prompt-chip" data-prompt="Get all Opportunities closed this quarter with Account Rating, Primary Contact, and Amount">Closed Opps this quarter with Account & Contact</button>
+              <button type="button" class="prompt-chip" data-prompt="List active System Administrator Users with Profile, Role, and last login date">Active Admin Users with Profile & Role</button>
+            </div>
+          </div>
+
+          <!-- Prompt Box -->
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <textarea id="ai-prompt-input" class="code-editor" rows="3" placeholder="Enter your prompt (e.g. 'Get all Accounts in California with more than 100 employees, showing their Contacts and total closed won Opportunity amounts')..."></textarea>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <label style="font-size: 12px; color: var(--text-muted);">Target Object:</label>
+                <input type="text" id="ai-target-obj" class="input-text" placeholder="Auto-detect or type (e.g. Account)" style="width: 180px; font-size: 12px; padding: 4px 8px;">
+                <label style="font-size: 12px; display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                  <input type="checkbox" id="ai-include-children" checked> Include Child Subqueries
+                </label>
+                <label style="font-size: 12px; display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                  <input type="checkbox" id="ai-include-parents" checked> Include Parent Lookups
+                </label>
+              </div>
+
+              <div style="display: flex; gap: 6px;">
+                <button class="btn btn-secondary btn-sm" id="btn-ai-explain">📖 Explain Query</button>
+                <button class="btn btn-secondary btn-sm" id="btn-ai-optimize">⚡ Optimize</button>
+                <button class="btn btn-primary" id="btn-ai-generate">✨ Generate Multi-Object SOQL</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Output & Preview -->
+          <div id="ai-output-container" style="display: none; border: 1px solid var(--border); border-radius: 8px; padding: 14px; background: var(--bg-card); display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <strong style="font-size: 13px; color: var(--primary);">Generated SOQL Query:</strong>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn btn-secondary btn-sm" id="btn-ai-copy">📋 Copy SOQL</button>
+                <button class="btn btn-primary btn-sm" id="btn-ai-run-now">▶ Run in Data Grid</button>
+              </div>
+            </div>
+            <pre id="ai-generated-code" class="guide-code" style="margin: 0;"></pre>
+            <div id="ai-explanation" style="font-size: 12px; color: var(--text-muted); line-height: 1.5; border-top: 1px dashed var(--border); padding-top: 8px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Relationship Explorer (Parent Lookups & Child Subqueries) -->
+      <div class="table-container" id="relations-view" style="display: none; padding: 16px; overflow-y: auto;">
+        <div style="max-width: 960px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <h2 style="font-size: 15px; margin: 0 0 4px 0; color: var(--primary);">🌲 Relationship & Cross-Object Explorer</h2>
+              <p style="font-size: 12px; color: var(--text-muted); margin: 0;">
+                Browse Parent lookups (Upward <code>Account.Name</code>) and Child subqueries (Downward <code>(SELECT ... FROM Contacts)</code>). Click any badge to insert into your SOQL!
+              </p>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <input type="text" id="rel-obj-input" class="input-text" placeholder="Object name (e.g. Account)" value="Account" style="width: 180px; font-size: 12px; padding: 4px 8px;">
+              <button class="btn btn-primary btn-sm" id="btn-rel-load">Load Relations</button>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <!-- Left: Parent Relationships -->
+            <div class="relation-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 6px;">
+                <strong style="font-size: 13px; color: #1d4ed8;">⬆️ Parent Lookups (Child-to-Parent)</strong>
+                <span id="rel-parent-count" style="font-size: 11px; color: var(--text-muted);">0 relationships</span>
+              </div>
+              <div id="rel-parent-list" style="display: flex; flex-direction: column; gap: 6px; max-height: 400px; overflow-y: auto; padding-right: 4px;">
+                <span style="font-size: 12px; color: var(--text-muted);">Click 'Load Relations' to discover parent lookups.</span>
+              </div>
+            </div>
+
+            <!-- Right: Child Relationships -->
+            <div class="relation-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 6px;">
+                <strong style="font-size: 13px; color: #15803d;">⬇️ Child Subqueries (Parent-to-Child)</strong>
+                <span id="rel-child-count" style="font-size: 11px; color: var(--text-muted);">0 relationships</span>
+              </div>
+              <div id="rel-child-list" style="display: flex; flex-direction: column; gap: 6px; max-height: 400px; overflow-y: auto; padding-right: 4px;">
+                <span style="font-size: 12px; color: var(--text-muted);">Click 'Load Relations' to discover child subqueries.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Raw JSON View -->
+      <div class="table-container" id="json-view" style="display: none; padding: 12px;">
+        <pre id="json-output" style="font-family: var(--font-mono); font-size: 12px;"></pre>
+      </div>
+
+      <!-- Tab 5: Query Plan View -->
+      <div class="table-container" id="plan-view" style="display: none; padding: 16px; overflow-y: auto;">
+        <div style="max-width: 800px; display: flex; flex-direction: column; gap: 12px;">
+          <h2 style="font-size: 15px; margin: 0; color: var(--primary);">⚡ Query Plan & Index Selectivity Analysis</h2>
+          <p style="font-size: 12px; color: var(--text-muted); margin: 0;">
+            Salesforce Query Optimizer evaluation. Shows leading index, cardinality (number of evaluated rows), and cost factor (&lt; 1.0 means indexed and performant for Large Data Volumes).
+          </p>
+          <div id="plan-output-container">
+            <pre id="plan-output" class="guide-code"></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 6: History View -->
+      <div class="table-container" id="history-view" style="display: none; padding: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <strong style="font-size: 13px;">Recent SOQL Queries</strong>
+          <button class="btn btn-secondary btn-sm" id="btn-clear-history">Clear History</button>
+        </div>
+        <ul id="history-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;"></ul>
+      </div>
+
+      <!-- Tab 7: Guide & Reference View -->
+      <div class="table-container" id="guide-view" style="display: none; padding: 16px; overflow-y: auto;">
+        <div style="max-width: 900px; display: flex; flex-direction: column; gap: 16px;">
+          <div>
+            <h2 style="font-size: 16px; margin: 0 0 4px 0; color: var(--primary);">📚 Salesforce SOQL & Data Export Architecture Guide</h2>
+            <p style="font-size: 12px; color: var(--text-muted); margin: 0;">
+              Comprehensive reference for writing performant queries, multi-object relationships, export formats, and free AI prompt workflows.
+            </p>
+          </div>
+
+          <div class="guide-card">
+            <h3>⚡ Free Built-in AI (No API Key & $0 Cost)</h3>
+            <p>
+              The built-in AI assistant runs entirely locally using reverse-engineered org metadata and rule heuristics. It analyzes your live Salesforce SObject schema (labels, fields, reference lookups, and child relationships) to assemble syntactically correct SOQL queries with parent dots and child subqueries without making any paid external API calls or charging your org.
+            </p>
+            <p>
+              If you prefer external LLMs (e.g. Google Gemini 1.5 Flash with free tier, OpenAI GPT-4o, or Anthropic Claude 3.5), you can enter your own free key in <strong>Settings</strong>. Keys are encrypted client-side via WebCrypto AES-GCM and never leave your browser.
+            </p>
+          </div>
+
+          <div class="guide-card">
+            <h3>⬆️ Parent Relationship Queries (Child-to-Parent)</h3>
+            <p>
+              Traverse up to 5 levels of parent relationships using dot-notation on standard and custom lookups:
+            </p>
+            <pre class="guide-code">SELECT Id, LastName, Account.Name, Account.Owner.Email, Account.Parent.Industry
+FROM Contact
+WHERE Account.BillingCountry = 'USA' AND Account.AnnualRevenue > 1000000</pre>
+            <p style="font-size: 11px; color: var(--text-muted);">
+              For custom relationships, use <code>__r</code> (e.g. <code>Custom_Object__r.Parent_Field__r.Name</code>).
+            </p>
+          </div>
+
+          <div class="guide-card">
+            <h3>⬇️ Child Subqueries (Parent-to-Child)</h3>
+            <p>
+              Fetch child records in a single SOQL statement by placing a nested <code>SELECT</code> clause using the plural child relationship name:
+            </p>
+            <pre class="guide-code">SELECT Id, Name, AnnualRevenue,
+  (SELECT Id, FirstName, LastName, Email, Title FROM Contacts),
+  (SELECT Id, Name, Amount, StageName, CloseDate FROM Opportunities WHERE IsWon = true),
+  (SELECT Id, CaseNumber, Status, Subject FROM Cases WHERE IsClosed = false)
+FROM Account
+WHERE Type = 'Customer - Direct' LIMIT 50</pre>
+          </div>
+
+          <div class="guide-card">
+            <h3>📋 Excel & Google Sheets Export Best Practices</h3>
+            <p>
+              Use <strong>📋 Copy (Excel)</strong> to copy Tab-Separated Values (TSV) directly to your clipboard. When pasted into Microsoft Excel or Google Sheets, each column aligns into a separate spreadsheet cell, with parent relationships flattened (e.g. <code>Account.Name</code>). Unlike standard CSV files, TSV prevents issues with commas inside addresses, names, or quotes!
+            </p>
+          </div>
+
+          <div class="guide-card">
+            <h3>🕒 SOQL Date Literals Cheat Sheet</h3>
+            <p>
+              Filter records dynamically without hardcoding timestamps:
+            </p>
+            <pre class="guide-code">TODAY, YESTERDAY, TOMORROW
+THIS_WEEK, LAST_WEEK, NEXT_WEEK
+THIS_MONTH, LAST_MONTH, NEXT_MONTH
+THIS_QUARTER, LAST_QUARTER, NEXT_QUARTER
+THIS_YEAR, LAST_YEAR, NEXT_YEAR
+THIS_FISCAL_QUARTER, LAST_FISCAL_QUARTER
+LAST_N_DAYS:30, NEXT_N_DAYS:60
+LAST_N_MONTHS:12, NEXT_N_MONTHS:6</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

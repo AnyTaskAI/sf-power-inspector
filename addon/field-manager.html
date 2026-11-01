@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Field Manager, Editor & FLS Studio — SF Power Inspector PRO</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <script type="module" src="field-manager.js"></script>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>📝 Field Manager, Editor & FLS Studio</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 500; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta" style="display: flex; gap: 8px; align-items: center;">
+      <div class="tool-tabs" id="fm-main-mode-tabs" style="margin: 0; background: transparent; border: none; padding: 0;">
+        <button class="tool-tab active" data-mode="edit-fields" id="tab-btn-edit-fields" style="font-size: 12px; padding: 6px 12px;">✏️ Manage & Edit Existing Fields</button>
+        <button class="tool-tab" data-mode="create-field" id="tab-btn-create-field" style="font-size: 12px; padding: 6px 12px;">⚡ Create New Field</button>
+      </div>
+      <button class="btn btn-primary" id="btn-create-field" style="display: none;">⚡ Deploy Field</button>
+      <button class="btn btn-primary" id="btn-save-existing-field">💾 Save Field Metadata Changes</button>
+    </div>
+  </header>
+
+  <!-- VIEW 1: MANAGE & EDIT EXISTING FIELDS (User Requested: change description, API names, rules, permissions, FLS) -->
+  <main class="tool-workspace" id="view-edit-fields" style="display: flex; flex-direction: row; gap: 16px;">
+    <!-- Left Column: Object & Fields List -->
+    <div class="tool-card" style="width: 440px; padding: 14px; display: flex; flex-direction: column; gap: 10px; overflow: hidden;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="font-size: 13px; font-weight: 700; color: #0176d3;">1. Select Object & Field</h2>
+        <span id="field-list-count" style="font-size: 11px; color: var(--text-muted); font-weight: 600;">0 fields</span>
+      </div>
+
+      <div style="display: flex; gap: 6px;">
+        <input type="text" id="existing-obj-input" class="input-text" list="sobjects-datalist" value="Account" placeholder="Object API Name (e.g. Account)" style="flex: 1; font-weight: 600;">
+        <datalist id="sobjects-datalist"></datalist>
+        <button class="btn btn-secondary" id="btn-load-obj-fields" style="font-size: 11px;">🔄 Load</button>
+      </div>
+
+      <div style="display: flex; gap: 4px; align-items: center;" id="field-category-filter">
+        <button type="button" class="btn btn-secondary active btn-cat-filter" data-cat="all" style="font-size: 10px; padding: 2px 7px;">All (<span id="cat-count-all">0</span>)</button>
+        <button type="button" class="btn btn-secondary btn-cat-filter" data-cat="custom" style="font-size: 10px; padding: 2px 7px;">Custom (<span id="cat-count-custom">0</span>)</button>
+        <button type="button" class="btn btn-secondary btn-cat-filter" data-cat="standard" style="font-size: 10px; padding: 2px 7px;">Standard (<span id="cat-count-standard">0</span>)</button>
+      </div>
+
+      <input type="text" id="existing-fields-filter" class="input-text" placeholder="Filter fields by label, API name, type..." style="font-size: 12px; padding: 6px 8px;">
+
+      <div class="table-container" style="flex: 1; overflow-y: auto; border: 1px solid var(--border); border-radius: 6px;">
+        <table class="data-table" id="table-existing-fields">
+          <thead>
+            <tr>
+              <th>Field Label</th>
+              <th>API Name</th>
+              <th style="width: 70px;">Type</th>
+            </tr>
+          </thead>
+          <tbody id="existing-fields-body">
+            <tr><td colspan="3" style="text-align: center; padding: 20px; color: var(--text-muted);">Loading object fields...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Middle Column: Field Metadata & Properties Editor -->
+    <div class="tool-card" style="width: 460px; padding: 14px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+        <div>
+          <h2 style="font-size: 13px; font-weight: 700;" id="edit-field-title">Field Metadata Properties</h2>
+          <span id="edit-field-type-badge" class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 10px;">STANDARD FIELD</span>
+        </div>
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <button class="btn btn-danger" id="btn-delete-field" style="display: none; font-size: 11px; padding: 3px 8px;" title="Permanently delete custom field from org">🗑️ Delete</button>
+          <button class="btn btn-secondary" id="btn-open-field-in-setup" style="font-size: 11px; padding: 3px 8px;" target="_blank">↗ Setup</button>
+        </div>
+      </div>
+
+      <div id="standard-field-guidance" style="display: none; font-size: 11px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; border-radius: 6px; padding: 8px 10px; line-height: 1.4;">
+        ℹ️ <strong>Standard Salesforce Field:</strong> System schema properties (API name, base data type) are managed natively by Salesforce. You can configure and save live Read/Edit access across all Profiles & Permission Sets in Section 2 (FLS Matrix).
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Field Label:</label>
+          <input type="text" id="edit-field-label" class="input-text" style="width: 100%; font-weight: 600;">
+        </div>
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-muted);">API Name:</label>
+          <input type="text" id="edit-field-api" class="input-text" style="width: 100%; font-family: var(--font-mono); font-size: 11px;" readonly>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Data Type:</label>
+          <input type="text" id="edit-field-datatype" class="input-text" style="width: 100%;" readonly>
+        </div>
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Length / Precision:</label>
+          <input type="text" id="edit-field-length" class="input-text" style="width: 100%;" readonly>
+        </div>
+      </div>
+
+      <div>
+        <label style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Description (Internal Org Documentation):</label>
+        <textarea id="edit-field-desc" class="code-editor" rows="3" placeholder="Enter description for administrators and developers..."></textarea>
+      </div>
+
+      <div>
+        <label style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Help Text / Tooltip (inlineHelpText):</label>
+        <textarea id="edit-field-help" class="code-editor" rows="3" placeholder="Enter tooltip shown to users on record pages..."></textarea>
+      </div>
+
+      <!-- Picklist Values Management (Shown only for Picklists) -->
+      <div id="edit-picklist-section" style="display: none; border-top: 1px solid var(--border); padding-top: 10px;">
+        <label style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Active Picklist Values (one per line):</label>
+        <textarea id="edit-picklist-values" class="code-editor" rows="4" placeholder="Option 1&#10;Option 2&#10;Option 3"></textarea>
+      </div>
+
+      <div style="display: flex; gap: 16px; margin-top: 4px;">
+        <label style="font-size: 12px; display: flex; align-items: center; gap: 4px;">
+          <input type="checkbox" id="edit-chk-required"> Required
+        </label>
+        <label style="font-size: 12px; display: flex; align-items: center; gap: 4px;">
+          <input type="checkbox" id="edit-chk-unique"> Unique
+        </label>
+        <label style="font-size: 12px; display: flex; align-items: center; gap: 4px;">
+          <input type="checkbox" id="edit-chk-external-id"> External ID
+        </label>
+      </div>
+
+      <div id="edit-field-status" style="font-size: 12px; padding: 8px; border-radius: 4px; display: none;"></div>
+    </div>
+
+    <!-- Right Column: Live FLS Matrix for Selected Field -->
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div style="padding: 12px 16px; background: #fafafa; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h2 style="font-size: 13px; font-weight: 700; color: #0176d3;">2. Field-Level Security (FLS) Permissions Matrix</h2>
+            <div style="font-size: 11px; color: var(--text-muted);" id="fls-field-target-label">Manage Read/Edit access for selected field across Profiles & Permission Sets</div>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn btn-secondary" id="btn-fls-all-edit" style="font-size: 11px; padding: 4px 8px;">Visible to All (Edit)</button>
+            <button class="btn btn-secondary" id="btn-fls-all-read" style="font-size: 11px; padding: 4px 8px;">Read-Only All</button>
+            <button class="btn btn-secondary" id="btn-fls-clear" style="font-size: 11px; padding: 4px 8px;">Clear All</button>
+            <button class="btn btn-primary" id="btn-save-fls" style="font-size: 11px; padding: 4px 10px;">💾 Save FLS Matrix</button>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" id="existing-fls-search" class="input-text" placeholder="Filter permission sets & profiles..." style="flex: 1; padding: 4px 8px; font-size: 12px;">
+          <span style="font-size: 11px; font-weight: 600; color: var(--text-muted);">
+            Active Access: <span id="existing-fls-active-count" style="color: #0176d3; font-weight: 700;">0</span> of <span id="existing-fls-total-count">0</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="table-container" style="flex: 1; overflow-y: auto; border: none; border-radius: 0;">
+        <table class="data-table" id="existing-fls-table">
+          <thead>
+            <tr>
+              <th>Profile / Permission Set Name</th>
+              <th style="width: 130px;">Type</th>
+              <th style="width: 90px; text-align: center;">Visible (Read)</th>
+              <th style="width: 90px; text-align: center;">Editable (Write)</th>
+            </tr>
+          </thead>
+          <tbody id="existing-fls-body">
+            <tr><td colspan="4" style="text-align: center; padding: 30px;">Select a field on the left to inspect and modify FLS permissions.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- VIEW 2: CREATE NEW FIELD (Existing creator preserved with full functionality) -->
+  <main class="tool-workspace" id="view-create-field" style="display: none; flex-direction: row; gap: 16px;">
+    <!-- Left Column: Field Definition -->
+    <div class="tool-card" style="width: 480px; padding: 16px; overflow-y: auto; gap: 12px;">
+      <h2 style="font-size: 14px; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+        1. Field Definition
+      </h2>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div>
+          <label style="font-size: 12px; font-weight: 600;">Target Object:</label>
+          <input type="text" id="target-obj" class="input-text" value="Account" placeholder="e.g. Account, Contact" style="width: 100%;">
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 600;">Data Type:</label>
+          <select id="field-type" class="select" style="width: 100%; font-weight: 600;">
+            <option value="Text">Text</option>
+            <option value="Number">Number</option>
+            <option value="Percent">Percent</option>
+            <option value="Currency">Currency</option>
+            <option value="Checkbox">Checkbox</option>
+            <option value="Date">Date</option>
+            <option value="DateTime">Date/Time</option>
+            <option value="Picklist">Picklist</option>
+            <option value="LongTextArea">Long Text Area</option>
+            <option value="Url">URL</option>
+            <option value="Email">Email</option>
+            <option value="Phone">Phone</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div>
+          <label style="font-size: 12px; font-weight: 600;">Field Label:</label>
+          <input type="text" id="field-label" class="input-text" placeholder="e.g. Customer Rating" style="width: 100%;">
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: 600;">Field API Name (no __c):</label>
+          <input type="text" id="field-api" class="input-text" placeholder="e.g. Customer_Rating" style="width: 100%;">
+        </div>
+      </div>
+
+      <!-- Dynamic options based on type -->
+      <div id="type-specific-options">
+        <div id="opt-text-length" style="margin-top: 6px;">
+          <label style="font-size: 12px; font-weight: 600;">Length (Max 255):</label>
+          <input type="number" id="text-length" class="input-text" value="255" min="1" max="255" style="width: 120px;">
+          <div id="length-tip" style="font-size:11px; color:#6b7280; margin-top:2px;">Standard Text max is 255 chars. For longer text up to 131,072 chars, choose <strong>Long Text Area</strong>.</div>
+        </div>
+
+        <div id="opt-number-spec" style="display: none; margin-top: 6px; gap: 10px;">
+          <div>
+            <label style="font-size: 12px; font-weight: 600;">Precision:</label>
+            <input type="number" id="num-precision" class="input-text" value="18" style="width: 80px;">
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 600;">Scale (Decimals):</label>
+            <input type="number" id="num-scale" class="input-text" value="0" style="width: 80px;">
+          </div>
+        </div>
+
+        <div id="opt-picklist-values" style="display: none; margin-top: 6px;">
+          <label style="font-size: 12px; font-weight: 600;">Picklist Values (one per line):</label>
+          <textarea id="picklist-lines" class="code-editor" rows="3" placeholder="High&#10;Medium&#10;Low"></textarea>
+        </div>
+      </div>
+
+      <div>
+        <label style="font-size: 12px; font-weight: 600;">Help Text / Description:</label>
+        <input type="text" id="field-help" class="input-text" placeholder="Optional description or tooltip..." style="width: 100%;">
+      </div>
+
+      <div style="display: flex; gap: 16px; margin-top: 4px;">
+        <label style="font-size: 12px; display: flex; align-items: center; gap: 4px;">
+          <input type="checkbox" id="chk-required"> Required
+        </label>
+        <label style="font-size: 12px; display: flex; align-items: center; gap: 4px;">
+          <input type="checkbox" id="chk-unique"> Unique
+        </label>
+        <label style="font-size: 12px; display: flex; align-items: center; gap: 4px;">
+          <input type="checkbox" id="chk-external-id"> External ID
+        </label>
+      </div>
+
+      <!-- Execution Log -->
+      <div style="margin-top: 10px;">
+        <label style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Deployment Output Log:</label>
+        <pre id="creation-output" style="background:#fafafa; border:1px solid var(--border); border-radius:6px; padding:10px; font-family:var(--font-mono); font-size:11px; max-height:160px; overflow-y:auto; white-space:pre-wrap; margin-top:4px;">Ready to create field and apply FLS permissions.</pre>
+      </div>
+
+      <!-- Visual Action Options & Links -->
+      <div id="success-visual-card" style="display:none; margin-top:12px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:12px;">
+        <div style="font-size:13px; font-weight:700; color:#15803d; margin-bottom:6px;">✓ Field Created Successfully!</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <a id="link-open-field-setup" href="#" target="_blank" class="btn btn-primary" style="font-size:11px; padding:4px 10px;">↗ Open Field in Setup</a>
+          <a id="link-open-schema-viewer" href="#" target="_blank" class="btn btn-secondary" style="font-size:11px; padding:4px 10px;">🗺️ View in Schema Studio</a>
+          <button type="button" id="btn-toggle-payloads" class="btn btn-secondary" style="font-size:11px; padding:4px 10px;">👁️ View Request / Response JSON</button>
+        </div>
+      </div>
+
+      <!-- Request / Response JSON Inspector -->
+      <div id="payloads-inspector" style="display:none; margin-top:8px;">
+        <label style="font-size:11px; font-weight:700; color:var(--text-muted);">Request Body Sent to Tooling API:</label>
+        <pre id="request-payload-view" style="background:#0f172a; color:#38bdf8; padding:8px; border-radius:4px; font-size:11px; max-height:120px; overflow-y:auto; margin-bottom:6px; font-family:var(--font-mono);"></pre>
+
+        <label style="font-size:11px; font-weight:700; color:var(--text-muted);">Response Body Returned from Tooling API:</label>
+        <pre id="response-payload-view" style="background:#0f172a; color:#4ade80; padding:8px; border-radius:4px; font-size:11px; max-height:120px; overflow-y:auto; font-family:var(--font-mono);"></pre>
+      </div>
+    </div>
+
+    <!-- Right Column: Field-Level Security & Permission Sets -->
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div style="padding: 12px 16px; background: #fafafa; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h2 style="font-size: 14px; font-weight: 700; color: #0176d3;">2. Field Visibility & Permission Sets (FLS)</h2>
+            <div style="font-size: 11px; color: var(--text-muted);">Assign Read / Edit visibility automatically upon creation across all Profiles & Permission Sets.</div>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn btn-secondary" id="fls-all-edit" style="font-size: 11px; padding: 4px 8px;">Visible to All (Edit)</button>
+            <button class="btn btn-secondary" id="fls-all-read" style="font-size: 11px; padding: 4px 8px;">Read-Only for All</button>
+            <button class="btn btn-secondary" id="fls-admins-only" style="font-size: 11px; padding: 4px 8px;">Admins Only</button>
+            <button class="btn btn-secondary" id="fls-clear" style="font-size: 11px; padding: 4px 8px;">Clear All</button>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" id="fls-search" class="input-text" placeholder="Filter permission sets & profiles..." style="flex: 1; padding: 4px 8px; font-size: 12px;">
+          <span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">
+            Selected: <span id="fls-selected-count" style="color: #0176d3; font-weight: 700;">0</span> of <span id="fls-total-count">0</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="table-container" style="border: none; border-radius: 0;">
+        <table class="data-table" id="fls-table">
+          <thead>
+            <tr>
+              <th>Profile / Permission Set Name</th>
+              <th style="width: 140px;">Type</th>
+              <th style="width: 90px; text-align: center;">Visible (Read)</th>
+              <th style="width: 90px; text-align: center;">Editable (Write)</th>
+            </tr>
+          </thead>
+          <tbody id="fls-body">
+            <tr><td colspan="4" style="text-align:center; padding:30px;">Loading Permission Sets and Profiles...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

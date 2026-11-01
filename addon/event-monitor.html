@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Event Monitor & Streaming API — SF Power Inspector</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <script type="module" src="event-monitor.js"></script>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>📡 Platform Event & CDC Monitor (Streaming API)</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 500; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta">
+      <span id="stream-status-pill" style="font-size: 11px; font-weight: 700; background: #fee2e2; color: #b91c1c; padding: 4px 8px; border-radius: 4px;">
+        ○ Disconnected
+      </span>
+      <button class="btn btn-primary" id="btn-subscribe">▶ Connect & Subscribe</button>
+      <button class="btn btn-secondary" id="btn-disconnect" style="display:none;">⏹ Disconnect</button>
+      <button class="btn btn-secondary" id="btn-publish-test">📤 Publish Test Event</button>
+    </div>
+  </header>
+
+  <main class="tool-workspace">
+    <!-- Channel Configuration Bar -->
+    <div class="tool-card" style="padding: 12px; gap: 8px;">
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <div>
+          <label style="font-size: 12px; font-weight: 600;">Channel Preset:</label>
+          <select id="select-channel-preset" class="select" style="width: 220px;">
+            <option value="/data/ChangeEvents">All Change Events (/data/ChangeEvents)</option>
+            <option value="/data/AccountChangeEvent">Account CDC (/data/AccountChangeEvent)</option>
+            <option value="/data/ContactChangeEvent">Contact CDC (/data/ContactChangeEvent)</option>
+            <option value="/data/OpportunityChangeEvent">Opportunity CDC (/data/OpportunityChangeEvent)</option>
+            <option value="custom">Custom Channel...</option>
+          </select>
+        </div>
+
+        <div style="flex: 1;">
+          <label style="font-size: 12px; font-weight: 600;">Subscription Channel Path:</label>
+          <input type="text" id="event-channel" class="input-text" value="/data/ChangeEvents" style="width: 100%; font-family: var(--font-mono);">
+        </div>
+
+        <div>
+          <label style="font-size: 12px; font-weight: 600;">Replay Option:</label>
+          <select id="select-replay" class="select" style="width: 160px;">
+            <option value="-1">Latest (-1)</option>
+            <option value="-2">Earliest / All (-2)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Stream Table -->
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div class="tool-tabs">
+        <button class="tool-tab active">Stream Messages (<span id="event-count">0</span>)</button>
+        <div style="margin-left: auto; display: flex; gap: 8px; align-items: center; padding-right: 12px;">
+          <button class="btn btn-secondary" id="btn-clear-events" style="font-size: 11px; padding: 2px 8px;">Clear Messages</button>
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="data-table" id="events-table">
+          <thead>
+            <tr>
+              <th style="width: 130px;">Received At</th>
+              <th style="width: 240px;">Channel</th>
+              <th style="width: 140px;">Replay ID</th>
+              <th>Payload Content</th>
+            </tr>
+          </thead>
+          <tbody id="events-body">
+            <tr><td colspan="4" style="text-align:center; padding:40px; color:#6b7280;">Click <strong>"Connect & Subscribe"</strong> above to begin streaming active events from your org via CometD.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

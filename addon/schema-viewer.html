@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Schema Studio & ERD Builder — SF Power Inspector</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <script type="module" src="schema-viewer.js"></script>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>🗺️ Schema Studio & ERD Explorer</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 500; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta">
+      <button class="btn btn-secondary" id="btn-export-csv">📥 Export Data Dictionary</button>
+      <button class="btn btn-secondary" id="btn-open-object-manager" style="display:none;">↗ Open in Setup</button>
+    </div>
+  </header>
+
+  <main class="tool-workspace" style="flex-direction: row; gap: 16px; padding-bottom: 70px;">
+    <!-- SObject Selector Palette (Left) -->
+    <div class="tool-card" style="width: 320px; overflow: hidden; display: flex; flex-direction: column;">
+      <div style="padding: 10px 12px; background: #fafafa; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; gap: 4px;">
+          <button class="tool-tab active filter-tab" data-filter="all" style="flex: 1; padding: 4px 6px; font-size: 11px; text-align: center;">All (<span id="count-all">0</span>)</button>
+          <button class="tool-tab filter-tab" data-filter="standard" style="flex: 1; padding: 4px 6px; font-size: 11px; text-align: center;">Standard</button>
+          <button class="tool-tab filter-tab" data-filter="custom" style="flex: 1; padding: 4px 6px; font-size: 11px; text-align: center;">Custom</button>
+        </div>
+        <input type="text" id="obj-search" class="input-text" placeholder="🔍 Search SObjects by name or label..." style="width: 100%; font-size: 12px;">
+      </div>
+
+      <div class="table-container" style="border: none; border-radius: 0;">
+        <ul id="objects-list" style="list-style: none;">
+          <li style="padding: 20px; text-align: center; color: var(--text-muted);">Loading objects...</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main Schema Inspector (Right) -->
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <!-- Selected Object Header Banner -->
+      <div id="object-banner" style="padding: 12px 16px; background: #fff; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <h2 id="obj-title" style="font-size: 16px; font-weight: 700; color: #0176d3;">Select an SObject</h2>
+            <code id="obj-api-badge" style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:12px;">—</code>
+            <span id="obj-prefix-badge" style="background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:700;">Prefix: —</span>
+          </div>
+          <div id="obj-flags" style="display: flex; gap: 6px; margin-top: 4px; font-size: 11px; color: var(--text-muted);">
+            Select an object from the left palette to view its fields, relationships, and visual ERD.
+          </div>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <button class="btn btn-secondary" id="btn-select-all-fields" style="font-size: 11px; padding: 4px 8px;">Select All Fields for SOQL</button>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tool-tabs" id="schema-tabs">
+        <button class="tool-tab active" data-tab="fields">📋 Fields Dictionary (<span id="field-count">0</span>)</button>
+        <button class="tool-tab" data-tab="relationships">🔗 Relationships & Lookups (<span id="rel-count">0</span>)</button>
+        <button class="tool-tab" data-tab="erd">🗺️ Visual ERD Schema Builder</button>
+        <button class="tool-tab" data-tab="raw">Raw Describe JSON</button>
+      </div>
+
+      <!-- Tab 1: Fields Dictionary -->
+      <div class="table-container" id="tab-view-fields" style="display: flex; flex-direction: column;">
+        <div style="padding: 8px 12px; background: #fafafa; border-bottom: 1px solid var(--border); display: flex; gap: 10px; align-items: center;">
+          <input type="text" id="field-search" class="input-text" placeholder="🔍 Filter fields by name or label..." style="width: 250px; font-size: 12px;">
+          <select id="field-type-filter" class="select" style="font-size: 12px;">
+            <option value="all">All Field Types</option>
+            <option value="custom">Custom Fields Only</option>
+            <option value="required">Required Fields Only</option>
+            <option value="reference">Lookups & References</option>
+            <option value="picklist">Picklists</option>
+            <option value="calculated">Formulas</option>
+          </select>
+        </div>
+
+        <div style="flex: 1; overflow: auto;">
+          <table class="data-table" id="fields-table">
+            <thead>
+              <tr>
+                <th style="width: 40px; text-align: center;"><input type="checkbox" id="chk-toggle-all-fields" title="Select All"></th>
+                <th style="width: 220px;">Field Label</th>
+                <th style="width: 200px;">API Name</th>
+                <th style="width: 140px;">Type & Length</th>
+                <th>Details (Formulas, Picklists, Lookup Target)</th>
+                <th style="width: 130px;">Flags</th>
+              </tr>
+            </thead>
+            <tbody id="fields-body">
+              <tr><td colspan="6" style="text-align:center; padding: 40px; color:#6b7280;">Select an object to inspect.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 2: Relationships & Lookups -->
+      <div class="table-container" id="tab-view-relationships" style="display: none; padding: 12px; overflow-y: auto;">
+        <h3 style="font-size: 13px; font-weight: 700; color: #0176d3; margin-bottom: 8px;">Parent Lookups (References to other objects):</h3>
+        <table class="data-table" style="margin-bottom: 24px;">
+          <thead>
+            <tr>
+              <th>Field API Name</th>
+              <th>Parent SObject (Click to Jump)</th>
+              <th>Relationship Name</th>
+            </tr>
+          </thead>
+          <tbody id="parent-lookups-body"></tbody>
+        </table>
+
+        <h3 style="font-size: 13px; font-weight: 700; color: #0176d3; margin-bottom: 8px;">Child Relationships (Objects referencing this object):</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Child SObject (Click to Jump)</th>
+              <th>Foreign Key Field</th>
+              <th>Child Relationship Name</th>
+              <th>Cascade Delete</th>
+            </tr>
+          </thead>
+          <tbody id="child-relationships-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Tab 3: Visual ERD Schema Builder -->
+      <div class="table-container" id="tab-view-erd" style="display: none; padding: 20px; background: #f8fafc; overflow: auto; text-align: center;">
+        <div id="erd-container" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+          <div style="font-size: 13px; font-weight: 600; color: #475569;">Interactive Visual Relationship Diagram</div>
+          <div id="erd-canvas" style="display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap;"></div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Raw JSON -->
+      <div class="table-container" id="tab-view-raw" style="display: none; padding: 12px;">
+        <pre id="raw-json" style="font-family: var(--font-mono); font-size: 11px; white-space: pre-wrap;"></pre>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom SOQL Builder Bar (Developer Productivity Tool) -->
+  <footer id="soql-builder-bar" style="position: fixed; bottom: 0; left: 0; right: 0; height: 55px; background: #1e293b; color: #fff; display: flex; align-items: center; padding: 0 20px; gap: 12px; z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.15);">
+    <span style="font-size: 12px; font-weight: 700; color: #38bdf8;">⚡ SOQL BUILDER:</span>
+    <input type="text" id="soql-output" readonly style="flex: 1; background: #0f172a; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; font-family: var(--font-mono); font-size: 12px;" value="SELECT Id FROM Account LIMIT 50">
+    <button class="btn btn-primary" id="btn-copy-soql" style="font-size: 12px; padding: 6px 12px;">📋 Copy SOQL</button>
+    <button class="btn btn-secondary" id="btn-open-in-explorer" style="font-size: 12px; padding: 6px 12px; background: #334155; color: #fff; border-color: #475569;">🚀 Open in Data Explorer</button>
+  </footer>
+</body>
+</html>

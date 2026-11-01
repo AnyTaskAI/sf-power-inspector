@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Settings & AI Trust Vault — SF Power Inspector PRO</title>
+  <link rel="stylesheet" href="styles/tools.css">
+</head>
+<body class="page-options" style="overflow-y: auto !important; height: auto !important; min-height: 100vh; display: flex; flex-direction: column;">
+  <!-- Header Navbar (Pinned) -->
+  <header class="tool-navbar" style="position: sticky; top: 0; z-index: 1000; box-shadow: 0 1px 4px rgba(0,0,0,0.08); flex-shrink: 0;">
+    <div class="tool-brand">
+      <h1 style="display:flex; align-items:center; gap:8px;">
+        <span>⚙️</span> Extension Settings & Preferences
+      </h1>
+      <span class="badge badge-sandbox" id="navbar-org-badge">PRO Settings</span>
+      <span id="navbar-org-name" style="font-weight: 500; font-size: 12px; color: var(--text-muted); margin-left: 8px;"></span>
+    </div>
+    <div class="tool-meta" style="display:flex; align-items:center; gap:8px;">
+      <button class="btn btn-secondary" id="btn-theme-toggle" title="Toggle Light / Dark Theme" style="font-size:13px; padding:6px 10px; cursor:pointer;">🌓</button>
+      <button class="btn btn-secondary" id="btn-reset-defaults" title="Restore all extension settings to initial defaults">🔄 Reset Defaults</button>
+      <button class="btn btn-primary" id="btn-save-all" style="font-weight:700;">💾 Save All Changes</button>
+    </div>
+  </header>
+
+  <!-- Workspace Container (Fully Scrollable) -->
+  <main class="tool-workspace" style="max-width: 980px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 14px; padding: 16px 20px 80px 20px; overflow-y: visible !important; flex: 1;">
+
+    <!-- Tab Bar -->
+    <div class="tool-tabs" style="margin-top: 4px;">
+      <button class="tool-tab active" data-tab="tab-api" id="btn-tab-api">🌐 API & Safety Shields</button>
+      <button class="tool-tab" data-tab="tab-data" id="btn-tab-data">📊 Data & Inspection</button>
+      <button class="tool-tab" data-tab="tab-ui" id="btn-tab-ui">🎨 UI & Org Dark Mode</button>
+      <button class="tool-tab" data-tab="tab-hotkeys" id="btn-tab-hotkeys">⌨️ Shortcuts & Hotkeys</button>
+      <button class="tool-tab" data-tab="tab-ai" id="btn-tab-ai">🤖 AI & Einstein Trust Layer</button>
+      <button class="tool-tab" data-tab="tab-backup" id="btn-tab-backup">💾 Backup & Migration</button>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 1: API & ENVIRONMENT SAFETY SHIELDS                           -->
+    <!-- ═════════════════════════════════════════════════════════════════ -->
+    <div class="tab-content" id="view-tab-api" style="display: flex; flex-direction: column; gap: 14px;">
+      
+      <!-- API Configuration Card -->
+      <div class="settings-section-card">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>🌐</span> Salesforce API Engine Configuration</div>
+            <div class="settings-card-desc">Control default REST, Tooling, and GraphQL API versions and query batch limits.</div>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Default Salesforce API Version</span>
+            <span class="setting-desc">The API endpoint version used for metadata queries, REST console, and data operations.</span>
+          </div>
+          <div class="setting-action">
+            <select id="opt-api-version" class="select" style="min-width: 170px; font-weight: 600;">
+              <option value="63.0">v63.0 (Spring '25)</option>
+              <option value="62.0">v62.0 (Winter '25)</option>
+              <option value="61.0">v61.0 (Summer '24)</option>
+              <option value="60.0">v60.0 (Spring '24)</option>
+              <option value="59.0">v59.0 (Winter '24)</option>
+              <option value="58.0">v58.0 (Summer '23)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Auto-Detect Org Supported API Version</span>
+            <span class="setting-desc">Automatically discover and upgrade to the highest API version supported by the connected Salesforce instance.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-auto-api" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Default SOQL / Query Batch Size</span>
+            <span class="setting-desc">Number of records returned per query locator chunk during bulk data exports.</span>
+          </div>
+          <div class="setting-action">
+            <select id="opt-batch-size" class="select" style="min-width: 140px;">
+              <option value="200">200 records (Standard)</option>
+              <option value="500">500 records</option>
+              <option value="1000">1,000 records</option>
+              <option value="2000">2,000 records (Max)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Prioritize Tooling API for Custom Metadata</span>
+            <span class="setting-desc">Query Tooling API first for CustomField, ValidationRule, and ApexClass metadata to bypass standard cache latency.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-tooling-api" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sandbox & Production Safety Shields -->
+      <div class="settings-section-card">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>🛡️</span> Visual Safety Shields & Environment Indicators</div>
+            <div class="settings-card-desc">Prevent accidental destructive updates in Production and clearly distinguish Sandbox orgs.</div>
+          </div>
+        </div>
+
+        <!-- Sandbox Warning Banner -->
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Show Colorized Warning Banner on Sandboxes</span>
+            <span class="setting-desc">Displays a persistent top banner in Salesforce indicating you are working in a non-production sandbox.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-sandbox-banner" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Sandbox Banner Color & Swatches -->
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Sandbox Banner Color</span>
+            <span class="setting-desc">Choose a distinct color theme for your sandbox indicator.</span>
+          </div>
+          <div class="setting-action">
+            <div class="color-swatches">
+              <button type="button" class="color-swatch-btn" data-color="#ff9800" style="background:#ff9800;" title="Amber Orange"></button>
+              <button type="button" class="color-swatch-btn" data-color="#0284c7" style="background:#0284c7;" title="Sky Blue"></button>
+              <button type="button" class="color-swatch-btn" data-color="#10b981" style="background:#10b981;" title="Emerald Green"></button>
+              <button type="button" class="color-swatch-btn" data-color="#8b5cf6" style="background:#8b5cf6;" title="Amethyst Purple"></button>
+              <button type="button" class="color-swatch-btn" data-color="#0f766e" style="background:#0f766e;" title="Teal"></button>
+              <input type="color" id="opt-banner-color" value="#ff9800" style="border:none; width:30px; height:26px; cursor:pointer; background:transparent;" title="Custom Color">
+            </div>
+          </div>
+        </div>
+
+        <!-- Sandbox Banner Custom Text -->
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Custom Sandbox Banner Text</span>
+            <span class="setting-desc">Optional custom message displayed in the sandbox indicator header.</span>
+          </div>
+          <div class="setting-action" style="flex:1; max-width:320px;">
+            <input type="text" id="opt-banner-text" class="input-text" placeholder="SANDBOX ENVIRONMENT" value="SANDBOX ENVIRONMENT" style="width:100%;">
+          </div>
+        </div>
+
+        <!-- Live Sandbox Banner Preview -->
+        <div class="preview-banner-box" style="border:1px solid var(--border); border-radius:6px; padding:10px 14px; display:flex; flex-direction:column; gap:6px;">
+          <span style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Live Sandbox Banner Preview</span>
+          <div id="preview-sandbox-banner" style="background:#ff9800; color:#fff; text-align:center; font-size:12px; font-weight:700; padding:4px 0; border-radius:4px; transition:all 0.2s ease;">
+            ⚠️ SANDBOX ENVIRONMENT — parrotrakhy
+          </div>
+        </div>
+
+        <!-- Production Guard Border -->
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Production Org Safety Shield</span>
+            <span class="setting-desc">Injects a prominent red indicator border and badge when logged into Production to prevent accidental updates.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-prod-banner" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Production Delete Confirmation -->
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Require 2-Step Confirmation for Production Data Deletes</span>
+            <span class="setting-desc">Forces explicit confirmation dialog before executing DELETE or HARD_DELETE in Production orgs.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-prod-confirm" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Tab Environment Prefix -->
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Prefix Browser Tab Title with Environment [PROD] / [SBX]</span>
+            <span class="setting-desc">Prepends org indicator tag to browser tabs so you instantly know which org is open across multiple tabs.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-title-prefix" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Favicon Tinting -->
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Dynamic Favicon Color Tinting</span>
+            <span class="setting-desc">Colors the Salesforce cloud favicon in your browser tab bar (Orange for Sandbox, Red for Production, Blue for Scratch).</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-favicon-tint" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 2: DATA & RECORD INSPECTION                                   -->
+    <!-- ═════════════════════════════════════════════════════════════════ -->
+    <div class="tab-content" id="view-tab-data" style="display: none; flex-direction: column; gap: 14px;">
+      
+      <!-- Data Export & Query Defaults -->
+      <div class="settings-section-card">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>📤</span> Data Export & SOQL Query Defaults</div>
+            <div class="settings-card-desc">Configure formats, query optimization, and autocomplete options for Data Explorer.</div>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Default Export Format</span>
+            <span class="setting-desc">Initial format selected when downloading query records or tables.</span>
+          </div>
+          <div class="setting-action">
+            <select id="opt-export-format" class="select" style="min-width: 150px; font-weight:600;">
+              <option value="csv">CSV (Comma Separated)</option>
+              <option value="excel">Excel (.xlsx Compatible)</option>
+              <option value="json">JSON Array</option>
+              <option value="markdown">Markdown Table</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Auto-Format SOQL Syntax on Typing & Paste</span>
+            <span class="setting-desc">Automatically formats keywords (SELECT, FROM, WHERE, ORDER BY) into clean multi-line queries.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-auto-soql" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Intelligent SOQL Field & Relationship Autocomplete</span>
+            <span class="setting-desc">Displays instant popover suggestions for SObject fields, parent lookups, and child relationship queries.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-auto-suggest" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Include Deleted & Archived Records (ALL ROWS)</span>
+            <span class="setting-desc">Appends ALL ROWS by default to include Recycle Bin and archived task records.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-include-deleted">
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Automatic Query Plan Analysis</span>
+            <span class="setting-desc">Flags leading wildcards (e.g. '%abc') and unindexed filter warnings to prevent query timeouts.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-query-plan" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Show All Data / Record Inspector Card -->
+      <div class="settings-section-card">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>🔍</span> Show All Data / Record Inspector Preferences</div>
+            <div class="settings-card-desc">Control field sorting, system audit fields, and inline editing behaviors.</div>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Default Field Sort Order</span>
+            <span class="setting-desc">How fields are initially ordered when opening Show All Data on any record.</span>
+          </div>
+          <div class="setting-action">
+            <select id="opt-field-sort" class="select" style="min-width: 180px;">
+              <option value="label">Alphabetical by Field Label</option>
+              <option value="api">Alphabetical by API Name</option>
+              <option value="populated">Populated Values First</option>
+              <option value="layout">Standard SLDS Layout Order</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Show System Audit Fields by Default</span>
+            <span class="setting-desc">Always include CreatedById, CreatedDate, LastModifiedById, and SystemModstamp in record views.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-show-audit" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Allow Direct Inline Field Editing</span>
+            <span class="setting-desc">Enables double-clicking field values to edit and save changes directly via REST API.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-inline-edit" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Highlight Modified Fields with Visual Accent</span>
+            <span class="setting-desc">Applies an emerald highlight to fields modified in the current editing session.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-highlight-modified" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Auto-Copy Record ID on Click</span>
+            <span class="setting-desc">Clicking the record ID badge in the popup immediately copies it to your clipboard.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-auto-copy-id">
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 3: UI, DOCKING & SALESFORCE ORG DARK MODE                     -->
+    <!-- ═════════════════════════════════════════════════════════════════ -->
+    <div class="tab-content" id="view-tab-ui" style="display: none; flex-direction: column; gap: 14px;">
+      
+      <!-- Theme & Org Dark Mode Card -->
+      <div class="settings-section-card">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>🌑</span> Salesforce Org Dark Mode & Extension Theme</div>
+            <div class="settings-card-desc">Configure appearance for both the extension UI and your entire Salesforce org.</div>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Extension Inspector Theme</span>
+            <span class="setting-desc">Theme applied across the inspector popup, standalone tool pages, and query editors.</span>
+          </div>
+          <div class="setting-action">
+            <select id="opt-theme" class="select" style="min-width: 160px; font-weight:600;">
+              <option value="dark">Dark Theme (Default)</option>
+              <option value="light">Light Theme</option>
+              <option value="system">Follow System OS Theme</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Global Salesforce Org Dark Mode</span>
+            <span class="setting-desc">When enabled, every Salesforce tab in this browser renders in sleek SLDS dark mode by default.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-org-darkmode">
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Dark Mode Contrast & Tone Intensity</span>
+            <span class="setting-desc">Select background depth palette for Lightning pages, Setup, and record views.</span>
+          </div>
+          <div class="setting-action">
+            <select id="opt-dark-intensity" class="select" style="min-width: 170px;">
+              <option value="100">100% Deep Slate (Contrast)</option>
+              <option value="90">90% Soft Charcoal (Smooth)</option>
+              <option value="80">80% Dim Midnight (Subtle)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Smart Canvas & SVG Chart Color Inversion</span>
+            <span class="setting-desc">Inverts report and dashboard chart canvases intelligently while keeping color data legible.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-dark-invert-charts" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Preserve User Avatars & Company Logos</span>
+            <span class="setting-desc">Never inverts user profile photos, chatter avatars, or org branding logos.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-dark-preserve-avatars" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Docking & Sidebar Geometry Card -->
+      <div class="settings-section-card">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>📐</span> Sidebar Docking & Popup Sizing</div>
+            <div class="settings-card-desc">Control popup width, floating inspector trigger button position, and idle opacity.</div>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Sidebar Popup Width</span>
+            <span class="setting-desc">Width of the slide-out inspector sidebar on Salesforce pages.</span>
+          </div>
+          <div class="setting-action">
+            <select id="opt-sidebar-width" class="select" style="min-width: 150px;">
+              <option value="395px">395px (Recommended)</option>
+              <option value="380px">380px (Compact)</option>
+              <option value="420px">420px (Spacious)</option>
+              <option value="450px">450px (Ultra-Wide)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Floating Inspector Trigger Button Position</span>
+            <span class="setting-desc">Screen edge anchor position for the floating 'Alt+I' trigger icon.</span>
+          </div>
+          <div class="setting-action">
+            <select id="opt-btn-position" class="select" style="min-width: 150px;">
+              <option value="right-middle">Right Edge (Middle)</option>
+              <option value="right-top">Right Edge (Top)</option>
+              <option value="right-bottom">Right Edge (Bottom)</option>
+              <option value="left-middle">Left Edge (Middle)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Floating Button Idle Opacity</span>
+            <span class="setting-desc">Controls button transparency when idle so it does not distract from Salesforce content.</span>
+          </div>
+          <div class="setting-action" style="display:flex; align-items:center; gap:8px;">
+            <input type="range" id="opt-btn-opacity" min="20" max="100" value="80" step="5" style="width:100px;">
+            <span id="lbl-btn-opacity" style="font-size:12px; font-weight:700; width:35px;">80%</span>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Default Open Section on Launch</span>
+            <span class="setting-desc">Section initially expanded when opening the inspector popup.</span>
+          </div>
+          <div class="setting-action">
+            <select id="opt-default-section" class="select" style="min-width: 160px;">
+              <option value="tools">Quick Tools Grid</option>
+              <option value="record">Current Record Context</option>
+              <option value="links">Quick Setup Links</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 4: SHORTCUTS & HOTKEYS                                        -->
+    <!-- ═════════════════════════════════════════════════════════════════ -->
+    <div class="tab-content" id="view-tab-hotkeys" style="display: none; flex-direction: column; gap: 14px;">
+      
+      <div class="settings-section-card">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>⌨️</span> Keyboard Shortcuts & Hotkeys</div>
+            <div class="settings-card-desc">Execute common inspection workflows instantly without moving your hands from the keyboard.</div>
+          </div>
+          <button class="btn btn-secondary" id="btn-reset-hotkeys">Reset Hotkeys</button>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Toggle SF Power Inspector Popup</span>
+            <span class="setting-desc">Opens or closes the main inspector sidebar on any Salesforce page.</span>
+          </div>
+          <div class="setting-action">
+            <input type="text" id="opt-hotkey-popup" class="input-text" style="width:120px; text-align:center; font-family:var(--font-mono); font-weight:700;" value="Alt+I">
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Toggle Field API Names Overlay</span>
+            <span class="setting-desc">Displays red API names beside all standard and custom field labels on record pages.</span>
+          </div>
+          <div class="setting-action">
+            <input type="text" id="opt-hotkey-api" class="input-text" style="width:120px; text-align:center; font-family:var(--font-mono); font-weight:700;" value="Alt+A">
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Toggle Salesforce Org Dark Mode</span>
+            <span class="setting-desc">Instantly toggles dark mode on or off for the current Salesforce tab.</span>
+          </div>
+          <div class="setting-action">
+            <input type="text" id="opt-hotkey-dark" class="input-text" style="width:120px; text-align:center; font-family:var(--font-mono); font-weight:700;" value="Alt+D">
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Execute SOQL Query in Data Explorer</span>
+            <span class="setting-desc">Shortcut to trigger query execution from the query editor tab.</span>
+          </div>
+          <div class="setting-action">
+            <input type="text" id="opt-hotkey-query" class="input-text" style="width:120px; text-align:center; font-family:var(--font-mono); font-weight:700;" value="Ctrl+Enter">
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Quick Search & Command Palette</span>
+            <span class="setting-desc">Focuses the global search input across tools, objects, and setup pages.</span>
+          </div>
+          <div class="setting-action">
+            <input type="text" id="opt-hotkey-search" class="input-text" style="width:120px; text-align:center; font-family:var(--font-mono); font-weight:700;" value="Ctrl+Shift+K">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 5: AI ARCHITECT & EINSTEIN TRUST LAYER                        -->
+    <!-- ═════════════════════════════════════════════════════════════════ -->
+    <div class="tab-content" id="view-tab-ai" style="display: none; flex-direction: column; gap: 14px;">
+      
+      <!-- AI Architecture Presets -->
+      <div class="settings-section-card">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>🤖</span> Quick AI Architecture Profiles</div>
+            <div class="settings-card-desc">1-Click presets for instant compliance, high performance, or maximum reasoning capability.</div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap:10px;">
+          <div class="tool-card" id="preset-enterprise" style="padding:12px; cursor:pointer; border:1px solid var(--border); transition:all 0.15s ease;" title="100% Offline, CTA Architecture Engine with Strict Redaction">
+            <div style="font-size:13px; font-weight:700; color:#10b981;">🏢 Enterprise Private</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">100% Offline CTA Engine. Zero cloud requests, zero data transmission.</div>
+          </div>
+          <div class="tool-card" id="preset-fast" style="padding:12px; cursor:pointer; border:1px solid var(--border); transition:all 0.15s ease;" title="High speed, low latency query generation">
+            <div style="font-size:13px; font-weight:700; color:#0284c7;">⚡ High-Speed Developer</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Gemini 1.5 Flash / GPT-4o-mini. Instant query generation & field suggestions.</div>
+          </div>
+          <div class="tool-card" id="preset-cta" style="padding:12px; cursor:pointer; border:1px solid var(--border); transition:all 0.15s ease;" title="Deep reasoning for complex flows, Apex audits and FLS">
+            <div style="font-size:13px; font-weight:700; color:#8b5cf6;">🧠 CTA Deep Reasoning</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Claude 3.5 Sonnet / GPT-4o. Deep multi-step flow & security vulnerability audits.</div>
+          </div>
+          <div class="tool-card" id="preset-ollama" style="padding:12px; cursor:pointer; border:1px solid var(--border); transition:all 0.15s ease;" title="On-premise air-gapped private LLM host">
+            <div style="font-size:13px; font-weight:700; color:#ea580c;">🦙 Air-Gapped Ollama</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Private host (localhost:11434). Run Llama 3 / Mistral inside your corporate network.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active AI Engine Provider Selection -->
+      <div class="settings-section-card">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>🧠</span> Active AI Provider Selection</div>
+            <div class="settings-card-desc">Select which intelligence engine powers SOQL query generation, Flow analysis, and code auditing.</div>
+          </div>
+        </div>
+
+        <div class="provider-grid">
+          <!-- Provider 1: Local CTA Engine -->
+          <div class="provider-card active" data-provider="local" id="card-prov-local">
+            <div class="provider-card-header">
+              <span class="provider-card-title"><span>🧠</span> Local CTA Engine</span>
+              <span class="provider-card-badge badge-local">100% Private</span>
+            </div>
+            <span style="font-size:11px; color:var(--text-muted);">Built-in offline rules & architecture engine. No API keys required. Zero latency.</span>
+          </div>
+
+          <!-- Provider 2: OpenAI -->
+          <div class="provider-card" data-provider="openai" id="card-prov-openai">
+            <div class="provider-card-header">
+              <span class="provider-card-title"><span>⚡</span> OpenAI</span>
+              <span class="provider-card-badge badge-cloud">Cloud API</span>
+            </div>
+            <span style="font-size:11px; color:var(--text-muted);">GPT-4o, GPT-4o-mini, o1. Industry leading code generation and reasoning.</span>
+          </div>
+
+          <!-- Provider 3: Anthropic Claude -->
+          <div class="provider-card" data-provider="anthropic" id="card-prov-anthropic">
+            <div class="provider-card-header">
+              <span class="provider-card-title"><span>🟣</span> Anthropic Claude</span>
+              <span class="provider-card-badge badge-cloud">Cloud API</span>
+            </div>
+            <span style="font-size:11px; color:var(--text-muted);">Claude 3.5 Sonnet & Haiku. Supreme architectural analysis and deep context window.</span>
+          </div>
+
+          <!-- Provider 4: Google Gemini -->
+          <div class="provider-card" data-provider="gemini" id="card-prov-gemini">
+            <div class="provider-card-header">
+              <span class="provider-card-title"><span>🔷</span> Google Gemini</span>
+              <span class="provider-card-badge badge-cloud">Cloud API</span>
+            </div>
+            <span style="font-size:11px; color:var(--text-muted);">Gemini 1.5 Flash & Pro, Gemini 2.0. Ultra-fast speeds and extensive token processing.</span>
+          </div>
+
+          <!-- Provider 5: Ollama Local Host -->
+          <div class="provider-card" data-provider="ollama" id="card-prov-ollama">
+            <div class="provider-card-header">
+              <span class="provider-card-title"><span>🦙</span> Ollama Private Host</span>
+              <span class="provider-card-badge badge-local">On-Premise</span>
+            </div>
+            <span style="font-size:11px; color:var(--text-muted);">Local LLM server (http://localhost:11434). Air-gapped on-premise execution.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Encrypted API Key Vault Card -->
+      <div class="settings-section-card">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>🔐</span> Hardware AES-GCM Encrypted Key Vault</div>
+            <div class="settings-card-desc">Your API keys are encrypted client-side using browser Web Crypto (AES-256-GCM) and never touch external servers.</div>
+          </div>
+        </div>
+
+        <!-- OpenAI Config -->
+        <div class="setting-item" id="row-cfg-openai" style="display:flex; flex-direction:column; align-items:stretch; gap:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="setting-title">⚡ OpenAI Configuration</span>
+            <button class="btn btn-secondary btn-sm" id="btn-test-openai">🔌 Test OpenAI Connection</button>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div style="flex:2; min-width:240px; display:flex; position:relative;">
+              <input type="password" id="opt-key-openai" class="input-text" placeholder="sk-..." style="width:100%; padding-right:32px;">
+              <button type="button" class="btn-toggle-vis" data-for="opt-key-openai" style="position:absolute; right:8px; top:8px; background:none; border:none; cursor:pointer;" title="Toggle Visibility">👁️</button>
+            </div>
+            <select id="opt-model-openai" class="select" style="flex:1; min-width:140px;">
+              <option value="gpt-4o">gpt-4o (Flagship)</option>
+              <option value="gpt-4o-mini">gpt-4o-mini (Fast)</option>
+              <option value="o1-preview">o1-preview (Reasoning)</option>
+              <option value="o1-mini">o1-mini</option>
+            </select>
+          </div>
+          <div id="status-openai" style="font-size:11px; font-weight:600; display:none;"></div>
+        </div>
+
+        <!-- Anthropic Config -->
+        <div class="setting-item" id="row-cfg-anthropic" style="display:flex; flex-direction:column; align-items:stretch; gap:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="setting-title">🟣 Anthropic Claude Configuration</span>
+            <button class="btn btn-secondary btn-sm" id="btn-test-anthropic">🔌 Test Claude Connection</button>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div style="flex:2; min-width:240px; display:flex; position:relative;">
+              <input type="password" id="opt-key-anthropic" class="input-text" placeholder="sk-ant-..." style="width:100%; padding-right:32px;">
+              <button type="button" class="btn-toggle-vis" data-for="opt-key-anthropic" style="position:absolute; right:8px; top:8px; background:none; border:none; cursor:pointer;" title="Toggle Visibility">👁️</button>
+            </div>
+            <select id="opt-model-anthropic" class="select" style="flex:1; min-width:140px;">
+              <option value="claude-3-5-sonnet-20241022">claude-3-5-sonnet (Recommended)</option>
+              <option value="claude-3-5-haiku-20241022">claude-3-5-haiku (Ultra Fast)</option>
+              <option value="claude-3-opus-20240229">claude-3-opus</option>
+            </select>
+          </div>
+          <div id="status-anthropic" style="font-size:11px; font-weight:600; display:none;"></div>
+        </div>
+
+        <!-- Gemini Config -->
+        <div class="setting-item" id="row-cfg-gemini" style="display:flex; flex-direction:column; align-items:stretch; gap:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="setting-title">🔷 Google Gemini Configuration</span>
+            <button class="btn btn-secondary btn-sm" id="btn-test-gemini">🔌 Test Gemini Connection</button>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div style="flex:2; min-width:240px; display:flex; position:relative;">
+              <input type="password" id="opt-key-gemini" class="input-text" placeholder="AIzaSy..." style="width:100%; padding-right:32px;">
+              <button type="button" class="btn-toggle-vis" data-for="opt-key-gemini" style="position:absolute; right:8px; top:8px; background:none; border:none; cursor:pointer;" title="Toggle Visibility">👁️</button>
+            </div>
+            <select id="opt-model-gemini" class="select" style="flex:1; min-width:140px;">
+              <option value="gemini-1.5-flash">gemini-1.5-flash (Fast & Free)</option>
+              <option value="gemini-1.5-pro">gemini-1.5-pro (Deep CTA)</option>
+              <option value="gemini-2.0-flash-exp">gemini-2.0-flash-exp</option>
+            </select>
+          </div>
+          <div id="status-gemini" style="font-size:11px; font-weight:600; display:none;"></div>
+        </div>
+
+        <!-- Ollama Config -->
+        <div class="setting-item" id="row-cfg-ollama" style="display:flex; flex-direction:column; align-items:stretch; gap:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="setting-title">🦙 Ollama On-Premise Host Configuration</span>
+            <button class="btn btn-secondary btn-sm" id="btn-test-ollama">🔌 Test Ollama Ping</button>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <input type="text" id="opt-endpoint-ollama" class="input-text" placeholder="http://localhost:11434" value="http://localhost:11434" style="flex:2; min-width:240px;">
+            <input type="text" id="opt-model-ollama" class="input-text" placeholder="llama3.2 / mistral / codellama" value="llama3.2" style="flex:1; min-width:140px;">
+          </div>
+          <div id="status-ollama" style="font-size:11px; font-weight:600; display:none;"></div>
+        </div>
+      </div>
+
+      <!-- Einstein Trust Layer Data Masking Card -->
+      <div class="settings-section-card">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>🛡️</span> Einstein Trust Layer & Dynamic Data Masking</div>
+            <div class="settings-card-desc">Redact personally identifiable information (PII) before prompts leave your browser.</div>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">Enable Strict Trust Layer Masking</span>
+            <span class="setting-desc">Master switch to sanitize all prompts and error traces with enterprise DLP masking algorithms.</span>
+          </div>
+          <div class="setting-action">
+            <label class="sfpi-switch">
+              <input type="checkbox" id="opt-mask-strict" checked>
+              <span class="sfpi-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; padding:10px 0;">
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600;">
+            <input type="checkbox" id="opt-mask-email" checked> Mask Customer Emails (e.g. j***@acme.com)
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600;">
+            <input type="checkbox" id="opt-mask-phone" checked> Mask Phone Numbers [PHONE_MASKED]
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600;">
+            <input type="checkbox" id="opt-mask-ssn" checked> Mask SSN / Tax IDs [SSN_MASKED]
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600;">
+            <input type="checkbox" id="opt-mask-cc" checked> Mask Credit Card Numbers
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600;">
+            <input type="checkbox" id="opt-mask-curr" checked> Redact Exact Currency Amounts
+          </label>
+        </div>
+      </div>
+
+      <!-- Interactive AI & Masking Playground -->
+      <div class="settings-section-card">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>🧪</span> Live AI Playground & Masking Sandbox</div>
+            <div class="settings-card-desc">Test your configured AI provider and verify data masking in real-time.</div>
+          </div>
+        </div>
+
+        <div class="ai-playground-box">
+          <div style="display:flex; gap:8px; align-items:center;">
+            <input type="text" id="ai-test-prompt" class="input-text" placeholder="e.g. Write a SOQL query to find all contacts for Acme Corp with email test@acme.com and phone +1-555-0199" style="flex:1;">
+            <button class="btn btn-primary" id="btn-run-ai-test">▶ Run Test Query</button>
+          </div>
+
+          <div style="font-size:11px; color:#94a3b8; display:flex; justify-content:space-between;">
+            <span id="ai-test-sanitized-label">Prompt Status: Ready</span>
+            <span id="ai-test-latency-label">Latency: -</span>
+          </div>
+
+          <div class="ai-playground-console" id="ai-test-output">
+// AI Response Console
+// Enter a prompt above and click 'Run Test Query' to verify connection and data masking...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 6: BACKUP, SYNC & MIGRATION                                   -->
+    <!-- ═════════════════════════════════════════════════════════════════ -->
+    <div class="tab-content" id="view-tab-backup" style="display: none; flex-direction: column; gap: 14px;">
+      
+      <!-- Reverse Engineering Migration Card -->
+      <div class="settings-section-card" style="border-left: 4px solid #0176d3;">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>🔄</span> 1-Click Migration from Salesforce Inspector & Reloaded</div>
+            <div class="settings-card-desc">Instantly scan and import your saved queries, API configurations, and custom preferences from existing extensions.</div>
+          </div>
+          <button class="btn btn-primary" id="btn-detect-migrate">🚀 Auto-Detect & Migrate</button>
+        </div>
+
+        <div style="font-size:12px; color:var(--text-muted); line-height:1.5;">
+          SF Power Inspector PRO can read stored queries and settings from:
+          <ul style="margin: 6px 0 0 18px;">
+            <li><b>Salesforce Inspector (Søren Krabbe)</b> — `queryHistory`, `savedQueries`, `apiVersion`</li>
+            <li><b>Salesforce Inspector Reloaded (Thomas Proudfoot)</b> — `sfir_options`, `sfir_saved_queries`, `sfir_shortcuts`</li>
+            <li><b>Salesforce Advanced Inspector</b> — `sfai_options`, `sfai_queries`</li>
+          </ul>
+        </div>
+        <div id="migration-status-box" style="display:none; padding:10px 14px; border-radius:6px; font-size:12px; font-weight:600;"></div>
+      </div>
+
+      <!-- Export & Import JSON Configuration -->
+      <div class="settings-section-card">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>📦</span> Backup & Share Extension Configuration</div>
+            <div class="settings-card-desc">Export your settings and queries to a portable JSON backup, or restore across browsers.</div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+          <button class="btn btn-secondary" id="btn-export-config">📤 Export Configuration (JSON)</button>
+          
+          <label class="btn btn-secondary" style="cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+            <span>📥 Import Configuration (JSON)</span>
+            <input type="file" id="file-import-config" accept=".json" style="display:none;">
+          </label>
+        </div>
+      </div>
+
+      <!-- Cache & Storage Management -->
+      <div class="settings-section-card">
+        <div class="settings-card-header">
+          <div>
+            <div class="settings-card-title"><span>🗑️</span> Cache & Storage Diagnostics</div>
+            <div class="settings-card-desc">Clear local cached SObject metadata, wipe query history, or perform a complete factory reset.</div>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">SObject Describe Metadata Cache</span>
+            <span class="setting-desc">Caches field definitions and child relationships locally to make autocompletion instantaneous.</span>
+          </div>
+          <div class="setting-action">
+            <button class="btn btn-secondary btn-sm" id="btn-clear-cache">Clear SObject Cache</button>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-text">
+            <span class="setting-title">SOQL & SOSL Query History</span>
+            <span class="setting-desc">Clears the log of recently executed queries stored in local history.</span>
+          </div>
+          <div class="setting-action">
+            <button class="btn btn-secondary btn-sm" id="btn-clear-history">Clear Query History</button>
+          </div>
+        </div>
+
+        <div class="setting-item" style="border-top: 1px solid #fee2e2; padding-top: 14px; margin-top: 6px;">
+          <div class="setting-text">
+            <span class="setting-title" style="color:#dc2626;">⚠️ Factory Reset All Preferences</span>
+            <span class="setting-desc">Wipes all custom hotkeys, dark mode configurations, API settings, and encrypted AI keys.</span>
+          </div>
+          <div class="setting-action">
+            <button class="btn btn-danger btn-sm" id="btn-factory-reset">Factory Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Notification Element -->
+  <div class="sfpi-toast" id="toast-message">
+    <span id="toast-icon">✓</span>
+    <span id="toast-text">Settings saved successfully!</span>
+  </div>
+
+  <script type="module" src="options.js"></script>
+</body>
+</html>

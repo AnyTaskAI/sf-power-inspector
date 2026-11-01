@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Object 360° Studio & Analyzer — SF Power Inspector</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <script type="module" src="object-scanner.js"></script>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>🔬 Object 360° Studio & Analyzer</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 500; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta" style="display: flex; gap: 8px; align-items: center;">
+      <div style="position: relative; width: 220px;">
+        <input type="text" id="scan-obj-name" class="input-text" value="Account" placeholder="Search Object (e.g. Account)" style="width: 100%;">
+        <div id="obj-suggestions" class="autocomplete-dropdown" style="display: none; max-height: 200px;"></div>
+      </div>
+      <button class="btn btn-primary" id="btn-scan">🔍 Analyze Object</button>
+    </div>
+  </header>
+
+  <!-- Sandbox / Production Direct Setup Links Bar -->
+  <div class="tool-card" style="margin: 12px 20px 0; padding: 10px 16px; border-radius: 6px; background: #ffffff;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 15px; font-weight: 700; color: #0176d3;" id="obj-title-label">Account</span>
+        <span class="badge" id="obj-type-badge" style="background:#f1f5f9; color:#475569;">STANDARD OBJECT</span>
+        <span id="obj-key-prefix" style="font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); background: #f8fafc; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border);">Prefix: 001</span>
+      </div>
+
+      <!-- Quick Deep-Links into Salesforce Setup -->
+      <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+        <span style="font-size: 11px; font-weight: 600; color: var(--text-muted); margin-right: 2px;">↗ Setup Links:</span>
+        <a id="link-setup-overview" class="btn btn-secondary" style="font-size: 11px; padding: 3px 8px; text-decoration: none;" target="_blank">Overview</a>
+        <a id="link-setup-fields" class="btn btn-secondary" style="font-size: 11px; padding: 3px 8px; text-decoration: none;" target="_blank">Fields</a>
+        <a id="link-setup-layouts" class="btn btn-secondary" style="font-size: 11px; padding: 3px 8px; text-decoration: none;" target="_blank">Layouts</a>
+        <a id="link-setup-pages" class="btn btn-secondary" style="font-size: 11px; padding: 3px 8px; text-decoration: none;" target="_blank">Lightning Pages</a>
+        <a id="link-setup-triggers" class="btn btn-secondary" style="font-size: 11px; padding: 3px 8px; text-decoration: none;" target="_blank">Triggers</a>
+        <a id="link-setup-validations" class="btn btn-secondary" style="font-size: 11px; padding: 3px 8px; text-decoration: none;" target="_blank">Validations</a>
+        <a id="link-setup-rectypes" class="btn btn-secondary" style="font-size: 11px; padding: 3px 8px; text-decoration: none;" target="_blank">Record Types</a>
+        <a id="link-setup-limits" class="btn btn-secondary" style="font-size: 11px; padding: 3px 8px; text-decoration: none;" target="_blank">Limits</a>
+        <button id="btn-quick-soql" class="btn btn-secondary" style="font-size: 11px; padding: 3px 8px; color: #0176d3; font-weight: 600;">📊 Query</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="tool-workspace" style="display: flex; flex-direction: column; gap: 12px; padding: 12px 20px 16px;">
+    
+    <!-- Stats Cards -->
+    <div id="obj-stats-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px;">
+      <div class="tool-card" style="padding: 12px; text-align: center;">
+        <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Total Records</div>
+        <div id="stat-records" style="font-size: 20px; font-weight: 700; color: #0176d3; margin-top: 4px;">—</div>
+      </div>
+      <div class="tool-card" style="padding: 12px; text-align: center;">
+        <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Custom Fields</div>
+        <div id="stat-fields" style="font-size: 20px; font-weight: 700; color: #0176d3; margin-top: 4px;">—</div>
+      </div>
+      <div class="tool-card" style="padding: 12px; text-align: center;">
+        <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Apex Triggers</div>
+        <div id="stat-triggers" style="font-size: 20px; font-weight: 700; color: #0176d3; margin-top: 4px;">—</div>
+      </div>
+      <div class="tool-card" style="padding: 12px; text-align: center;">
+        <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Validation Rules</div>
+        <div id="stat-validations" style="font-size: 20px; font-weight: 700; color: #0176d3; margin-top: 4px;">—</div>
+      </div>
+      <div class="tool-card" style="padding: 12px; text-align: center;">
+        <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Record Types</div>
+        <div id="stat-rectypes" style="font-size: 20px; font-weight: 700; color: #0176d3; margin-top: 4px;">—</div>
+      </div>
+      <div class="tool-card" style="padding: 12px; text-align: center;">
+        <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Triggered Flows</div>
+        <div id="stat-flows" style="font-size: 20px; font-weight: 700; color: #0176d3; margin-top: 4px;">—</div>
+      </div>
+    </div>
+
+    <!-- Multi-Tab Detailed Inspector -->
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div class="tool-tabs" id="scanner-tabs">
+        <button class="tool-tab active" data-tab="automations">⚡ Triggers & Flows (<span id="count-automations">0</span>)</button>
+        <button class="tool-tab" data-tab="validations">🛡️ Validation Rules (<span id="count-validations">0</span>)</button>
+        <button class="tool-tab" data-tab="fields">📋 Fields Dictionary (<span id="count-fields">0</span>)</button>
+        <button class="tool-tab" data-tab="layouts">📐 Layouts & Record Types</button>
+        <button class="tool-tab" data-tab="relationships">🔗 Child Relationships (<span id="count-relationships">0</span>)</button>
+        <button class="tool-tab" data-tab="object-settings">⚙️ Object Settings & Sharing</button>
+      </div>
+
+      <!-- Tab 1: Automations & Triggers -->
+      <div class="table-container" id="tab-automations" style="padding: 12px; display: flex; flex-direction: column; gap: 16px;">
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h3 style="font-size: 13px; font-weight: 700; color: #0176d3;">Apex Triggers</h3>
+            <span id="trigger-summary" style="font-size: 11px; color: var(--text-muted);"></span>
+          </div>
+          <table class="data-table" id="triggers-table">
+            <thead>
+              <tr>
+                <th>Trigger Name</th>
+                <th style="width: 100px;">Status</th>
+                <th>Trigger Events</th>
+                <th style="width: 90px;">API Version</th>
+                <th style="width: 120px; text-align: center;">Setup Link</th>
+              </tr>
+            </thead>
+            <tbody id="triggers-body">
+              <tr><td colspan="5" style="text-align:center; padding:20px;">Loading triggers...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h3 style="font-size: 13px; font-weight: 700; color: #0176d3;">Record-Triggered Flows</h3>
+            <a href="https://" target="_blank" id="link-flows-home" style="font-size: 11px; color: #0176d3; font-weight: 600; text-decoration: none;">↗ Flow Builder Home</a>
+          </div>
+          <table class="data-table" id="flows-table">
+            <thead>
+              <tr>
+                <th>Flow Label & API Name</th>
+                <th style="width: 160px;">Trigger Type</th>
+                <th style="width: 100px;">Status</th>
+                <th style="width: 120px; text-align: center;">Flow Builder</th>
+              </tr>
+            </thead>
+            <tbody id="flows-body">
+              <tr><td colspan="4" style="text-align:center; padding:20px;">Loading record-triggered flows...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 2: Validation Rules -->
+      <div class="table-container" id="tab-validations" style="display: none; padding: 12px;">
+        <table class="data-table" id="validations-table">
+          <thead>
+            <tr>
+              <th style="width: 220px;">Rule Name</th>
+              <th style="width: 90px;">Status</th>
+              <th>Error Message & Location</th>
+              <th>Description</th>
+              <th style="width: 120px; text-align: center;">Setup Link</th>
+            </tr>
+          </thead>
+          <tbody id="validations-body">
+            <tr><td colspan="5" style="text-align:center; padding:20px;">Loading validation rules...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tab 3: Fields Dictionary -->
+      <div class="table-container" id="tab-fields" style="display: none; padding: 12px; flex-direction: column; gap: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <input type="text" id="fields-filter" class="input-text" placeholder="🔍 Filter fields by name, label, or type..." style="width: 280px; font-size: 12px;">
+          <div style="display: flex; gap: 6px;">
+            <button class="btn btn-secondary" id="btn-export-fields-csv" style="font-size: 11px; padding: 3px 8px;">📥 Export Fields CSV</button>
+            <button class="btn btn-primary" id="btn-create-field-shortcut" style="font-size: 11px; padding: 3px 8px;">➕ Create New Field</button>
+          </div>
+        </div>
+        <table class="data-table" id="fields-table">
+          <thead>
+            <tr>
+              <th>Field API Name</th>
+              <th>Label</th>
+              <th style="width: 110px;">Data Type</th>
+              <th style="width: 80px;">Custom?</th>
+              <th style="width: 140px;">Properties</th>
+              <th style="width: 120px; text-align: center;">Setup Link</th>
+            </tr>
+          </thead>
+          <tbody id="fields-body">
+            <tr><td colspan="6" style="text-align:center; padding:20px;">Loading fields dictionary...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tab 4: Layouts & Record Types -->
+      <div class="table-container" id="tab-layouts" style="display: none; padding: 12px; flex-direction: column; gap: 16px;">
+        <div>
+          <h3 style="font-size: 13px; font-weight: 700; color: #0176d3; margin-bottom: 8px;">Record Types</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Record Type Name</th>
+                <th>Developer Name</th>
+                <th style="width: 90px;">Active</th>
+                <th style="width: 90px;">Default</th>
+                <th style="width: 120px; text-align: center;">Setup Link</th>
+              </tr>
+            </thead>
+            <tbody id="rectypes-body"></tbody>
+          </table>
+        </div>
+
+        <div>
+          <h3 style="font-size: 13px; font-weight: 700; color: #0176d3; margin-bottom: 8px;">Page Layouts</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Layout Name</th>
+                <th>Id</th>
+                <th style="width: 120px; text-align: center;">Setup Link</th>
+              </tr>
+            </thead>
+            <tbody id="layouts-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 5: Child Relationships -->
+      <div class="table-container" id="tab-relationships" style="display: none; padding: 12px;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Child SObject</th>
+              <th>Relationship Field</th>
+              <th>Relationship Name</th>
+              <th style="width: 140px;">Cascade Delete?</th>
+            </tr>
+          </thead>
+          <tbody id="relationships-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Tab 6: Object Settings & Sharing Editor (User Requested) -->
+      <div class="table-container" id="tab-object-settings" style="display: none; padding: 16px; flex-direction: column; gap: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+          <div>
+            <h3 style="font-size: 14px; font-weight: 700; color: #0176d3;">SObject Definition & Sharing Configuration</h3>
+            <div style="font-size: 11px; color: var(--text-muted);">Inspect and edit object metadata labels, descriptions, and sharing models.</div>
+          </div>
+          <button class="btn btn-primary" id="btn-save-object-settings" style="font-size: 11px;">💾 Save Object Metadata</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 800px;">
+          <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Object Singular Label:</label>
+            <input type="text" id="obj-setting-label" class="input-text" style="width: 100%; font-weight: 600;">
+          </div>
+          <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Object Plural Label:</label>
+            <input type="text" id="obj-setting-plural" class="input-text" style="width: 100%; font-weight: 600;">
+          </div>
+        </div>
+
+        <div style="max-width: 800px;">
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Description:</label>
+          <textarea id="obj-setting-desc" class="code-editor" rows="3" placeholder="Object documentation and purpose description..."></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 800px;">
+          <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Internal Sharing Model (OWD):</label>
+            <input type="text" id="obj-setting-internal-owd" class="input-text" style="width: 100%;" readonly>
+          </div>
+          <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">External Sharing Model (OWD):</label>
+            <input type="text" id="obj-setting-external-owd" class="input-text" style="width: 100%;" readonly>
+          </div>
+        </div>
+
+        <div id="obj-setting-status" style="font-size: 12px; padding: 8px; border-radius: 4px; display: none; max-width: 800px;"></div>
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>

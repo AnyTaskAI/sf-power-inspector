@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Dependencies Explorer — SF Power Inspector</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <script type="module" src="dependencies.js"></script>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>🔗 Dependencies & Impact Explorer</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 500; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta">
+      <button class="btn btn-primary" id="btn-search-dep">🔍 Find Dependencies</button>
+    </div>
+  </header>
+
+  <main class="tool-workspace">
+    <div class="tool-card" style="padding: 12px; gap: 8px;">
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <label style="font-size: 12px; font-weight: 600;">Component Name:</label>
+        <input type="text" id="component-name" class="input-text" placeholder="e.g. Account.Industry, MyApexClass, MyFlowName" style="flex: 1;">
+        <select id="dep-direction" class="select">
+          <option value="whereUsed">Where is it used? (Impact analysis)</option>
+          <option value="whatUses">What does it depend on?</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Results Table -->
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div class="tool-tabs">
+        <button class="tool-tab active">Dependency Matrix (<span id="dep-count">0</span>)</button>
+        <span id="dep-status" style="margin-left: auto; padding: 6px 14px; font-size: 12px; font-weight: 600; color: var(--text-muted);">Ready</span>
+      </div>
+      <div class="table-container">
+        <table class="data-table" id="dep-table">
+          <thead>
+            <tr>
+              <th>Dependent Component</th>
+              <th>Dependent Type</th>
+              <th>Referenced Component</th>
+              <th>Referenced Type</th>
+            </tr>
+          </thead>
+          <tbody id="dep-body">
+            <tr><td colspan="4" style="text-align:center; padding:30px;">Enter a component name above and click "Find Dependencies".</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
+

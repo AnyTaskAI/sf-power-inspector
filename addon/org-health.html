@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Org Health & Security Check — SF Power Inspector PRO</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <style>
+    .health-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .kpi-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .kpi-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .kpi-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+  </style>
+</head>
+
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>🛡️ Org Health & Security Audit Suite</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 600; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta" style="display: flex; gap: 8px; align-items: center;">
+      <a href="https://" target="_blank" class="btn btn-secondary" id="link-setup-health"
+        style="font-size: 11px; text-decoration: none;">↗ Setup Health Check</a>
+      <button class="btn btn-secondary" id="btn-export-health-csv" style="font-size: 11px;">📥 Export CSV</button>
+      <button class="btn btn-primary" id="btn-run-audit">🔍 Run Deep Security Audit</button>
+    </div>
+  </header>
+
+  <main class="tool-workspace">
+    <!-- Top KPI Cards -->
+    <div class="health-kpi-grid" id="kpi-panel">
+      <div class="kpi-card" style="border-left: 4px solid #16a34a;">
+        <span class="kpi-title">Health Score</span>
+        <span class="kpi-val" id="kpi-score" style="color: #16a34a;">--%</span>
+      </div>
+      <div class="kpi-card" style="border-left: 4px solid #dc2626;">
+        <span class="kpi-title">High Risk Settings</span>
+        <span class="kpi-val" id="kpi-high-risks" style="color: #dc2626;">0</span>
+      </div>
+      <div class="kpi-card" style="border-left: 4px solid #b45309;">
+        <span class="kpi-title">Modify All Holders</span>
+        <span class="kpi-val" id="kpi-modify-all" style="color: #b45309;">0</span>
+      </div>
+      <div class="kpi-card" style="border-left: 4px solid #0284c7;">
+        <span class="kpi-title">Guest Users</span>
+        <span class="kpi-val" id="kpi-guest-users" style="color: #0284c7;">0</span>
+      </div>
+      <div class="kpi-card" style="border-left: 4px solid #7c3aed;">
+        <span class="kpi-title">Unused PermSets</span>
+        <span class="kpi-val" id="kpi-unused-permsets" style="color: #7c3aed;">0</span>
+      </div>
+    </div>
+
+    <!-- Findings Table Card -->
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div
+        style="padding: 10px 14px; background: #fafafa; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" id="filter-findings" class="input-text"
+            placeholder="Filter checks by name, category, or severity..." style="width: 320px; font-size: 12px;">
+          <select id="filter-severity" class="select" style="font-size: 12px;">
+            <option value="ALL">All Severities</option>
+            <option value="CRITICAL">Critical & High Risks</option>
+            <option value="WARNING">Warnings</option>
+            <option value="CLEAN">Compliant / Clean</option>
+          </select>
+        </div>
+        <div id="audit-status" style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Ready to audit</div>
+      </div>
+
+      <div class="table-container" style="flex: 1; overflow: auto;">
+        <table class="data-table" id="health-table">
+          <thead>
+            <tr>
+              <th style="width: 200px;">Category</th>
+              <th style="width: 130px;">Severity</th>
+              <th style="width: 260px;">Check Name</th>
+              <th>Findings, Impact & Hardening Recommendations</th>
+            </tr>
+          </thead>
+          <tbody id="audit-body">
+            <tr>
+              <td colspan="4" style="text-align:center; padding:50px; color:var(--text-muted);">Click <strong>"Run Deep
+                  Security Audit"</strong> to execute complete CIS and Salesforce platform hardening checks.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="org-health.js"></script>
+</body>
+
+</html>

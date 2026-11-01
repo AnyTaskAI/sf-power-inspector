@@ -1,0 +1,11 @@
+{
+  "name": "sf-power-inspector",
+  "version": "1.0.0",
+  "description": "SF Power Inspector PRO Extension",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test --experimental-test-coverage test/**/*.test.js"
+  }
+}
+

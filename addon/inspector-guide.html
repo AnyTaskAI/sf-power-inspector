@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Inspector User Guide & Architecture Manual — SF Power Inspector PRO</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <style>
+    .guide-tool-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.15s ease;
+    }
+    .guide-tool-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+    }
+    .guide-tool-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .guide-feature-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .guide-feature-list li strong {
+      color: var(--text-main);
+    }
+    .tag-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+    .tag-dml { background: #fee2e2; color: #dc2626; }
+    .tag-gov { background: #fef3c7; color: #b45309; }
+    .tag-sec { background: #e0f2fe; color: #0284c7; }
+    .tag-ai { background: #ede9fe; color: #7c3aed; }
+    .tag-schema { background: #f3f4f6; color: #374151; }
+    
+    .category-filter-btn {
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--bg-main);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .category-filter-btn:hover, .category-filter-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+    .cheat-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .cheat-table th, .cheat-table td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .cheat-table th {
+      background: rgba(0,0,0,0.03);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>📖 Inspector User Guide & Tool Directory</h1>
+      <span class="badge" id="env-badge" style="display:none;"></span>
+      <span id="org-name" style="font-weight: 600; font-size: 13px;"></span>
+      <span class="badge badge-sandbox" style="background: #e0f2fe; color: #0369a1;">COMPLETE ARCHITECTURE MANUAL</span>
+    </div>
+    <div class="tool-meta" style="display: flex; gap: 8px; align-items: center;">
+      <a href="learning-hub.html" id="link-nav-trailhead" class="btn btn-primary" style="font-size: 11px; text-decoration: none;">🎓 Trailhead Help & Learning</a>
+      <a href="https://developer.salesforce.com/docs" target="_blank" class="btn btn-secondary" style="font-size: 11px; text-decoration: none;">↗ SF Docs</a>
+      <a href="https://status.salesforce.com" target="_blank" class="btn btn-secondary" style="font-size: 11px; text-decoration: none;">↗ SF Trust</a>
+    </div>
+  </header>
+
+  <main class="tool-workspace">
+    <!-- Hub Navigation Tabs -->
+    <div class="tool-tabs" id="guide-tabs" style="border-radius:var(--radius) var(--radius) 0 0;">
+      <button class="tool-tab active" data-tab="directory" id="tab-btn-directory">🗂️ All 14 Inspector Tools</button>
+      <button class="tool-tab" data-tab="shortcuts" id="tab-btn-shortcuts">⚡ Shortcuts & Productivity Workflows</button>
+      <button class="tool-tab" data-tab="ai-guide" id="tab-btn-ai-guide">🤖 AI Query Studio & SOQL Guide</button>
+      <button class="tool-tab" data-tab="router-guide" id="tab-btn-router-guide">🔗 Deep-Links & URL Router API</button>
+    </div>
+
+    <!-- Tab 1: All 14 Inspector Tools -->
+    <div class="tool-card tab-content" id="view-directory" style="flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column;">
+      <div style="max-width: 960px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <div style="font-size: 16px; font-weight: 800; color: var(--primary);">🚀 SF Power Inspector PRO — Tool Directory & Feature Manual</div>
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                Comprehensive documentation of all 14 tools, hidden capabilities, CRUD operations, live inline editors, and official Salesforce REST/Tooling endpoints.
+              </div>
+            </div>
+            <input type="text" id="guide-search" class="input-text" placeholder="🔍 Search tools, features, shortcuts..." style="width: 260px; font-size: 12px; padding: 5px 10px;">
+          </div>
+
+          <!-- Category filter pills -->
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;" id="category-filters">
+            <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-right: 4px;">Filter Category:</span>
+            <button class="category-filter-btn active" data-cat="ALL">All Tools (14)</button>
+            <button class="category-filter-btn" data-cat="DATA">📊 Data & Records (4)</button>
+            <button class="category-filter-btn" data-cat="ADMIN">🔧 Admin & Governance (3)</button>
+            <button class="category-filter-btn" data-cat="DEV">🛠️ Developers & Code (4)</button>
+            <button class="category-filter-btn" data-cat="AI">🤖 AI & Streaming (3)</button>
+          </div>
+        </div>
+
+        <div id="guide-tools-list" style="display: flex; flex-direction: column; gap: 14px;">
+          <!-- Dynamically populated by inspector-guide.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Shortcuts & Productivity Workflows -->
+    <div class="tool-card tab-content" id="view-shortcuts" style="flex: 1; overflow-y: auto; padding: 18px; display: none;">
+      <div style="max-width: 960px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 16px;">
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;">
+          <h3 style="font-size: 15px; font-weight: 800; color: var(--primary); margin-bottom: 6px;">⚡ Keyboard Shortcuts & Power Workflows</h3>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+            Supercharge your Salesforce administration and development speed with these built-in hotkeys and instant copy workflows:
+          </p>
+        </div>
+
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;">
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">⌨️ Keyboard Shortcuts</h4>
+          <table class="cheat-table">
+            <thead>
+              <tr>
+                <th style="width: 220px;">Shortcut</th>
+                <th>Tool Context</th>
+                <th>Action Performed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><kbd style="background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 4px; font-weight: 700;">Ctrl + Enter</kbd> (or <kbd>Cmd + Enter</kbd>)</td>
+                <td>Data Explorer / SOQL Studio</td>
+                <td>Execute active SOQL query immediately</td>
+              </tr>
+              <tr>
+                <td><kbd style="background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 4px; font-weight: 700;">Ctrl + Enter</kbd> (or <kbd>Cmd + Enter</kbd>)</td>
+                <td>Apex Runner</td>
+                <td>Compile and execute anonymous Apex code block</td>
+              </tr>
+              <tr>
+                <td><kbd style="background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 4px; font-weight: 700;">Esc</kbd></td>
+                <td>All Modals / Inline Editors</td>
+                <td>Dismiss open modal, dialog, or field editor without saving</td>
+              </tr>
+              <tr>
+                <td><kbd style="background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 4px; font-weight: 700;">Ctrl + F</kbd> / Real-time search</td>
+                <td>Show All Data / Metadata Browser</td>
+                <td>Focus on live filter input to search fields or metadata items instantly</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;">
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">📋 1-Click Multi-Format Export Workflows</h4>
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+            <div>• <strong>📋 Copy (Excel):</strong> Copies the active Data Grid rows as Tab-Separated Values (TSV) with clean headers. Directly paste into Microsoft Excel, Google Sheets, or Apple Numbers with zero CSV delimiter confusion or scientific notation mangling.</div>
+            <div>• <strong>📋 Copy (CSV) & 📥 Export CSV:</strong> RFC-4180 standard CSV file export with quote-escaping, suitable for Data Loader or external ETL pipelines.</div>
+            <div>• <strong>📋 Copy (JSON) & 📥 Export JSON:</strong> Exports the raw or flattened Salesforce JSON record array with nested relationship attributes.</div>
+            <div>• <strong>📋 Copy (IN clause):</strong> Automatically extracts the selected column (or ID column) from all visible rows and formats it into a SOQL-ready `IN ('001...', '001...')` clause for instant query chaining.</div>
+            <div>• <strong>🗑️ Include Deleted (queryAll):</strong> Toggling this checkbox queries both active and soft-deleted (Recycle Bin) records, as well as archived Task and Event records.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: AI Query Studio & SOQL Guide -->
+    <div class="tool-card tab-content" id="view-ai-guide" style="flex: 1; overflow-y: auto; padding: 18px; display: none;">
+      <div style="max-width: 960px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 16px;">
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;">
+          <h3 style="font-size: 15px; font-weight: 800; color: var(--primary); margin-bottom: 6px;">🤖 100% Free AI Query Studio & SOQL Engine</h3>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+            SF Power Inspector PRO features an advanced, reverse-engineered schema-aware Prompt-to-SOQL engine that synthesizes complex multi-object queries without charging any organization costs or requiring mandatory API keys.
+          </p>
+        </div>
+
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;">
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">🧠 How the Free AI Engine Works</h4>
+          <ol style="font-size: 12px; color: var(--text-muted); line-height: 1.8; padding-left: 20px;">
+            <li><strong>Introspective Schema Extraction:</strong> The engine introspects the active Salesforce object's fields, labels, types, and relationship names (`referenceTo` and `childRelationships`) in real time.</li>
+            <li><strong>Natural Language Intent Parsing:</strong> Analyzes user keywords like <em>"created this month"</em>, <em>"amount greater than 50k"</em>, <em>"owner email"</em>, and <em>"closed won"</em>.</li>
+            <li><strong>Parent Relationship Traversal:</strong> Automatically converts phrases like <em>"Account owner name"</em> into `Account.Owner.Name`.</li>
+            <li><strong>Child Relationship Subqueries:</strong> Automatically synthesizes nested subqueries like `(SELECT Id, LastName, Email FROM Contacts)` when child objects are requested.</li>
+            <li><strong>Safe SOQL Verification:</strong> Validates field existence against the target object's describe metadata, preventing `No such column` runtime exceptions.</li>
+          </ol>
+        </div>
+
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;">
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">🔑 Optional Bring-Your-Own-Key (BYOK) AI Models</h4>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px;">
+            If you wish to use frontier LLMs for multi-paragraph SOQL reasoning, you can enter your own free API key in the AI Query Studio settings:
+          </p>
+          <ul style="font-size: 12px; color: var(--text-muted); line-height: 1.6; padding-left: 20px;">
+            <li><strong>Google Gemini (Free Tier):</strong> Recommended. Generous free tier with fast response times. Get a free key at <a href="https://aistudio.google.com" target="_blank" style="color: var(--primary);">aistudio.google.com</a>.</li>
+            <li><strong>OpenAI (GPT-4o / GPT-4o-mini):</strong> Direct BYOK support with your OpenAI API key.</li>
+            <li><strong>Anthropic Claude (Claude 3.5 Sonnet):</strong> High-precision reasoning for complex architectural queries.</li>
+            <li><strong>Local Ollama / Localhost:</strong> 100% private, offline LLM inference via `http://localhost:11434`.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 4: Deep-Links & URL Router API -->
+    <div class="tool-card tab-content" id="view-router-guide" style="flex: 1; overflow-y: auto; padding: 18px; display: none;">
+      <div style="max-width: 960px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 16px;">
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;">
+          <h3 style="font-size: 15px; font-weight: 800; color: var(--primary); margin-bottom: 6px;">🔗 Deep-Linking & URL Router Specification</h3>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+            Every tool in SF Power Inspector PRO supports query parameters for seamless inter-tool linking, bookmarking, and opening directly from external scripts:
+          </p>
+        </div>
+
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;">
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">📌 Supported URL Parameters by Tool</h4>
+          <table class="cheat-table">
+            <thead>
+              <tr>
+                <th style="width: 180px;">Tool Page</th>
+                <th style="width: 260px;">URL Pattern</th>
+                <th>Behavior on Load</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Record Inspector</strong></td>
+                <td><code>inspect-record.html?sobject=Account</code></td>
+                <td>Queries most recently modified record on Account and opens live inspection immediately.</td>
+              </tr>
+              <tr>
+                <td><strong>Record Inspector</strong></td>
+                <td><code>inspect-record.html?id=001...</code></td>
+                <td>Directly loads the specific 15 or 18-character Salesforce record ID.</td>
+              </tr>
+              <tr>
+                <td><strong>Data Explorer</strong></td>
+                <td><code>data-explorer.html?sobject=Contact</code></td>
+                <td>Builds a smart SELECT query using valid fields on Contact and executes it automatically.</td>
+              </tr>
+              <tr>
+                <td><strong>Data Explorer</strong></td>
+                <td><code>data-explorer.html?query=SELECT+Id+FROM+Lead</code></td>
+                <td>Pre-populates the query editor and automatically runs the query.</td>
+              </tr>
+              <tr>
+                <td><strong>Field Manager & FLS</strong></td>
+                <td><code>field-manager.html?sobject=Case&field=Status</code></td>
+                <td>Loads Case object and selects Status field with its FLS permissions matrix.</td>
+              </tr>
+              <tr>
+                <td><strong>Schema Studio</strong></td>
+                <td><code>schema-viewer.html?sobject=Opportunity</code></td>
+                <td>Adds Opportunity entity to the visual ERD canvas immediately.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="inspector-guide.js"></script>
+</body>
+</html>

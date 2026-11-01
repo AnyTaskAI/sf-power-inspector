@@ -1,0 +1,138 @@
+/* SF Power Inspector — Content Script Styles */
+
+/* ── Root container ── */
+#sfpi-root {
+  position: fixed !important;
+  right: 0 !important;
+  top: 120px !important;
+  z-index: 2147483647 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* ── Toggle Button ── */
+.sfpi-btn {
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: 36px !important;
+  height: 36px !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  border-right: none !important;
+  border-radius: 8px 0 0 8px !important;
+  background: #ffffff !important;
+  box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.2) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  outline: none !important;
+  z-index: 2147483647 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  box-sizing: border-box !important;
+}
+
+.sfpi-btn:hover {
+  background: #f0f7ff !important;
+  width: 44px !important;
+  box-shadow: -3px 3px 14px rgba(1, 118, 211, 0.35) !important;
+}
+
+.sfpi-btn svg {
+  display: block !important;
+  width: 20px !important;
+  height: 20px !important;
+  stroke: #0176d3 !important;
+  fill: none !important;
+  transition: transform 0.25s ease !important;
+}
+
+#sfpi-root.sfpi-active .sfpi-btn svg {
+  transform: rotate(180deg) !important;
+}
+
+/* ── Dark Mode Toggle Button Appearance ── */
+[data-sfpi-darkmode="true"] .sfpi-btn,
+html[data-sfpi-darkmode="true"] .sfpi-btn,
+[data-theme="dark"] .sfpi-btn {
+  background: #161b22 !important;
+  border: 1px solid #38bdf8 !important;
+  border-right: none !important;
+  box-shadow: -2px 2px 14px rgba(0, 0, 0, 0.6), 0 0 10px rgba(56, 189, 248, 0.3) !important;
+}
+
+[data-sfpi-darkmode="true"] .sfpi-btn:hover,
+html[data-sfpi-darkmode="true"] .sfpi-btn:hover,
+[data-theme="dark"] .sfpi-btn:hover {
+  background: #1f293d !important;
+  width: 44px !important;
+  box-shadow: -3px 3px 18px rgba(56, 189, 248, 0.5) !important;
+}
+
+[data-sfpi-darkmode="true"] .sfpi-btn svg,
+html[data-sfpi-darkmode="true"] .sfpi-btn svg,
+[data-theme="dark"] .sfpi-btn svg {
+  stroke: #38bdf8 !important;
+}
+
+/* ── Popup Iframe ── */
+.sfpi-popup {
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: 395px !important;
+  max-width: 95vw !important;
+  height: 82vh !important;
+  max-height: 740px !important;
+  border: none !important;
+  border-radius: 12px 0 0 12px !important;
+  box-shadow: -4px 4px 24px rgba(0, 0, 0, 0.35) !important;
+  background: transparent !important;
+  display: none !important;
+  transform: translateX(100%) !important;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  z-index: 2147483646 !important;
+  box-sizing: border-box !important;
+}
+
+#sfpi-root.sfpi-active .sfpi-popup {
+  display: block !important;
+  transform: translateX(0) !important;
+}
+
+/* ── API Name Marks ── */
+.sfpi-api-name {
+  cursor: copy !important;
+  background: #e1f5fe !important;
+  color: #01579b !important;
+  font-size: 11px !important;
+  padding: 1px 4px !important;
+  border-radius: 3px !important;
+  margin-left: 4px !important;
+  font-weight: 500 !important;
+}
+
+/* ── Sandbox Banner ── */
+.sfpi-sandbox-banner {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 99999 !important;
+  text-align: center !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 2px 0 !important;
+  box-sizing: border-box !important;
+}

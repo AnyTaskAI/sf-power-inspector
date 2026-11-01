@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2-Hour Experience Review — SF Power Inspector PRO</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <style>
+    html, body {
+      background: var(--bg-body, #0b1120);
+      color: var(--text-main, #f8fafc);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      height: auto !important;
+      min-height: 100vh !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      display: flex;
+      flex-direction: column;
+    }
+    .exp-header {
+      backdrop-filter: blur(12px);
+      background: rgba(15, 23, 42, 0.85);
+      border-bottom: 1px solid var(--border, #1e293b);
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .exp-container {
+      max-width: 680px;
+      margin: 40px auto;
+      padding: 0 20px 60px 20px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .exp-card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .star-rating {
+      display: flex;
+      gap: 12px;
+      font-size: 32px;
+      cursor: pointer;
+    }
+    .star {
+      color: #475569;
+      transition: color 0.15s, transform 0.15s;
+    }
+    .star:hover, .star.active {
+      color: #fbbf24;
+      transform: scale(1.15);
+    }
+    .feature-tags-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 600px) {
+      .feature-tags-grid { grid-template-columns: 1fr; }
+    }
+    .feature-tag-item {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .feature-tag-item:hover {
+      border-color: #38bdf8;
+    }
+    .feature-tag-item input {
+      accent-color: #38bdf8;
+    }
+    .exp-textarea {
+      width: 100%;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #475569;
+      border-radius: 8px;
+      padding: 12px;
+      color: #f8fafc;
+      font-size: 14px;
+      min-height: 90px;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    .exp-textarea:focus {
+      outline: none;
+      border-color: #38bdf8;
+    }
+    .success-card {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+  </style>
+</head>
+<body class="page-scrollable page-experience">
+
+  <header class="exp-header">
+    <div style="display:flex; align-items:center; gap:10px; font-weight:800; font-size:18px; color:#38bdf8;">
+      <span>⚡</span> SF Power Inspector PRO
+    </div>
+    <div style="font-size: 12px; color: #94a3b8;" id="install-elapsed-badge">
+      ⏱️ Calculating installation time...
+    </div>
+  </header>
+
+  <main class="exp-container">
+    <div class="exp-card" id="review-card">
+      <div>
+        <div style="display:inline-block; font-size:11px; font-weight:800; background:#fef3c7; color:#92400e; padding:3px 10px; border-radius:20px; text-transform:uppercase; margin-bottom:8px;">
+          2-Hour Milestone
+        </div>
+        <h1 style="margin:0 0 6px 0; font-size:24px; font-weight:900;">How is your experience with SF Power Inspector?</h1>
+        <p style="margin:0; font-size:14px; color:#94a3b8; line-height:1.5;">
+          You've had the extension installed for over 2 hours. Help us make it even better for the entire Salesforce developer & architect community.
+        </p>
+      </div>
+
+      <!-- Star Rating -->
+      <div>
+        <label style="display:block; font-weight:700; font-size:14px; margin-bottom:8px;">Overall Satisfaction Rating</label>
+        <div class="star-rating" id="star-rating">
+          <span class="star" data-rating="1">★</span>
+          <span class="star" data-rating="2">★</span>
+          <span class="star" data-rating="3">★</span>
+          <span class="star" data-rating="4">★</span>
+          <span class="star" data-rating="5">★</span>
+        </div>
+        <div id="rating-label" style="font-size:13px; color:#38bdf8; font-weight:600; margin-top:6px;">Select your rating</div>
+      </div>
+
+      <!-- Features Explored -->
+      <div>
+        <label style="display:block; font-weight:700; font-size:14px; margin-bottom:10px;">Which features have you tried?</label>
+        <div class="feature-tags-grid">
+          <label class="feature-tag-item">
+            <input type="checkbox" name="feat" value="incognito" checked>
+            <span>👤 Incognito User Login</span>
+          </label>
+          <label class="feature-tag-item">
+            <input type="checkbox" name="feat" value="storage_cleaner" checked>
+            <span>🗑️ Sandbox Storage Cleaner</span>
+          </label>
+          <label class="feature-tag-item">
+            <input type="checkbox" name="feat" value="org_tab" checked>
+            <span>🏢 Org Details & Limits Tab</span>
+          </label>
+          <label class="feature-tag-item">
+            <input type="checkbox" name="feat" value="ai_assistant">
+            <span>🤖 AI Architecture & SOQL</span>
+          </label>
+          <label class="feature-tag-item">
+            <input type="checkbox" name="feat" value="data_explorer">
+            <span>📦 Record & Data Explorer</span>
+          </label>
+          <label class="feature-tag-item">
+            <input type="checkbox" name="feat" value="flow_analyzer">
+            <span>🌊 Flow & Apex Diagnostics</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Open Feedback -->
+      <div>
+        <label style="display:block; font-weight:700; font-size:14px; margin-bottom:8px;">What did you like most, or what can we improve?</label>
+        <textarea id="feedback-text" class="exp-textarea" placeholder="Share any thoughts, requests, or bugs you encountered..."></textarea>
+      </div>
+
+      <!-- Optional Subscription Checkbox -->
+      <div style="background:rgba(30, 41, 59, 0.6); border:1px solid #334155; border-radius:10px; padding:14px;">
+        <label style="display:flex; align-items:center; gap:10px; font-size:13px; cursor:pointer;">
+          <input type="checkbox" id="chk-subscribe-feedback" checked>
+          <span>Subscribe me to new release drops & CTA tips (Login is NOT required)</span>
+        </label>
+        <div style="margin-top:10px;">
+          <input type="email" id="feedback-email" class="exp-textarea" style="min-height:unset; padding:8px 12px;" placeholder="Your email (optional)">
+        </div>
+      </div>
+
+      <button id="btn-submit-review" class="btn btn-primary" style="padding:14px; font-size:15px; font-weight:800; cursor:pointer;">
+        🚀 Submit Experience Review
+      </button>
+    </div>
+
+    <!-- Success View -->
+    <div class="exp-card success-card" id="success-card">
+      <div style="font-size:48px;">🎉</div>
+      <h2 style="font-size:26px; font-weight:900; margin:10px 0;">Thank You For Shaping SF Power Inspector!</h2>
+      <p style="color:#94a3b8; font-size:15px; line-height:1.6; max-width:500px; margin:0 auto 24px auto;">
+        Your feedback has been recorded. We take every suggestion into our sprint planning to ensure SF Power Inspector PRO remains the fastest, cleanest reverse engineering toolkit.
+      </p>
+      <div style="display:flex; justify-content:center; gap:14px;">
+        <a href="welcome.html" class="btn btn-secondary">🏠 Back to Welcome Hub</a>
+        <a href="inspector-guide.html" class="btn btn-primary">📖 Explore User Guide</a>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="experience.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Debug Console — SF Power Inspector</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <script type="module" src="debug-console.js"></script>
+</head>
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>📋 Debug Log Console</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 500; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta">
+      <button class="btn btn-primary" id="btn-enable-trace">⚡ Enable Logging for Me</button>
+      <button class="btn btn-secondary" id="btn-refresh">🔄 Refresh Logs</button>
+      <button class="btn btn-danger" id="btn-delete-all">🗑 Delete All Logs</button>
+    </div>
+  </header>
+
+  <main class="tool-workspace" style="flex-direction: row; gap: 16px;">
+    <!-- Logs List -->
+    <div class="tool-card" style="width: 450px; overflow: hidden; display: flex; flex-direction: column;">
+      <div style="padding: 8px 12px; background: #fafafa; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 12px; font-weight: 600;">Captured Logs (<span id="log-count">0</span>)</span>
+        <input type="text" id="log-filter" class="input-text" placeholder="Filter..." style="padding: 2px 6px; font-size: 11px; width: 140px;">
+      </div>
+      <div class="table-container" style="border: none; border-radius: 0;">
+        <table class="data-table" id="logs-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>User</th>
+              <th>Operation</th>
+              <th>Status</th>
+              <th>Size</th>
+            </tr>
+          </thead>
+          <tbody id="logs-body">
+            <tr><td colspan="5" style="text-align:center; padding:20px;">Fetching logs...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Log Viewer -->
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div style="padding: 8px 12px; background: #fafafa; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+        <span id="selected-log-info" style="font-size: 12px; font-weight: 600;">Select a log to inspect</span>
+        <button class="btn btn-secondary" id="btn-download-log" style="padding: 2px 8px; font-size: 11px;" disabled>Download Log</button>
+      </div>
+      <div class="table-container" style="padding: 12px; border: none;">
+        <pre id="log-content" style="font-family: var(--font-mono); font-size: 11px; white-space: pre-wrap; word-break: break-all;">Select a log from the list on the left.</pre>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
+

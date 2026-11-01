@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Flow Analyzer — SF Power Inspector</title>
+  <link rel="stylesheet" href="styles/tools.css">
+  <script type="module" src="flow-analyzer.js"></script>
+</head>
+
+<body>
+  <header class="tool-navbar">
+    <div class="tool-brand">
+      <h1>🌊 Flow & Process Scanner</h1>
+      <span class="badge" id="env-badge">Connecting...</span>
+      <span id="org-name" style="font-weight: 500; font-size: 13px;"></span>
+    </div>
+    <div class="tool-meta" style="display: flex; gap: 8px; align-items: center;">
+      <input type="text" id="flow-filter" class="input-text" placeholder="🔍 Filter flows by name or type..."
+        style="width: 240px; padding: 6px 10px; font-size: 12px;">
+      <select id="risk-filter" class="select" style="font-size: 12px; padding: 6px 8px;">
+        <option value="all">All Flows</option>
+        <option value="active">Active Only</option>
+        <option value="issues">Has Risks / Warnings</option>
+        <option value="clean">Clean Only</option>
+      </select>
+      <button class="btn btn-primary" id="btn-scan-all">⚡ Scan All Active Flows</button>
+    </div>
+  </header>
+
+  <main class="tool-workspace">
+    <div class="tool-card" style="padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-size: 13px;">
+          Scans Salesforce Flow definitions for governor limit risks (SOQL 101/DML 150 in loops), anti-patterns,
+          hardcoded IDs, and missing fault paths.
+        </div>
+        <div id="scan-status" style="font-size: 12px; font-weight: 600; color: var(--text-muted);">
+          Loading flow catalog...
+        </div>
+      </div>
+      <div id="progress-container"
+        style="display: none; width: 100%; background: #e2e8f0; border-radius: 4px; height: 6px; overflow: hidden;">
+        <div id="progress-bar" style="width: 0%; height: 100%; background: #0176d3; transition: width 0.2s ease;"></div>
+      </div>
+    </div>
+
+    <!-- Scan Results Table -->
+    <div class="tool-card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+      <div class="table-container">
+        <table class="data-table" id="flows-table">
+          <thead>
+            <tr>
+              <th style="width: 280px;">Flow Label & Version</th>
+              <th style="width: 140px;">Process Type</th>
+              <th style="width: 90px;">Status</th>
+              <th style="width: 90px; text-align: center;">Action</th>
+              <th>Anti-Patterns & Diagnostics Detected</th>
+            </tr>
+          </thead>
+          <tbody id="flows-body">
+            <tr>
+              <td colspan="5" style="text-align:center; padding:30px;">Loading active flows from Salesforce...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>
