@@ -25,139 +25,96 @@
       display: flex;
       flex-direction: column;
     }
-    /* Top Announcement Bar */
-    .top-announcement-bar {
-      background: linear-gradient(90deg, #0b1329 0%, #172554 50%, #0b1329 100%);
-      border-bottom: 1px solid rgba(56, 189, 248, 0.25);
-      padding: 8px 24px;
-      font-size: 13px;
-      color: #cbd5e1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 14px;
-      position: relative;
-      z-index: 101;
-    }
-    .announcement-content {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .announcement-badge {
-      background: linear-gradient(135deg, #0284c7, #2563eb);
-      color: #ffffff;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 2px 9px;
-      border-radius: 12px;
-      letter-spacing: 0.5px;
-      box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
-    }
-    .announcement-link {
-      color: #38bdf8;
-      font-weight: 700;
-      text-decoration: underline;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .announcement-link:hover {
-      color: #7dd3fc;
-    }
-    .announcement-close {
-      position: absolute;
-      right: 14px;
-      background: none;
-      border: none;
-      color: #64748b;
-      cursor: pointer;
-      font-size: 14px;
-      padding: 4px;
-      line-height: 1;
-    }
-    .announcement-close:hover {
-      color: #f8fafc;
-    }
-
-    /* Modern Sticky Landing Header */
+    /* Clean, Modern Header */
     .landing-header {
       position: sticky;
       top: 0;
       z-index: 100;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      background: rgba(11, 17, 32, 0.92);
-      border-bottom: 1px solid rgba(51, 65, 85, 0.7);
-      padding: 11px 24px;
+      background: rgba(11, 17, 32, 0.88);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0;
+    }
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 12px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
-    }
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      flex-shrink: 0;
+      box-sizing: border-box;
+      gap: 20px;
     }
     .brand-title {
-      font-size: 18px;
-      font-weight: 800;
+      font-size: 17px;
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
       color: #f8fafc;
       text-decoration: none;
       letter-spacing: -0.2px;
+      flex-shrink: 0;
     }
     .brand-bolt {
-      font-size: 21px;
+      font-size: 20px;
       color: #38bdf8;
-      filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.75));
+      filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
     }
     .pro-tag {
-      background: linear-gradient(135deg, #0284c7, #2563eb);
-      color: #ffffff;
-      font-size: 10.5px;
-      font-weight: 900;
-      padding: 2px 7px;
-      border-radius: 6px;
+      background: rgba(2, 132, 199, 0.2);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
       letter-spacing: 0.5px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
     }
     .header-nav {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 28px;
     }
     .header-nav .nav-link {
       color: #94a3b8;
       font-size: 13.5px;
-      font-weight: 600;
+      font-weight: 500;
       text-decoration: none;
-      transition: color 0.15s;
+      transition: color 0.15s ease;
     }
     .header-nav .nav-link:hover {
-      color: #38bdf8;
+      color: #f8fafc;
     }
-    @media (max-width: 980px) {
-      .header-nav { display: none; }
-    }
-
-    /* Header CTA Group (Fast Install Buttons) */
     .header-cta-group {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-shrink: 0;
     }
-    .btn-header-install {
-      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    .btn-header-ghost {
+      background: transparent;
+      color: #cbd5e1 !important;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 8px;
+      padding: 7px 13px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .btn-header-ghost:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(148, 163, 184, 0.5);
+      color: #f8fafc !important;
+    }
+    .btn-header-cta {
+      background: #0284c7;
       color: #ffffff !important;
       border: 1px solid #38bdf8;
       border-radius: 8px;
@@ -167,74 +124,39 @@
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      box-shadow: 0 2px 12px rgba(2, 132, 199, 0.4);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      gap: 6px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      transition: all 0.15s ease;
       text-decoration: none;
     }
-    .btn-header-install:hover {
-      background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
-      transform: translateY(-1.5px);
-      box-shadow: 0 4px 18px rgba(56, 189, 248, 0.55);
+    .btn-header-cta:hover {
+      background: #0369a1;
+      border-color: #7dd3fc;
+      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4);
     }
-    .btn-header-open {
-      background: rgba(15, 23, 42, 0.85);
-      color: #f8fafc !important;
-      border: 1px solid #475569;
-      border-radius: 8px;
-      padding: 7px 14px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      text-decoration: none;
-    }
-    .btn-header-open:hover {
-      background: rgba(30, 41, 59, 0.95);
-      border-color: #f59e0b;
-      transform: translateY(-1.5px);
-      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
-    }
-    .btn-header-icon {
-      padding: 6px 11px;
-      border-radius: 8px;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .live-telemetry-badge {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(30, 41, 59, 0.8);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
+    .btn-header-theme {
+      background: transparent;
+      border: 1px solid rgba(148, 163, 184, 0.2);
       color: #94a3b8;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      line-height: 1;
     }
-    .pulse-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #22c55e;
-      box-shadow: 0 0 8px #22c55e;
-      animation: pulse 1.8s infinite;
+    .btn-header-theme:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #f8fafc;
+      border-color: rgba(148, 163, 184, 0.4);
     }
-    @keyframes pulse {
-      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-      70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
-      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    @media (max-width: 860px) {
+      .header-nav { display: none; }
     }
-    @media (max-width: 720px) {
-      .btn-header-open { display: none; }
-      .live-telemetry-badge { display: none; }
+    @media (max-width: 580px) {
+      .btn-header-ghost { display: none; }
       .brand-title .brand-name { font-size: 15px; }
-      .landing-header { padding: 10px 14px; }
+      .header-container { padding: 10px 16px; }
     }
 
     /* Fast Install Modal Styles */
@@ -816,53 +738,33 @@
 </head>
 <body class="page-scrollable page-welcome">
 
-  <!-- Top Announcement Bar (Dismissible & Live) -->
-  <div class="top-announcement-bar" id="top-announcement-bar">
-    <div class="announcement-content">
-      <span class="announcement-badge">NEW v1.0.0</span>
-      <span>SF Power Inspector PRO is live for Chrome & Edge! Enterprise architecture tools with zero login required.</span>
-      <a href="#quick-install-modal" id="btn-announcement-install" class="announcement-link">⚡ Fast Install (30s) →</a>
-    </div>
-    <button class="announcement-close" id="btn-close-announcement" title="Dismiss announcement">✕</button>
-  </div>
-
-  <!-- Landing Header with Real-Time Live Counters & Header Action View -->
+  <!-- Clean, Elegant Header -->
   <header class="landing-header">
-    <div class="header-left">
+    <div class="header-container">
       <a href="welcome.html" class="brand-title">
         <span class="brand-bolt">⚡</span>
         <span class="brand-name">SF Power Inspector</span>
         <span class="pro-tag">PRO</span>
       </a>
 
-      <!-- Compact Live Telemetry Badge -->
-      <div class="live-telemetry-badge" id="live-telemetry-badge">
-        <span class="pulse-dot"></span>
-        <span id="txt-live-active">314 Active Engineers Now</span>
-        <span style="opacity: 0.5;">•</span>
-        <span id="txt-live-installs">15,280+ Installs</span>
+      <!-- Clean Navigation Links -->
+      <nav class="header-nav">
+        <a href="#guide-section" class="nav-link">Guide</a>
+        <a href="storage-cleaner.html" class="nav-link">Storage Cleaner</a>
+        <a href="#requirements-section" class="nav-link">Roadmap</a>
+        <a href="#subscribe-section" class="nav-link">Subscribe</a>
+      </nav>
+
+      <!-- Clean Header Action View -->
+      <div class="header-cta-group">
+        <button id="btn-header-open" class="btn-header-ghost" title="Open Extension Popup">
+          <span>⚡ Open Extension</span>
+        </button>
+        <a href="#" id="btn-header-install" class="btn-header-cta" title="Add to Chrome (Free, 1-Click)">
+          <span>➕ Add to Chrome</span>
+        </a>
+        <button id="btn-theme-toggle" class="btn-header-theme" title="Toggle Light / Dark Theme">🌓</button>
       </div>
-    </div>
-
-    <!-- Quick Navigation Links (Find Features & Sections Fast) -->
-    <nav class="header-nav">
-      <a href="#guide-section" class="nav-link">📖 Quick Guide</a>
-      <a href="storage-cleaner.html" class="nav-link">🧹 Storage Cleaner</a>
-      <a href="#requirements-section" class="nav-link">🔥 Roadmap</a>
-      <a href="#subscribe-section" class="nav-link">📬 Subscribe</a>
-    </nav>
-
-    <!-- Header Action View (Fast Install & Direct Launch) -->
-    <div class="header-cta-group">
-      <a href="#" id="btn-header-install" class="btn-header-install" title="Add Extension to Chrome (Free, 1-Click)">
-        <span style="font-size: 14px;">➕</span>
-        <span>Add Extension to Chrome</span>
-      </a>
-      <button id="btn-header-open" class="btn-header-open" title="Open SF Power Inspector Directly">
-        <span style="font-size: 14px; color: #f59e0b;">⚡</span>
-        <span>Open Extension Directly</span>
-      </button>
-      <button id="btn-theme-toggle" class="btn btn-secondary btn-header-icon" title="Toggle Light / Dark Theme">🌓</button>
     </div>
   </header>
 
