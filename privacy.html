@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — SF Power Inspector PRO</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="styles/tools.css">
+  <style>
+    body {
+      background: #0b1120;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      height: auto !important;
+      min-height: 100vh !important;
+      overflow-y: auto !important;
+    }
+    .legal-container {
+      max-width: 860px;
+      margin: 40px auto 60px auto;
+      padding: 0 24px;
+      line-height: 1.7;
+      color: #cbd5e1;
+    }
+    .legal-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 36px 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    h1 { font-size: 32px; font-weight: 900; color: #f8fafc; margin-top: 0; }
+    h2 { font-size: 20px; font-weight: 800; color: #38bdf8; margin-top: 32px; border-bottom: 1px solid #1e293b; padding-bottom: 8px; }
+    h3 { font-size: 16px; font-weight: 700; color: #f1f5f9; margin-top: 20px; }
+    p, li { font-size: 14.5px; }
+    ul { padding-left: 24px; }
+    .badge-pill {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid #16a34a;
+      color: #86efac;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    a { color: #38bdf8; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .legal-footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid #1e293b;
+      font-size: 13px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body class="page-scrollable">
+  <div class="legal-container">
+    <div class="legal-card">
+      <div class="badge-pill">🛡️ ENTERPRISE PRIVACY & ZERO DATA RETENTION</div>
+      <h1>Privacy Policy</h1>
+      <p style="font-size: 13px; color: #94a3b8;">Effective Date: November 1, 2026 • Version: 1.0 Production</p>
+
+      <p>
+        <strong>SF Power Inspector PRO</strong> ("the Extension", "we", "our", or "the Service"), developed and founded by <strong>ParrotRakhy</strong>, is designed with a strict, privacy-first, zero-data-retention architectural model. This Privacy Policy details how data is handled when you use the extension and its associated web hub.
+      </p>
+
+      <h2>1. The Zero-Data-Retention Commitment</h2>
+      <p>
+        We believe your Salesforce CRM data belongs solely to you and your enterprise. Unlike traditional cloud tools, <strong>SF Power Inspector PRO operates 100% locally in your browser sandbox</strong>:
+      </p>
+      <ul>
+        <li><strong>No External CRM Telemetry</strong>: Your Salesforce record data, custom objects, SOQL queries, and schema metadata never leave your browser session.</li>
+        <li><strong>Direct Browser-to-Salesforce Communication</strong>: All API requests (REST, Tooling, GraphQL, SOAP) are transmitted directly between your web browser and your authoritative Salesforce domain using your existing active session cookie.</li>
+        <li><strong>No Third-Party Analytics on CRM Data</strong>: We do not capture, log, inspect, or sell any information viewed or edited inside your Salesforce org.</li>
+      </ul>
+
+      <h2>2. Data Handled by the Extension</h2>
+      <h3>A. Salesforce Session Authentication</h3>
+      <p>
+        The extension uses your browser's existing Salesforce login session (via standard cookie permissions). Session tokens (<code>sid</code>) are held ephemerally in browser memory and are never persisted to external servers or logged in plain text.
+      </p>
+
+      <h3>B. AI API Keys & Web Crypto Vault</h3>
+      <p>
+        If you choose to use optional third-party AI models (OpenAI, Anthropic Claude, Google Gemini), your API keys are encrypted at rest on your local device using <strong>256-bit AES-GCM encryption</strong> via the native Web Crypto API (<code>SubtleCrypto</code>). Keys are never transmitted to us.
+      </p>
+
+      <h3>C. Einstein Trust Layer & Dynamic PII Masking</h3>
+      <p>
+        Before any prompt is dispatched to an AI model, our built-in client-side PII sanitizer automatically masks sensitive data patterns (including email addresses, telephone numbers, Social Security Numbers, and credit card numbers) to protect your organization's privacy.
+      </p>
+
+      <h2>3. Web Hub Subscriptions & Community Ideas</h2>
+      <p>
+        When you voluntarily use our public web hub (<a href="https://anytaskai.github.io/sf-power-inspector/">https://anytaskai.github.io/sf-power-inspector/</a>):
+      </p>
+      <ul>
+        <li><strong>Optional Email Subscription</strong>: If you subscribe to updates, your provided email address is used solely to dispatch release notes and security advisories. Login is never mandatory.</li>
+        <li><strong>Feature Requests & Community Votes</strong>: Titles, categories, and use-case descriptions submitted through the community roadmap are recorded to prioritize engineering improvements.</li>
+      </ul>
+
+      <h2>4. Compliance (GDPR, CCPA, Enterprise Standards)</h2>
+      <p>
+        Because SF Power Inspector PRO does not act as a data controller or data processor of your Salesforce customer data, your enterprise retains full GDPR and CCPA compliance. You may clear all extension state at any time by clearing your browser's local storage or uninstalling the extension.
+      </p>
+
+      <h2>5. Contact & Questions</h2>
+      <p>
+        For inquiries regarding this Privacy Policy, enterprise security audits, or data protection questions, please contact:
+      </p>
+      <p>
+        <strong>ParrotRakhy</strong> — Developer & Founder<br>
+        Email: <a href="mailto:anythingxearn@gmail.com">anythingxearn@gmail.com</a><br>
+        GitHub: <a href="https://github.com/AnyTaskAI/sf-power-inspector" target="_blank">https://github.com/AnyTaskAI/sf-power-inspector</a>
+      </p>
+
+      <div class="legal-footer">
+        <p>© 2026 <strong>ParrotRakhy</strong> (Developer & Founder). All rights reserved.</p>
+        <p><a href="addon/welcome.html">Return to Live Hub</a> • <a href="terms.html">Terms & Conditions</a></p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

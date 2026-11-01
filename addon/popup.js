@@ -315,6 +315,9 @@ function render() {
           <span>•</span>
           <a href="#" id="btn-open-settings" title="Extension Settings">⚙️ Settings</a>
         </div>
+        <div style="text-align:center; font-size:9.5px; color:var(--sfpi-text-muted); margin-top:5px; padding-bottom:3px; opacity:0.85;">
+          © 2026 <strong>ParrotRakhy</strong> (Developer & Founder)
+        </div>
       </div>
 
       <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -358,6 +361,9 @@ function render() {
           <span>•</span>
           <a href="#" id="btn-open-settings-user" title="Extension Settings">⚙️ Settings</a>
         </div>
+        <div style="text-align:center; font-size:9.5px; color:var(--sfpi-text-muted); margin-top:5px; padding-bottom:3px; opacity:0.85;">
+          © 2026 <strong>ParrotRakhy</strong> (Developer & Founder)
+        </div>
 
       </div>
 
@@ -378,6 +384,9 @@ function render() {
           <a href="#" id="btn-open-experience-org" title="2-Hour Experience Feedback">⭐ Review</a>
           <span>•</span>
           <a href="#" id="btn-open-settings-org" title="Extension Settings">⚙️ Settings</a>
+        </div>
+        <div style="text-align:center; font-size:9.5px; color:var(--sfpi-text-muted); margin-top:5px; padding-bottom:3px; opacity:0.85;">
+          © 2026 <strong>ParrotRakhy</strong> (Developer & Founder)
         </div>
       </div>
     </div>

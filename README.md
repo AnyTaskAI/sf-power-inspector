@@ -276,3 +276,28 @@ Comprehensive preferences and enterprise security suite with 100% feature parity
 - **Experience Feedback**: Features interactive 5-star rating, explored feature tags, improvement suggestions, and one-click review submission.
 - **Evaluation Preview Mode**: Includes instant preview trigger (`experience.html?ref=preview`) so developers and reviewers can test and submit feedback immediately without waiting 2 hours.
 
+---
+
+## 👨‍💻 Developer & Founder
+
+**SF Power Inspector PRO** is architected, developed, and maintained by **ParrotRakhy** (Developer & Founder).
+
+- **Founder & Lead Developer**: **ParrotRakhy**
+- **Contact Email**: [anythingxearn@gmail.com](mailto:anythingxearn@gmail.com)
+- **Official Repository**: [https://github.com/AnyTaskAI/sf-power-inspector](https://github.com/AnyTaskAI/sf-power-inspector)
+- **Live Web Hub**: [https://anytaskai.github.io/sf-power-inspector/](https://anytaskai.github.io/sf-power-inspector/)
+
+---
+
+## 📜 Compliance, Legal & Production Standards
+
+- 📄 [**Privacy Policy**](privacy.html) — Zero data retention, client-side sandbox execution, GDPR & CCPA compliance.
+- ⚖️ [**Terms & Conditions**](terms.html) — End-User License Agreement, permitted usage, disclaimer of warranties.
+- 🛡️ [**Security Policy**](SECURITY.md) — Vulnerability reporting guidelines and Web Crypto AES-GCM vault specifications.
+- 📝 [**Release Notes**](RELEASE_NOTES.md) — Comprehensive v1.0.0 release log and architecture summary.
+
+---
+
+© 2026 **ParrotRakhy** (Developer & Founder). All rights reserved.
+Licensed under standard open and independent developer terms. Salesforce, Force.com, Agentforce, and Einstein are registered trademarks of Salesforce, Inc.
+

@@ -1,6 +1,7 @@
 {
   "name": "SF Power Inspector PRO - Salesforce Toolkit",
   "description": "Inspect Salesforce records & fields, run SOQL, clean sandbox storage, export data, and login as any user without leaving your tab.",
+  "author": "ParrotRakhy",
   "version": "1.0.0",
   "version_name": "1.0",
   "icons": {
