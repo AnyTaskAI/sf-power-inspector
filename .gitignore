@@ -1,5 +1,17 @@
+# Dependencies & Runtime
 node_modules/
 .DS_Store
 Thumbs.db
 *.log
 .env
+.env.*
+
+# Private & Secret Files (Kept local, never pushed to public Git)
+*.csv
+google-sheets-tracker.js
+*.secret
+*.key
+*.pem
+secrets/
+private/
+config.local.*

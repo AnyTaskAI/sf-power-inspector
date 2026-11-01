@@ -12,6 +12,9 @@ const BASE_INSTALL_COUNT = 15280;
 const BASE_ACTIVE_USERS = 314;
 const TWO_HOURS_MS = 2 * 60 * 60 * 1000; // 120 minutes
 
+// Optional Google Sheets Webhook Tracker (configured privately via localStorage or extension options)
+export const DEFAULT_GSHEET_WEBHOOK_URL = "";
+
 // ─── 1. Anonymous Device / Installation Identifier ───────────────────
 export function getOrCreateInstallId() {
   let id = localStorage.getItem("sfpi_install_id");
@@ -337,11 +340,45 @@ export function submitUserRequirement({
     } catch (e) {}
   }
 
+  // Dispatch to Google Sheets Tracker Webhook
+  try {
+    const webhookUrl = localStorage.getItem("sfpi_gsheet_webhook_url") || DEFAULT_GSHEET_WEBHOOK_URL;
+    if (webhookUrl && typeof fetch === "function") {
+      fetch(webhookUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(newReq)
+      }).catch(() => {});
+    }
+  } catch (e) {}
+
   return {
     success: true,
     message: "Thank you! Your requirement has been submitted and queued for CTA review.",
     requirement: newReq
   };
+}
+
+export function getGoogleSheetsWebhookUrl() {
+  try {
+    return localStorage.getItem("sfpi_gsheet_webhook_url") || DEFAULT_GSHEET_WEBHOOK_URL;
+  } catch (e) {
+    return DEFAULT_GSHEET_WEBHOOK_URL;
+  }
+}
+
+export function setGoogleSheetsWebhookUrl(url) {
+  try {
+    if (url) {
+      localStorage.setItem("sfpi_gsheet_webhook_url", url.trim());
+    } else {
+      localStorage.removeItem("sfpi_gsheet_webhook_url");
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
 
 export function upvoteRequirement(reqId) {
