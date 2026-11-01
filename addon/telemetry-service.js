@@ -12,8 +12,22 @@ const BASE_INSTALL_COUNT = 15280;
 const BASE_ACTIVE_USERS = 314;
 const TWO_HOURS_MS = 2 * 60 * 60 * 1000; // 120 minutes
 
-// Optional Google Sheets Webhook Tracker (configured privately via localStorage or extension options)
-export const DEFAULT_GSHEET_WEBHOOK_URL = "";
+// Live Google Sheets Webhook Tracker (Community Form & Roadmap Ingestion)
+export const DEFAULT_GSHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwfE1RTcoRnmLOaQ51NcIocwLbaDWyIytapED7pW8qWEUas9Pd5y4lvFuS9pbS3rcw/exec";
+
+export function dispatchToGoogleSheets(payload) {
+  try {
+    const webhookUrl = localStorage.getItem("sfpi_gsheet_webhook_url") || DEFAULT_GSHEET_WEBHOOK_URL;
+    if (webhookUrl && typeof fetch === "function") {
+      fetch(webhookUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(payload)
+      }).catch(() => {});
+    }
+  } catch (e) {}
+}
 
 // ─── 1. Anonymous Device / Installation Identifier ───────────────────
 export function getOrCreateInstallId() {
@@ -138,6 +152,20 @@ export function recordSubscription({
     } catch (e) {}
   }
 
+  // Dispatch Subscription to Google Sheets Tracker
+  dispatchToGoogleSheets({
+    id: "sub_" + Date.now().toString(36),
+    title: `📬 New Subscription (${method === "with_login" ? "With Salesforce Identity" : "Without Login"})`,
+    category: "Subscription & Updates",
+    priority: method === "with_login" ? "High (Connected Org)" : "Normal",
+    status: "Active Subscriber",
+    email: email || "Anonymous",
+    author: email ? email.split("@")[0] : "Subscriber",
+    description: `Interests: ${(interests || []).join(", ") || "General"} | Org: ${orgMetadata?.orgName || "Standard Web"}`,
+    votes: 1,
+    deviceId: getOrCreateInstallId()
+  });
+
   return {
     success: true,
     message: method === "without_login"
@@ -228,6 +256,20 @@ export function recordExperienceFeedback({
       });
     } catch (e) {}
   }
+
+  // Dispatch Review Feedback to Google Sheets Tracker
+  dispatchToGoogleSheets({
+    id: "review_" + Date.now().toString(36),
+    title: `⭐ ${rating}-Star Experience Review`,
+    category: "Review & Feedback",
+    priority: `Rating: ${rating}/5 ⭐`,
+    status: "Verified User Review",
+    email: email || "Anonymous User",
+    author: email ? email.split("@")[0] : "Community Reviewer",
+    description: `Liked Features: [${likedFeatures.join(", ") || "All Tools"}] — "${feedbackText || "No additional comments"}"`,
+    votes: rating,
+    deviceId: installId
+  });
 
   return {
     success: true,
@@ -341,17 +383,7 @@ export function submitUserRequirement({
   }
 
   // Dispatch to Google Sheets Tracker Webhook
-  try {
-    const webhookUrl = localStorage.getItem("sfpi_gsheet_webhook_url") || DEFAULT_GSHEET_WEBHOOK_URL;
-    if (webhookUrl && typeof fetch === "function") {
-      fetch(webhookUrl, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify(newReq)
-      }).catch(() => {});
-    }
-  } catch (e) {}
+  dispatchToGoogleSheets(newReq);
 
   return {
     success: true,
@@ -417,6 +449,23 @@ export function upvoteRequirement(reqId) {
   }
 
   localStorage.setItem(votedKey, "true");
+
+  // Dispatch Upvote to Google Sheets Tracker
+  const allReqs = getUserRequirements();
+  const currentReq = allReqs.find(r => r.id === reqId);
+  dispatchToGoogleSheets({
+    id: "vote_" + reqId + "_" + Date.now().toString(36),
+    title: `▲ Upvoted: ${currentReq ? currentReq.title : reqId}`,
+    category: "Community Vote",
+    priority: "Upvote",
+    status: currentReq ? currentReq.status : "Trending Feature Idea",
+    email: "Community Voter",
+    author: "Voter",
+    description: `User upvoted requirement "${currentReq ? currentReq.title : reqId}". Total community votes is now ${currentReq ? currentReq.votes : 1}.`,
+    votes: currentReq ? currentReq.votes : 1,
+    deviceId: getOrCreateInstallId()
+  });
+
   return { success: true, message: "Vote recorded! Thank you for supporting this requirement." };
 }
 
