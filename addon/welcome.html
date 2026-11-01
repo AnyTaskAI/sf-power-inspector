@@ -25,27 +25,186 @@
       display: flex;
       flex-direction: column;
     }
+    /* Top Announcement Bar */
+    .top-announcement-bar {
+      background: linear-gradient(90deg, #0b1329 0%, #172554 50%, #0b1329 100%);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 8px 24px;
+      font-size: 13px;
+      color: #cbd5e1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      position: relative;
+      z-index: 101;
+    }
+    .announcement-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .announcement-badge {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 9px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+    }
+    .announcement-link {
+      color: #38bdf8;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .announcement-link:hover {
+      color: #7dd3fc;
+    }
+    .announcement-close {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px;
+      line-height: 1;
+    }
+    .announcement-close:hover {
+      color: #f8fafc;
+    }
+
+    /* Modern Sticky Landing Header */
     .landing-header {
       position: sticky;
       top: 0;
       z-index: 100;
-      backdrop-filter: blur(12px);
-      background: rgba(15, 23, 42, 0.85);
-      border-bottom: 1px solid var(--border, #1e293b);
-      padding: 14px 28px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(11, 17, 32, 0.92);
+      border-bottom: 1px solid rgba(51, 65, 85, 0.7);
+      padding: 11px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
     }
     .brand-title {
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 800;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      color: #f8fafc;
+      text-decoration: none;
+      letter-spacing: -0.2px;
+    }
+    .brand-bolt {
+      font-size: 21px;
       color: #38bdf8;
+      filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.75));
+    }
+    .pro-tag {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+      font-size: 10.5px;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .header-nav .nav-link {
+      color: #94a3b8;
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .header-nav .nav-link:hover {
+      color: #38bdf8;
+    }
+    @media (max-width: 980px) {
+      .header-nav { display: none; }
+    }
+
+    /* Header CTA Group (Fast Install Buttons) */
+    .header-cta-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .btn-header-install {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff !important;
+      border: 1px solid #38bdf8;
+      border-radius: 8px;
+      padding: 7px 15px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 2px 12px rgba(2, 132, 199, 0.4);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       text-decoration: none;
     }
+    .btn-header-install:hover {
+      background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+      transform: translateY(-1.5px);
+      box-shadow: 0 4px 18px rgba(56, 189, 248, 0.55);
+    }
+    .btn-header-open {
+      background: rgba(15, 23, 42, 0.85);
+      color: #f8fafc !important;
+      border: 1px solid #475569;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      text-decoration: none;
+    }
+    .btn-header-open:hover {
+      background: rgba(30, 41, 59, 0.95);
+      border-color: #f59e0b;
+      transform: translateY(-1.5px);
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
+    }
+    .btn-header-icon {
+      padding: 6px 11px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
     .live-telemetry-badge {
       display: flex;
       align-items: center;
@@ -70,6 +229,198 @@
       0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
       70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
       100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+    @media (max-width: 720px) {
+      .btn-header-open { display: none; }
+      .live-telemetry-badge { display: none; }
+      .brand-title .brand-name { font-size: 15px; }
+      .landing-header { padding: 10px 14px; }
+    }
+
+    /* Fast Install Modal Styles */
+    .install-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(11, 17, 32, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      animation: fadeIn 0.15s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .install-modal-card {
+      background: #0f172a;
+      border: 1px solid #38bdf8;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 660px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(56, 189, 248, 0.2);
+      overflow: hidden;
+      animation: scaleUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes scaleUp {
+      from { transform: scale(0.96); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-header {
+      padding: 20px 24px;
+      background: rgba(30, 41, 59, 0.5);
+      border-bottom: 1px solid #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-close-btn {
+      background: rgba(51, 65, 85, 0.5);
+      border: 1px solid #475569;
+      color: #94a3b8;
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 15px;
+      transition: all 0.15s;
+    }
+    .modal-close-btn:hover {
+      background: #dc2626;
+      border-color: #ef4444;
+      color: #fff;
+    }
+    .modal-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .download-action-box {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.15) 0%, rgba(30, 58, 138, 0.2) 100%);
+      border: 1px solid #0284c7;
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .btn-modal-download {
+      background: #0284c7;
+      color: #fff !important;
+      font-weight: 800;
+      font-size: 13.5px;
+      padding: 9px 18px;
+      border-radius: 8px;
+      border: 1px solid #38bdf8;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+      transition: all 0.2s;
+    }
+    .btn-modal-download:hover {
+      background: #0369a1;
+      transform: translateY(-1.5px);
+    }
+    .btn-modal-github {
+      background: rgba(30, 41, 59, 0.9);
+      color: #cbd5e1 !important;
+      font-weight: 700;
+      font-size: 13.5px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      border: 1px solid #475569;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-modal-github:hover {
+      background: #334155;
+      color: #fff !important;
+    }
+    .modal-steps-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .modal-step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 12px 16px;
+    }
+    .modal-step-number {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #0284c7;
+      color: #fff;
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .modal-step-info {
+      flex: 1;
+    }
+    .modal-step-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #f1f5f9;
+      margin-bottom: 3px;
+    }
+    .modal-step-desc {
+      font-size: 12.5px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+    .modal-step-desc code {
+      background: #0b1120;
+      color: #38bdf8;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      border: 1px solid #334155;
+    }
+    .btn-copy-inline {
+      background: rgba(14, 165, 233, 0.15);
+      border: 1px solid #0284c7;
+      color: #38bdf8;
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: 700;
+      margin-left: 6px;
+      transition: all 0.15s;
+    }
+    .btn-copy-inline:hover {
+      background: #0284c7;
+      color: #fff;
+    }
+    .modal-footer {
+      padding: 16px 24px;
+      background: rgba(30, 41, 59, 0.4);
+      border-top: 1px solid #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     .hero-section {
       text-align: center;
@@ -465,19 +816,53 @@
 </head>
 <body class="page-scrollable page-welcome">
 
-  <!-- Landing Header with Real-Time Live Counters -->
+  <!-- Top Announcement Bar (Dismissible & Live) -->
+  <div class="top-announcement-bar" id="top-announcement-bar">
+    <div class="announcement-content">
+      <span class="announcement-badge">NEW v1.0.0</span>
+      <span>SF Power Inspector PRO is live for Chrome & Edge! Enterprise architecture tools with zero login required.</span>
+      <a href="#quick-install-modal" id="btn-announcement-install" class="announcement-link">⚡ Fast Install (30s) →</a>
+    </div>
+    <button class="announcement-close" id="btn-close-announcement" title="Dismiss announcement">✕</button>
+  </div>
+
+  <!-- Landing Header with Real-Time Live Counters & Header Action View -->
   <header class="landing-header">
-    <a href="#" class="brand-title">
-      <span>⚡</span> SF Power Inspector PRO
-    </a>
-    <div style="display: flex; align-items: center; gap: 14px;">
+    <div class="header-left">
+      <a href="welcome.html" class="brand-title">
+        <span class="brand-bolt">⚡</span>
+        <span class="brand-name">SF Power Inspector</span>
+        <span class="pro-tag">PRO</span>
+      </a>
+
+      <!-- Compact Live Telemetry Badge -->
       <div class="live-telemetry-badge" id="live-telemetry-badge">
         <span class="pulse-dot"></span>
         <span id="txt-live-active">314 Active Engineers Now</span>
-        <span>•</span>
+        <span style="opacity: 0.5;">•</span>
         <span id="txt-live-installs">15,280+ Installs</span>
       </div>
-      <button id="btn-theme-toggle" class="btn btn-secondary" style="padding: 6px 12px; cursor: pointer;" title="Toggle Theme">🌓</button>
+    </div>
+
+    <!-- Quick Navigation Links (Find Features & Sections Fast) -->
+    <nav class="header-nav">
+      <a href="#guide-section" class="nav-link">📖 Quick Guide</a>
+      <a href="storage-cleaner.html" class="nav-link">🧹 Storage Cleaner</a>
+      <a href="#requirements-section" class="nav-link">🔥 Roadmap</a>
+      <a href="#subscribe-section" class="nav-link">📬 Subscribe</a>
+    </nav>
+
+    <!-- Header Action View (Fast Install & Direct Launch) -->
+    <div class="header-cta-group">
+      <a href="#" id="btn-header-install" class="btn-header-install" title="Add Extension to Chrome (Free, 1-Click)">
+        <span style="font-size: 14px;">➕</span>
+        <span>Add Extension to Chrome</span>
+      </a>
+      <button id="btn-header-open" class="btn-header-open" title="Open SF Power Inspector Directly">
+        <span style="font-size: 14px; color: #f59e0b;">⚡</span>
+        <span>Open Extension Directly</span>
+      </button>
+      <button id="btn-theme-toggle" class="btn btn-secondary btn-header-icon" title="Toggle Light / Dark Theme">🌓</button>
     </div>
   </header>
 
@@ -821,6 +1206,82 @@
       <a href="experience.html" style="color: #94a3b8; text-decoration: none;">2-Hour Experience</a>
     </div>
   </footer>
+
+  <!-- Fast Install & Setup Modal (1-Click Zip & 30-Second Guide) -->
+  <div id="quick-install-modal" class="install-modal-overlay" style="display: none;">
+    <div class="install-modal-card">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 26px;">⚡</span>
+          <div>
+            <div style="font-weight: 800; font-size: 18px; color: #f8fafc;">Install SF Power Inspector PRO</div>
+            <div style="font-size: 12.5px; color: #94a3b8;">1-Click Setup for Chrome, Edge, Brave & Opera (30 Seconds)</div>
+          </div>
+        </div>
+        <button id="btn-close-install-modal" class="modal-close-btn" title="Close modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Direct 1-Click Download Button -->
+        <div class="download-action-box">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+            <div>
+              <div style="font-weight: 800; font-size: 15px; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+                <span>📦</span> Download Ready-to-Install Extension
+              </div>
+              <div style="font-size: 12px; color: #cbd5e1; margin-top: 3px;">
+                Includes all PRO inspection tools, Storage Cleaner, and Privacy Vault (v1.0.0 • 434 KB).
+              </div>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <a href="../sf-power-inspector-v1.0.0.zip" download="sf-power-inspector-v1.0.0.zip" id="btn-modal-download-zip" class="btn-modal-download">
+                <span>⬇️</span> Download ZIP (v1.0.0)
+              </a>
+              <a href="https://github.com/AnyTaskAI/sf-power-inspector/releases" target="_blank" rel="noopener" class="btn-modal-github">
+                <span>🐙</span> GitHub Release
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3-Step Rapid Instructions -->
+        <div class="modal-steps-container">
+          <div class="modal-step-item">
+            <div class="modal-step-number">1</div>
+            <div class="modal-step-info">
+              <div class="modal-step-title">Extract the ZIP File</div>
+              <div class="modal-step-desc">Right-click the downloaded <code>sf-power-inspector-v1.0.0.zip</code> and choose <strong>Extract All</strong> to any local folder.</div>
+            </div>
+          </div>
+
+          <div class="modal-step-item">
+            <div class="modal-step-number">2</div>
+            <div class="modal-step-info">
+              <div class="modal-step-title">Open Chrome Extensions Manager</div>
+              <div class="modal-step-desc">
+                In your browser, visit <code id="txt-chrome-url">chrome://extensions</code>
+                <button id="btn-copy-chrome-url" class="btn-copy-inline" title="Copy URL to clipboard">📋 Copy URL</button>
+                and toggle <strong>Developer mode</strong> (top-right corner).
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-step-item">
+            <div class="modal-step-number">3</div>
+            <div class="modal-step-info">
+              <div class="modal-step-title">Click "Load Unpacked"</div>
+              <div class="modal-step-desc">Click the <strong>Load unpacked</strong> button and select the extracted <code>addon</code> folder. Done! Use shortcut <kbd style="background:#0b1120; border:1px solid #334155; padding:2px 6px; border-radius:4px; font-size:11px; color:#38bdf8;">Alt+Shift+I</kbd> on any active Salesforce tab.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <span style="font-size: 12px; color: #64748b;">© 2026 ParrotRakhy (Developer & Founder) • 100% Free & Open Source</span>
+        <button id="btn-modal-done" class="btn btn-primary" style="padding: 8px 18px; font-size: 13px;">Got It, Thanks! 👍</button>
+      </div>
+    </div>
+  </div>
 
   <div id="toast-popup" class="toast-popup"></div>
 

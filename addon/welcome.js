@@ -47,19 +47,85 @@ updateLiveCounters();
 setInterval(updateLiveCounters, 5000);
 recordHeartbeat();
 
-// ─── 2. Live Web vs Extension Installed Detection ────────────────────
+// ─── 2. Fast Install Modal & Extension Context Detection ──────────────
 const isExt = isRunningInExtension();
 const installBadgeTitle = document.getElementById("install-badge-title");
 const installBadgeDesc = document.getElementById("install-badge-desc");
 const btnWebInstall = document.getElementById("btn-web-install");
 const btnWebOpenDirect = document.getElementById("btn-web-open-direct");
+const btnHeaderInstall = document.getElementById("btn-header-install");
+const btnHeaderOpen = document.getElementById("btn-header-open");
+const btnAnnouncementInstall = document.getElementById("btn-announcement-install");
+const btnCloseAnnouncement = document.getElementById("btn-close-announcement");
+const topAnnouncementBar = document.getElementById("top-announcement-bar");
+const installModal = document.getElementById("quick-install-modal");
+
+function openInstallModal() {
+  if (installModal) {
+    installModal.style.display = "flex";
+  }
+}
+
+function closeInstallModal() {
+  if (installModal) {
+    installModal.style.display = "none";
+  }
+}
+
+// Modal controls
+document.getElementById("btn-close-install-modal")?.addEventListener("click", closeInstallModal);
+document.getElementById("btn-modal-done")?.addEventListener("click", closeInstallModal);
+installModal?.addEventListener("click", (e) => {
+  if (e.target === installModal) closeInstallModal();
+});
+
+// Copy chrome://extensions helper
+document.getElementById("btn-copy-chrome-url")?.addEventListener("click", () => {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText("chrome://extensions").then(() => {
+      showToast("Copied 'chrome://extensions' to clipboard! 📋");
+    }).catch(() => {
+      showToast("Navigate to chrome://extensions in your URL bar.");
+    });
+  } else {
+    showToast("Navigate to chrome://extensions in your URL bar.");
+  }
+});
+
+// Announcement bar controls
+btnCloseAnnouncement?.addEventListener("click", () => {
+  if (topAnnouncementBar) {
+    topAnnouncementBar.style.display = "none";
+    try { sessionStorage.setItem("sfpi_dismiss_announcement", "1"); } catch (e) {}
+  }
+});
+try {
+  if (sessionStorage.getItem("sfpi_dismiss_announcement") === "1" && topAnnouncementBar) {
+    topAnnouncementBar.style.display = "none";
+  }
+} catch (e) {}
+
+btnAnnouncementInstall?.addEventListener("click", (e) => {
+  e.preventDefault();
+  openInstallModal();
+});
 
 if (isExt) {
+  // ── Extension Environment ──
   if (installBadgeTitle) {
     installBadgeTitle.innerHTML = `<span style="color: #4ade80;">✅</span> SF Power Inspector Extension Active & Installed`;
   }
   if (installBadgeDesc) {
     installBadgeDesc.textContent = "Your extension is ready! Open tools directly or use Alt+Shift+I on any active Salesforce page.";
+  }
+  if (btnHeaderInstall) {
+    btnHeaderInstall.innerHTML = `<span style="font-size:14px;">📖</span><span>User Guide</span>`;
+    btnHeaderInstall.href = "inspector-guide.html";
+  }
+  if (btnHeaderOpen) {
+    btnHeaderOpen.addEventListener("click", () => {
+      window.location.href = "popup.html";
+    });
   }
   if (btnWebInstall) {
     btnWebInstall.innerHTML = `<span>📖</span> Explore Full User Guide`;
@@ -72,21 +138,25 @@ if (isExt) {
     });
   }
 } else {
-  // Live website mode
-  if (btnWebInstall) {
-    btnWebInstall.href = "https://chromewebstore.google.com/search/SF%20Power%20Inspector";
-    btnWebInstall.target = "_blank";
-  }
-  if (btnWebOpenDirect) {
-    btnWebOpenDirect.addEventListener("click", () => {
-      // Attempt to launch extension via known protocol or URL
-      try {
-        window.open("chrome-extension://mock-sfpi-extension-id/popup.html", "_blank");
-      } catch (e) {
-        showToast("Please install the extension first to open it directly.");
-      }
-    });
-  }
+  // ── Live Website Mode (GitHub Pages / Web) ──
+  btnHeaderInstall?.addEventListener("click", (e) => {
+    e.preventDefault();
+    openInstallModal();
+  });
+  btnWebInstall?.addEventListener("click", (e) => {
+    e.preventDefault();
+    openInstallModal();
+  });
+
+  const handleOpenDirect = () => {
+    showToast("⚡ Click the SF Power Inspector icon in your browser toolbar on any Salesforce tab!");
+    setTimeout(() => {
+      openInstallModal();
+    }, 1800);
+  };
+
+  btnHeaderOpen?.addEventListener("click", handleOpenDirect);
+  btnWebOpenDirect?.addEventListener("click", handleOpenDirect);
 }
 
 // ─── 3. Detect Salesforce Identity (Optional) ────────────────────────

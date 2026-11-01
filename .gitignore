@@ -4,6 +4,7 @@ node_modules/
 Thumbs.db
 *.log
 *.zip
+!sf-power-inspector-v1.0.0.zip
 .env
 .env.*
 
