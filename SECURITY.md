@@ -41,3 +41,4 @@ If you believe you have discovered a security issue in SF Power Inspector PRO:
 ---
 
 © 2026 **ParrotRakhy** (Developer & Founder). All rights reserved.
+
