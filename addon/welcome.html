@@ -344,92 +344,548 @@
       justify-content: space-between;
       align-items: center;
     }
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* MODERN HIGH-CONVERTING HERO & ANIMATED SHOWCASE                 */
+    /* ═══════════════════════════════════════════════════════════════ */
     .hero-section {
       text-align: center;
-      padding: 60px 20px 40px 20px;
-      max-width: 920px;
+      padding: 44px 20px 30px 20px;
+      max-width: 1060px;
       margin: 0 auto;
+      position: relative;
     }
-    .hero-badge {
-      display: inline-block;
-      padding: 5px 14px;
-      background: rgba(14, 165, 233, 0.15);
-      border: 1px solid #0284c7;
-      color: #38bdf8;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      margin-bottom: 20px;
+    
+    /* Ambient Glow Behind Hero */
+    .hero-section::before {
+      content: "";
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 740px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.16) 0%, rgba(139, 92, 246, 0.12) 40%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(50px);
     }
-    .hero-title {
-      font-size: 42px;
-      font-weight: 900;
-      line-height: 1.2;
-      margin: 0 0 16px 0;
-      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #38bdf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .hero-desc {
-      font-size: 17px;
-      color: #94a3b8;
-      line-height: 1.6;
-      margin-bottom: 30px;
-    }
-    .no-login-banner {
-      background: rgba(34, 197, 94, 0.12);
-      border: 1px solid #16a34a;
-      border-radius: 12px;
-      padding: 14px 20px;
-      margin: 0 auto 36px auto;
-      max-width: 760px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      text-align: left;
-    }
-    .no-login-icon {
-      font-size: 28px;
-      flex-shrink: 0;
-    }
-    .hero-actions {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .btn-hero {
-      padding: 14px 26px;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
+
+    .hero-pill-badge {
+      position: relative;
+      z-index: 1;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: all 0.2s;
-      border: none;
-      text-decoration: none;
+      padding: 6px 16px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 9999px;
+      box-shadow: 0 0 16px rgba(14, 165, 233, 0.18);
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
     }
-    .btn-hero-primary {
-      background: #0284c7;
+    .hero-pill-badge:hover {
+      border-color: #38bdf8;
+      box-shadow: 0 0 24px rgba(14, 165, 233, 0.35);
+      transform: translateY(-1px);
+    }
+    .pill-sparkle {
+      font-size: 14px;
+      filter: drop-shadow(0 0 4px #facc15);
+    }
+    .pill-text {
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: #e0f2fe;
+      text-transform: uppercase;
+    }
+    .pill-live-dot {
+      width: 6px;
+      height: 6px;
+      background: #22c55e;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #22c55e;
+      animation: pulseGreen 2s infinite ease-in-out;
+    }
+
+    .hero-title {
+      position: relative;
+      z-index: 1;
+      font-size: 44px;
+      font-weight: 900;
+      line-height: 1.15;
+      margin: 0 0 16px 0;
+      letter-spacing: -0.8px;
       color: #ffffff;
-      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
     }
-    .btn-hero-primary:hover {
-      background: #0369a1;
+    .hero-title .gradient-text {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+    .hero-desc {
+      position: relative;
+      z-index: 1;
+      font-size: 17px;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin: 0 auto 28px auto;
+      max-width: 760px;
+    }
+
+    /* Unified CTA Action Hub */
+    .hero-cta-wrapper {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .hero-actions-main {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* Primary Chrome CTA */
+    .btn-hero-primary-glow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 26px;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      color: #ffffff !important;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(2, 132, 199, 0.45), 0 0 0 1px rgba(56, 189, 248, 0.3);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+    .btn-hero-primary-glow:hover {
+      background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
       transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(2, 132, 199, 0.6), 0 0 0 1px rgba(56, 189, 248, 0.5);
     }
-    .btn-hero-secondary {
-      background: rgba(30, 41, 59, 0.8);
-      border: 1px solid #475569;
+
+    /* Secondary Live Demo CTA */
+    .btn-hero-secondary-glow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      border-radius: 12px;
+      color: #f1f5f9 !important;
+      text-decoration: none;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+    .btn-hero-secondary-glow:hover {
+      background: rgba(51, 65, 85, 0.95);
+      border-color: #a855f7;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(139, 92, 246, 0.35);
+      color: #ffffff !important;
+    }
+
+    /* Auxiliary Subtle Ghost Buttons */
+    .hero-aux-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-hero-aux {
+      background: transparent;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      color: #94a3b8 !important;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-hero-aux:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #f8fafc !important;
+      border-color: rgba(148, 163, 184, 0.4);
+    }
+
+    /* Context Pill (Compact & Elegant - adapts between web and extension) */
+    .hero-context-pill {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 9999px;
+      padding: 6px 18px;
+      font-size: 12.5px;
+      color: #94a3b8;
+      margin: 4px auto 16px auto;
+      backdrop-filter: blur(10px);
+      max-width: 680px;
+    }
+    .context-pill-title {
+      font-weight: 700;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+    .context-pill-separator {
+      color: #475569;
+    }
+    .context-pill-desc {
+      color: #cbd5e1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Clean 4-Item Trust Strip (Replaces the clunky green box) */
+    .hero-trust-strip {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .trust-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .trust-item strong {
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+    .trust-icon {
+      font-size: 15px;
+    }
+    .trust-separator {
+      color: #475569;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* ANIMATED SALESFORCE COCKPIT SHOWCASE COMPONENT                  */
+    /* ═══════════════════════════════════════════════════════════════ */
+    .hero-showcase-container {
+      position: relative;
+      z-index: 1;
+      max-width: 920px;
+      margin: 16px auto 0 auto;
+      padding: 24px 20px;
+    }
+
+    /* Central Salesforce Mockup Window */
+    .hero-card-window {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 16px;
+      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(2, 132, 199, 0.15);
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+      text-align: left;
+      position: relative;
+      z-index: 2;
+      transition: border-color 0.3s ease;
+    }
+    .hero-card-window:hover {
+      border-color: rgba(56, 189, 248, 0.45);
+    }
+    .hero-card-header {
+      background: #0b1120;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .hero-card-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .card-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .hero-card-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+    }
+    .hero-card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #86efac;
+      padding: 3px 9px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .hero-card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .hero-record-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 14px;
+    }
+    .hero-record-entity {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .entity-icon {
+      font-size: 26px;
+      background: rgba(2, 132, 199, 0.15);
+      border: 1px solid rgba(2, 132, 199, 0.3);
+      border-radius: 10px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .entity-name {
+      font-size: 15px;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+    .entity-sub {
+      font-size: 12px;
+      color: #94a3b8;
+      font-family: var(--font-mono, monospace);
+      margin-top: 2px;
+    }
+    .hero-record-badges {
+      display: flex;
+      gap: 8px;
+    }
+    .mini-chip {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .chip-green {
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #86efac;
+    }
+    .chip-purple {
+      background: rgba(139, 92, 246, 0.18);
+      border: 1px solid rgba(139, 92, 246, 0.35);
+      color: #c4b5fd;
+    }
+
+    .hero-fields-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .hero-field-cell {
+      background: #0b1120;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .field-label {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .field-val {
+      font-size: 13px;
       color: #f1f5f9;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .btn-hero-secondary:hover {
-      background: rgba(51, 65, 85, 0.9);
-      border-color: #64748b;
-      transform: translateY(-2px);
+
+    .hero-agentforce-callout {
+      background: linear-gradient(135deg, rgba(88, 28, 135, 0.25) 0%, rgba(30, 27, 75, 0.35) 100%);
+      border: 1px solid rgba(147, 51, 234, 0.3);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      justify-content: space-between;
+    }
+    .agentforce-callout-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .agentforce-callout-text {
+      font-size: 12.5px;
+      color: #e2e8f0;
+      line-height: 1.4;
+      flex-grow: 1;
+    }
+    .agentforce-callout-text strong {
+      color: #c4b5fd;
+    }
+    .hero-jump-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(139, 92, 246, 0.2);
+      border: 1px solid #a855f7;
+      color: #f5f3ff !important;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .hero-jump-btn:hover {
+      background: #7c3aed;
+      color: #ffffff !important;
+      transform: translateY(-1px);
+    }
+
+    /* 4 Floating Micro-Badges with Bobbing Keyframe Animation */
+    .hero-floating-badge {
+      position: absolute;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 8px 14px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+      text-align: left;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    .floating-badge-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .floating-badge-label {
+      font-size: 11px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+    .floating-badge-status {
+      font-size: 12px;
+      font-weight: 700;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Floating Positions & Animations */
+    .badge-top-left {
+      top: -6px;
+      left: -8px;
+      animation: floatSlow 4s ease-in-out infinite alternate;
+    }
+    .badge-top-right {
+      top: 0px;
+      right: -8px;
+      animation: floatSlow 4.5s ease-in-out infinite alternate-reverse;
+    }
+    .badge-bottom-left {
+      bottom: -10px;
+      left: 10px;
+      animation: floatSlow 3.8s ease-in-out infinite alternate-reverse;
+    }
+    .badge-bottom-right {
+      bottom: -6px;
+      right: 10px;
+      animation: floatSlow 4.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatSlow {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-8px); }
+    }
+    @keyframes pulseGreen {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Responsive Adaptation */
+    @media (max-width: 960px) {
+      .hero-floating-badge {
+        display: none;
+      }
+      .hero-fields-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hero-title {
+        font-size: 36px;
+      }
+    }
+    @media (max-width: 640px) {
+      .hero-fields-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-actions-main {
+        flex-direction: column;
+        width: 100%;
+      }
+      .btn-hero-primary-glow, .btn-hero-secondary-glow {
+        width: 100%;
+        justify-content: center;
+      }
     }
     .metrics-ribbon {
       display: flex;
@@ -616,19 +1072,7 @@
       background: #0284c7;
       color: #ffffff;
     }
-    .live-install-banner {
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
-      border: 1px solid #38bdf8;
-      border-radius: 14px;
-      padding: 20px 24px;
-      margin: 20px auto 30px auto;
-      max-width: 920px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
+
     /* Quick Guide & Feature Highlights */
     .guide-section {
       max-width: 960px;
@@ -1032,50 +1476,206 @@
   <!-- Hero Section -->
   <main>
     <section class="hero-section">
-      <span class="hero-badge">✨ ENTERPRISE SALESFORCE EXTENSION 2026</span>
-      <h1 class="hero-title">Reverse Engineer, Inspect & Optimize Any Salesforce Org</h1>
+      <!-- Ambient Glowing Pill Badge -->
+      <div class="hero-pill-badge">
+        <span class="pill-sparkle">✨</span>
+        <span class="pill-text">Enterprise Salesforce Extension 2026 • Built for Agentforce</span>
+        <span class="pill-live-dot"></span>
+      </div>
+
+      <!-- Main High-Impact Title -->
+      <h1 class="hero-title">
+        Reverse Engineer, Inspect & Optimize Any <span class="gradient-text">Salesforce Org</span>
+      </h1>
       <p class="hero-desc">
-        Inspect live records, test SOQL, browse schemas, diagnose flows, execute anonymous apex, and clean sandbox storage — all powered by our privacy-first Einstein Trust Layer.
+        Inspect live records, debug SOQL in milliseconds, audit Agentforce AI prompts, and reclaim gigabytes of sandbox storage — with 100% client-side privacy.
       </p>
 
-      <!-- Clear "No Login Mandatory" Guarantee -->
-      <div class="no-login-banner">
-        <div class="no-login-icon">🔓</div>
-        <div>
-          <div style="font-weight: 800; font-size: 15px; color: #86efac;">Login Is Never Mandatory</div>
-          <div style="font-size: 13px; color: #cbd5e1; margin-top: 2px;">
-            You can use all SF Power Inspector inspection tools, guides, and explorers immediately. No forced login, no paywall, no credential lockouts. Both anonymous and connected workflows are fully supported.
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-actions">
-        <button id="btn-launch-inspector" class="btn-hero btn-hero-primary">
-          <span>🚀</span> Open Inspector Tools (Use Without Login)
-        </button>
-        <a href="#subscribe-section" class="btn-hero btn-hero-secondary">
-          <span>📬</span> Subscribe to Updates (With / Without Login)
-        </a>
-      </div>
-
-      <!-- Live Web Install & Direct Launch Bar (Adapts if viewed from website or extension) -->
-      <div class="live-install-banner" id="live-install-banner" style="margin-top: 32px; text-align: left;">
-        <div style="max-width: 550px;">
-          <div id="install-badge-title" style="font-weight: 800; font-size: 16px; color: #38bdf8; display: flex; align-items: center; gap: 8px;">
-            <span>🌐</span> Using On Live Web? Add SF Power Inspector to Chrome
-          </div>
-          <div id="install-badge-desc" style="font-size: 13px; color: #94a3b8; margin-top: 4px;">
-            Install in 1-click on Chrome, Edge, Brave, or Opera. Open tools directly from any active Salesforce tab.
-          </div>
-        </div>
-        <div style="display: flex; gap: 10px; align-items: center;">
-          <a href="#" id="btn-web-install" class="btn-hero btn-hero-primary" style="padding: 10px 18px; font-size: 13px;">
-            <span>➕</span> Add Extension to Chrome
+      <!-- Unified Action Hub -->
+      <div class="hero-cta-wrapper">
+        <div class="hero-actions-main">
+          <a href="#" id="btn-web-install" class="btn-hero-primary-glow" title="Add to Chrome, Edge, Brave, or Opera">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; line-height:1.2;">
+              <strong style="font-size:15px;">Add Extension to Chrome</strong>
+              <span style="font-size:11px; opacity:0.85; font-weight:500;">Free • 1-Click Install • Chrome & Edge</span>
+            </span>
           </a>
-          <button id="btn-web-open-direct" class="btn-hero btn-hero-secondary" style="padding: 10px 18px; font-size: 13px;">
+
+          <a href="#interactive-demo" class="btn-hero-secondary-glow" title="Test drive features in the live interactive sandbox below">
+            <span style="font-size:19px;">🎮</span>
+            <span style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; line-height:1.2;">
+              <strong style="font-size:15px;">Play with Live Sandbox</strong>
+              <span style="font-size:11px; opacity:0.85; font-weight:500;">Interactive Demo • No Login Required</span>
+            </span>
+          </a>
+        </div>
+
+        <!-- Auxiliary Quick Actions -->
+        <div class="hero-aux-actions">
+          <button id="btn-web-open-direct" class="btn-hero-aux" title="Open extension popup directly">
             <span>⚡</span> Open Extension Directly
           </button>
+          <button id="btn-launch-inspector" class="btn-hero-aux" title="Explore complete inspector documentation">
+            <span>📖</span> Inspector Guides
+          </button>
+          <a href="#subscribe-section" class="btn-hero-aux" title="Subscribe to updates">
+            <span>📬</span> Subscribe
+          </a>
         </div>
+      </div>
+
+      <!-- Live Web Install & Direct Launch Bar (Adapts smoothly if viewed from website or extension) -->
+      <div class="hero-context-pill" id="live-install-banner">
+        <div id="install-badge-title" class="context-pill-title">
+          <span>🌐</span> Live Web Mode
+        </div>
+        <div class="context-pill-separator">•</div>
+        <div id="install-badge-desc" class="context-pill-desc">
+          Test drive our live interactive simulator below, or add to Chrome to inspect active Salesforce tabs.
+        </div>
+      </div>
+
+      <!-- Sleek Trust Strip -->
+      <div class="hero-trust-strip">
+        <div class="trust-item">
+          <span class="trust-icon">🔓</span>
+          <span><strong>Zero Login Required</strong> — Explore freely</span>
+        </div>
+        <div class="trust-separator">•</div>
+        <div class="trust-item">
+          <span class="trust-icon">🛡️</span>
+          <span><strong>100% Client-Side</strong> — Zero proxy servers</span>
+        </div>
+        <div class="trust-separator">•</div>
+        <div class="trust-item">
+          <span class="trust-icon">🤖</span>
+          <span><strong>Agentforce AI Native</strong> — Copilot audit</span>
+        </div>
+        <div class="trust-separator">•</div>
+        <div class="trust-item">
+          <span class="trust-icon">⚡</span>
+          <span><strong>All Editions</strong> — Prod, Sandbox & Dev</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════════ -->
+      <!-- ANIMATED HERO SHOWCASE: SALESFORCE 360° AI COCKPIT PREVIEW     -->
+      <!-- ═══════════════════════════════════════════════════════════════ -->
+      <div class="hero-showcase-container">
+        
+        <!-- Floating Micro-Badge 1: Agentforce Copilot (Top Left) -->
+        <div class="hero-floating-badge badge-top-left">
+          <div class="floating-badge-icon" style="background: rgba(139, 92, 246, 0.2); color: #c4b5fd;">🤖</div>
+          <div class="floating-badge-content">
+            <div class="floating-badge-label">Agentforce Copilot</div>
+            <div class="floating-badge-status">
+              <span class="pill-live-dot" style="margin-right:2px;"></span>
+              <span>Grounded & PII Masked</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Micro-Badge 2: SOQL Optimizer (Top Right) -->
+        <div class="hero-floating-badge badge-top-right">
+          <div class="floating-badge-icon" style="background: rgba(14, 165, 233, 0.2); color: #38bdf8;">⚡</div>
+          <div class="floating-badge-content">
+            <div class="floating-badge-label">SOQL Query Optimizer</div>
+            <div class="floating-badge-status" style="color: #38bdf8;">
+              <span>18ms • Cost: 0.08 (Indexed)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Micro-Badge 3: Storage Reclaimed (Bottom Left) -->
+        <div class="hero-floating-badge badge-bottom-left">
+          <div class="floating-badge-icon" style="background: rgba(34, 197, 94, 0.2); color: #4ade80;">🧹</div>
+          <div class="floating-badge-content">
+            <div class="floating-badge-label">Sandbox Storage Cleaner</div>
+            <div class="floating-badge-status" style="color: #4ade80;">
+              <span>+2.75 GB Space Reclaimed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Micro-Badge 4: Einstein Trust Shield (Bottom Right) -->
+        <div class="hero-floating-badge badge-bottom-right">
+          <div class="floating-badge-icon" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">🛡️</div>
+          <div class="floating-badge-content">
+            <div class="floating-badge-label">Einstein Trust Shield</div>
+            <div class="floating-badge-status" style="color: #fbbf24;">
+              <span>Zero PII Leakage Verified</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Central Salesforce Mockup Card -->
+        <div class="hero-card-window">
+          <div class="hero-card-header">
+            <div class="hero-card-dots">
+              <span class="card-dot dot-red"></span>
+              <span class="card-dot dot-yellow"></span>
+              <span class="card-dot dot-green"></span>
+            </div>
+            <div class="hero-card-title">
+              <img src="favicon.svg" width="16" height="16" alt="SFPI Logo" style="vertical-align:middle; margin-right:6px;">
+              <span>Salesforce Lightning Inspector — Active Record 360°</span>
+            </div>
+            <div class="hero-card-badge">
+              <span class="pill-live-dot" style="margin-right:2px;"></span>
+              <span>Spring '26 • v62.0</span>
+            </div>
+          </div>
+
+          <div class="hero-card-body">
+            <div class="hero-record-top">
+              <div class="hero-record-entity">
+                <div class="entity-icon">💼</div>
+                <div>
+                  <div class="entity-name">Opportunity: Acme Global Enterprises — $450,000</div>
+                  <div class="entity-sub">ID: <code>006Hu000010xKzYIAU</code> • SObject: <code>Opportunity</code></div>
+                </div>
+              </div>
+              <div class="hero-record-badges">
+                <span class="mini-chip chip-green">Stage: Closed Won</span>
+                <span class="mini-chip chip-purple">Agentforce Grounded</span>
+              </div>
+            </div>
+
+            <!-- Live Inspection Fields Grid Inside Mockup -->
+            <div class="hero-fields-grid">
+              <div class="hero-field-cell">
+                <span class="field-label">Amount (Currency)</span>
+                <span class="field-val" style="color: #4ade80; font-weight: 800;">$450,000.00</span>
+              </div>
+              <div class="hero-field-cell">
+                <span class="field-label">Win Propensity</span>
+                <span class="field-val" style="color: #38bdf8; font-weight: 800;">98.4% (AI Score)</span>
+              </div>
+              <div class="hero-field-cell">
+                <span class="field-label">Account Name</span>
+                <span class="field-val">Acme Corporation Inc.</span>
+              </div>
+              <div class="hero-field-cell">
+                <span class="field-label">Field Level Security</span>
+                <span class="field-val" style="color: #a78bfa;">Full Admin Access (FLS OK)</span>
+              </div>
+            </div>
+
+            <!-- Agentforce Banner Inside Mockup -->
+            <div class="hero-agentforce-callout">
+              <div class="agentforce-callout-icon">🤖</div>
+              <div class="agentforce-callout-text">
+                <strong>Agentforce Action Recommended:</strong> Opportunity grounded with 4 decision-makers. All contact PII masked via Einstein Trust Shield.
+              </div>
+              <a href="#interactive-demo" class="hero-jump-btn">
+                <span>Play in Sandbox</span>
+                <span>↓</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
