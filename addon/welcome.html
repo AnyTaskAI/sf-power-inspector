@@ -525,6 +525,74 @@
       border-color: rgba(148, 163, 184, 0.4);
     }
 
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* UNIQUE, MODERN & TACTILE INTERACTIVE BUTTON SYSTEM              */
+    /* ═══════════════════════════════════════════════════════════════ */
+    .btn-hero {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-decoration: none;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      position: relative;
+      letter-spacing: 0.2px;
+      box-sizing: border-box;
+    }
+    .btn-hero:hover {
+      transform: translateY(-2px);
+    }
+    .btn-hero:active {
+      transform: scale(0.97);
+    }
+
+    .btn-hero-primary {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff !important;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+    }
+    .btn-hero-primary:hover {
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      box-shadow: 0 8px 24px rgba(14, 165, 233, 0.45);
+      border-color: #38bdf8;
+      color: #ffffff !important;
+    }
+
+    .btn-hero-secondary {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      color: #38bdf8 !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+    .btn-hero-secondary:hover {
+      background: rgba(14, 165, 233, 0.18);
+      border-color: #38bdf8;
+      color: #ffffff !important;
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.35);
+    }
+
+    .btn-hero-amber {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #0f172a !important;
+      border: 1px solid rgba(251, 191, 36, 0.5);
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+      font-weight: 800;
+    }
+    .btn-hero-amber:hover {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.5);
+      border-color: #fde047;
+      color: #000000 !important;
+    }
+
     /* Context Pill (Compact & Elegant - adapts between web and extension) */
     .hero-context-pill {
       position: relative;
@@ -1056,21 +1124,29 @@
     }
     .btn-upvote {
       background: rgba(14, 165, 233, 0.15);
-      border: 1px solid #0284c7;
+      border: 1px solid rgba(56, 189, 248, 0.35);
       color: #38bdf8;
       border-radius: 8px;
       padding: 6px 12px;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 12px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-width: 48px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
     }
     .btn-upvote:hover {
       background: #0284c7;
+      border-color: #38bdf8;
       color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+    }
+    .btn-upvote:active {
+      transform: scale(0.94);
     }
 
     /* Quick Guide & Feature Highlights */
@@ -1334,19 +1410,29 @@
       overflow-y: auto;
     }
     .chip-btn {
-      background: rgba(14, 165, 233, 0.12);
-      border: 1px solid rgba(14, 165, 233, 0.3);
-      color: #38bdf8;
-      border-radius: 6px;
-      padding: 4px 9px;
-      font-size: 11px;
-      font-weight: 600;
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #cbd5e1;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     }
     .chip-btn:hover {
       background: #0284c7;
-      color: #fff;
+      border-color: #38bdf8;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+    }
+    .chip-btn:active {
+      transform: scale(0.96);
     }
     .sim-table {
       width: 100%;
@@ -2220,7 +2306,7 @@
           Our automated 2-hour experience tracker invites feedback after you've had time to inspect your org. You can also preview and share your rating right now to shape future updates!
         </div>
       </div>
-      <button id="btn-open-experience" class="btn-hero btn-hero-primary" style="background: #f59e0b; color: #1e293b; padding: 10px 20px;">
+      <button id="btn-open-experience" class="btn-hero btn-hero-amber" style="padding: 10px 22px;">
         <span>⭐</span> Give 2-Hour Feedback Now
       </button>
     </section>
@@ -2254,7 +2340,7 @@
 
           <div style="display: flex; flex-direction: column; gap: 10px; margin-top: auto;">
             <input type="email" id="sub-email-input" class="sub-input" placeholder="Enter your email (optional)">
-            <button id="btn-sub-without-login" class="btn-hero btn-hero-primary" style="justify-content: center;">
+            <button id="btn-sub-without-login" class="btn-hero btn-hero-primary" style="justify-content: center; width: 100%; padding: 12px;">
               <span>📬</span> Subscribe Without Login
             </button>
             <div id="sub-status-without" style="font-size: 12px; text-align: center; color: #86efac; min-height: 18px;"></div>
@@ -2283,7 +2369,7 @@
             <div id="detected-org-box" style="background: rgba(30, 41, 59, 0.8); border: 1px solid #334155; padding: 10px; border-radius: 8px; font-size: 12px; color: #94a3b8;">
               <span id="detected-org-status">Detecting active Salesforce session...</span>
             </div>
-            <button id="btn-sub-with-login" class="btn-hero btn-hero-secondary" style="justify-content: center; border-color: #38bdf8; color: #38bdf8;">
+            <button id="btn-sub-with-login" class="btn-hero btn-hero-secondary" style="justify-content: center; width: 100%; padding: 12px;">
               <span>⚡</span> Subscribe with Salesforce Identity
             </button>
             <div id="sub-status-with" style="font-size: 12px; text-align: center; color: #93c5fd; min-height: 18px;"></div>
@@ -2347,7 +2433,7 @@
             <input type="email" id="req-email-input" class="sub-input" placeholder="architect@company.com">
           </div>
 
-          <button id="btn-submit-req" class="btn-hero btn-hero-primary" style="justify-content: center; padding: 12px;">
+          <button id="btn-submit-req" class="btn-hero btn-hero-primary" style="justify-content: center; width: 100%; padding: 13px;">
             <span>🚀</span> Submit Requirement to Roadmap
           </button>
         </div>
