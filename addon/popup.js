@@ -168,7 +168,10 @@ function render() {
       <!-- Pinned Org Header -->
       <div class="sfpi-header">
         <div class="sfpi-header-top">
-          <h1 class="sfpi-title">⚡ SF Power Inspector</h1>
+          <a href="#" id="btn-open-welcome-title" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:7px;" title="Visit SF Power Inspector Live Web Hub">
+            <img src="favicon.svg" alt="SF Power Inspector Logo" width="19" height="19" style="vertical-align:middle; border-radius:3px; filter:drop-shadow(0 0 5px #38bdf8);">
+            <h1 class="sfpi-title" style="margin:0; font-size:15px;">SF Power Inspector</h1>
+          </a>
           <div style="display:flex; align-items:center; gap:8px;">
             <button id="btn-toggle-theme" style="background:none; border:none; cursor:pointer; font-size:15px;" title="Toggle Light / Dark Theme">🌓</button>
             <span class="sfpi-version" title="Release Version: ${extensionVersion}">${extensionVersion}</span>
@@ -309,9 +312,11 @@ function render() {
         <div class="sfpi-footer">
           <a href="#" id="btn-api-version" title="Change API Version">API v${apiVersion}</a>
           <span>•</span>
-          <a href="#" id="btn-open-welcome" title="Live Community & Subscribers Hub (Login Not Required)">🟢 Live Hub</a>
+          <a href="#" id="btn-open-welcome" title="Live Community & Subscribers Hub (Login Not Required)">🌐 Hub</a>
           <span>•</span>
           <a href="#" id="btn-open-experience" title="2-Hour Experience Feedback">⭐ Review</a>
+          <span>•</span>
+          <a href="#" id="btn-open-feedback" title="Request a Feature or Raise a Concern">💡 Concern</a>
           <span>•</span>
           <a href="#" id="btn-open-settings" title="Extension Settings">⚙️ Settings</a>
         </div>
@@ -355,9 +360,11 @@ function render() {
         <div class="sfpi-footer">
           <a href="#" id="btn-api-version-user" title="Change API Version">API v${apiVersion}</a>
           <span>•</span>
-          <a href="#" id="btn-open-welcome-user" title="Live Community & Subscribers Hub">🟢 Live Hub</a>
+          <a href="#" id="btn-open-welcome-user" title="Live Community & Subscribers Hub">🌐 Hub</a>
           <span>•</span>
           <a href="#" id="btn-open-experience-user" title="2-Hour Experience Feedback">⭐ Review</a>
+          <span>•</span>
+          <a href="#" id="btn-open-feedback-user" title="Request a Feature or Raise a Concern">💡 Concern</a>
           <span>•</span>
           <a href="#" id="btn-open-settings-user" title="Extension Settings">⚙️ Settings</a>
         </div>
@@ -379,9 +386,11 @@ function render() {
         <div class="sfpi-footer">
           <a href="#" id="btn-api-version-org" title="Change API Version">API v${apiVersion}</a>
           <span>•</span>
-          <a href="#" id="btn-open-welcome-org" title="Live Community & Subscribers Hub">🟢 Live Hub</a>
+          <a href="#" id="btn-open-welcome-org" title="Live Community & Subscribers Hub">🌐 Hub</a>
           <span>•</span>
           <a href="#" id="btn-open-experience-org" title="2-Hour Experience Feedback">⭐ Review</a>
+          <span>•</span>
+          <a href="#" id="btn-open-feedback-org" title="Request a Feature or Raise a Concern">💡 Concern</a>
           <span>•</span>
           <a href="#" id="btn-open-settings-org" title="Extension Settings">⚙️ Settings</a>
         </div>
@@ -528,6 +537,16 @@ function bindEvents() {
   document.getElementById("btn-open-experience-user")?.addEventListener("click", handleOpenExperience);
   document.getElementById("btn-open-experience-org")?.addEventListener("click", handleOpenExperience);
   document.getElementById("btn-banner-experience")?.addEventListener("click", handleOpenExperience);
+
+  // Open Feature Request & Concern Form (Community Roadmap)
+  const handleOpenFeedback = (e) => {
+    e.preventDefault();
+    window.open(chrome.runtime.getURL("welcome.html#requirements-section"), "_blank");
+  };
+  document.getElementById("btn-open-feedback")?.addEventListener("click", handleOpenFeedback);
+  document.getElementById("btn-open-feedback-user")?.addEventListener("click", handleOpenFeedback);
+  document.getElementById("btn-open-feedback-org")?.addEventListener("click", handleOpenFeedback);
+  document.getElementById("btn-open-welcome-title")?.addEventListener("click", handleOpenWelcome);
 
   // ── Org Dark Mode Toggle ──
   const orgDarkToggle = document.getElementById("toggle-org-darkmode");

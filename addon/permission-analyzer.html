@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>Security, Permissions & Sharing Studio — SF Power Inspector PRO</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="styles/tools.css">
   <script type="module" src="permission-analyzer.js"></script>
   <style>
@@ -51,6 +53,9 @@
 <body>
   <header class="tool-navbar">
     <div class="tool-brand">
+      <a href="welcome.html" class="tool-logo-link" title="Visit SF Power Inspector Live Web Hub">
+        <img src="favicon.svg" alt="SF Power Inspector Logo" class="tool-logo-img">
+      </a>
       <h1>🔐 Security, Permissions & Sharing Studio</h1>
       <span class="badge" id="env-badge">Connecting...</span>
       <span id="org-name" style="font-weight: 600; font-size: 13px;"></span>
@@ -58,6 +63,11 @@
     <div class="tool-meta" style="display: flex; gap: 8px; align-items: center;">
       <button class="btn btn-secondary" id="btn-export-perm-report" style="font-size: 11px;">📋 Copy Report</button>
       <button class="btn btn-primary" id="btn-save-crud-matrix" style="display: none; font-size: 11px;">💾 Save Object CRUD Changes</button>
+      <div class="tool-hub-actions">
+        <a href="welcome.html" class="tool-hub-btn" title="Visit SF Power Inspector Live Web Hub">🌐 Visit Hub</a>
+        <a href="experience.html" class="tool-hub-btn" title="Rate Experience & Provide Feedback">⭐ Rate</a>
+        <a href="welcome.html#requirements-section" class="tool-hub-btn" title="Suggest a Feature or Raise a Concern">💡 Request / Concern</a>
+      </div>
     </div>
   </header>
 
