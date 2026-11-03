@@ -233,5 +233,34 @@ describe("telemetry-service.js Comprehensive Test Suite", () => {
       assert.strictEqual(inExt, true);
     });
   });
+
+  describe("Service Worker Resilience (When localStorage is undefined)", () => {
+    it("should execute recordInstallEvent without throwing ReferenceError when localStorage is undefined", () => {
+      const origLocalStorage = globalThis.localStorage;
+      try {
+        // Temporarily delete or hide localStorage to simulate MV3 Service Worker
+        delete globalThis.localStorage;
+
+        const res = recordInstallEvent();
+        assert.ok(res.installId);
+        assert.ok(res.installTime > 0);
+
+        const stats = getTelemetryStats();
+        assert.ok(stats.totalInstalls >= 15280);
+
+        const sub = recordSubscription({ email: "sw-tester@example.com" });
+        assert.strictEqual(sub.success, true);
+        assert.strictEqual(sub.subscription.email, "sw-tester@example.com");
+
+        const status = getSubscriptionStatus();
+        assert.strictEqual(status.subscribed, true);
+
+        const due = isExperienceDue();
+        assert.strictEqual(typeof due, "boolean");
+      } finally {
+        globalThis.localStorage = origLocalStorage;
+      }
+    });
+  });
 });
 

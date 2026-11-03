@@ -4,6 +4,36 @@
  * and Einstein Trust Layer Data Masking.
  */
 
+// ─── Universal Safe Storage Adapter (Service Worker & Window Resilient) ───────
+const _aiMemStore = new Map();
+const safeStorage = {
+  getItem: (k) => {
+    try {
+      if (typeof localStorage !== "undefined" && localStorage && typeof localStorage.getItem === "function") {
+        return localStorage.getItem(k);
+      }
+    } catch (e) {}
+    return _aiMemStore.has(k) ? _aiMemStore.get(k) : null;
+  },
+  setItem: (k, v) => {
+    const s = String(v);
+    _aiMemStore.set(k, s);
+    try {
+      if (typeof localStorage !== "undefined" && localStorage && typeof localStorage.setItem === "function") {
+        localStorage.setItem(k, s);
+      }
+    } catch (e) {}
+  },
+  removeItem: (k) => {
+    _aiMemStore.delete(k);
+    try {
+      if (typeof localStorage !== "undefined" && localStorage && typeof localStorage.removeItem === "function") {
+        localStorage.removeItem(k);
+      }
+    } catch (e) {}
+  }
+};
+
 // ─── 1. ENCRYPTION & KEY VAULT (Web Crypto AES-GCM) ─────────────────
 const SALT = new Uint8Array([83, 70, 80, 73, 95, 65, 73, 95, 83, 69, 67, 82, 69, 84, 95, 49]);
 
@@ -32,7 +62,7 @@ async function getEncryptionKey() {
 
 export async function saveEncryptedKey(provider, plainKey) {
   if (!plainKey) {
-    localStorage.removeItem(`sfpi_key_${provider}`);
+    safeStorage.removeItem(`sfpi_key_${provider}`);
     return;
   }
   const key = await getEncryptionKey();
@@ -44,11 +74,11 @@ export async function saveEncryptedKey(provider, plainKey) {
     iv: Array.from(iv),
     data: Array.from(new Uint8Array(cipherBuffer)),
   };
-  localStorage.setItem(`sfpi_key_${provider}`, JSON.stringify(payload));
+  safeStorage.setItem(`sfpi_key_${provider}`, JSON.stringify(payload));
 }
 
 export async function getDecryptedKey(provider) {
-  const raw = localStorage.getItem(`sfpi_key_${provider}`);
+  const raw = safeStorage.getItem(`sfpi_key_${provider}`);
   if (!raw) return "";
   try {
     const payload = JSON.parse(raw);
@@ -117,7 +147,7 @@ export async function executeAiQuery({ prompt, systemPrompt = "", provider = "lo
           "Authorization": `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: localStorage.getItem("sfpi_openai_model") || "gpt-4o",
+          model: safeStorage.getItem("sfpi_openai_model") || "gpt-4o",
           messages: [
             { role: "system", content: effectiveSystemPrompt },
             { role: "user", content: sanitizedPrompt }
@@ -140,7 +170,7 @@ export async function executeAiQuery({ prompt, systemPrompt = "", provider = "lo
           "dangerously-allow-browser": "true"
         },
         body: JSON.stringify({
-          model: localStorage.getItem("sfpi_anthropic_model") || "claude-3-5-sonnet-20241022",
+          model: safeStorage.getItem("sfpi_anthropic_model") || "claude-3-5-sonnet-20241022",
           max_tokens: 2048,
           system: effectiveSystemPrompt,
           messages: [{ role: "user", content: sanitizedPrompt }]
@@ -152,7 +182,7 @@ export async function executeAiQuery({ prompt, systemPrompt = "", provider = "lo
     }
 
     if (provider === "gemini") {
-      const model = localStorage.getItem("sfpi_gemini_model") || "gemini-1.5-flash";
+      const model = safeStorage.getItem("sfpi_gemini_model") || "gemini-1.5-flash";
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
       const res = await fetch(url, {
         method: "POST",
@@ -167,8 +197,8 @@ export async function executeAiQuery({ prompt, systemPrompt = "", provider = "lo
     }
 
     if (provider === "ollama") {
-      const endpoint = localStorage.getItem("sfpi_ollama_endpoint") || "http://localhost:11434";
-      const model = localStorage.getItem("sfpi_ollama_model") || "llama3.2";
+      const endpoint = safeStorage.getItem("sfpi_ollama_endpoint") || "http://localhost:11434";
+      const model = safeStorage.getItem("sfpi_ollama_model") || "llama3.2";
       const res = await fetch(`${endpoint.replace(/\/+$/, "")}/api/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

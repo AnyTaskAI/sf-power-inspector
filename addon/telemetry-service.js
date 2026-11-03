@@ -6,7 +6,80 @@
  * 2. Subscription Engine: Supports BOTH 'Without Login' (Anonymous / Email) and 'With Login' (Salesforce / OAuth).
  * 3. Login Independence: Guarantees full extension functionality without requiring any login.
  * 4. 2-Hour Post-Install Experience Tracker: Evaluates when 2 hours have elapsed and presents review/feedback prompt.
+ * 5. Safe Universal Storage: Seamlessly works across Service Workers (MV3), window tabs, and Node.js test runners without throwing ReferenceError: localStorage is not defined.
  */
+
+// ─── Universal Safe Storage Adapter (Service Worker & Window Resilient) ───────
+const _memoryStorage = new Map();
+
+export const safeStorage = {
+  getItem(key) {
+    if (typeof localStorage !== "undefined" && localStorage && typeof localStorage.getItem === "function") {
+      try {
+        return localStorage.getItem(key);
+      } catch (e) {}
+    }
+    return _memoryStorage.has(key) ? _memoryStorage.get(key) : null;
+  },
+  setItem(key, val) {
+    const strVal = String(val);
+    if (typeof localStorage !== "undefined" && localStorage && typeof localStorage.setItem === "function") {
+      try {
+        localStorage.setItem(key, strVal);
+      } catch (e) {}
+    }
+    _memoryStorage.set(key, strVal);
+    if (typeof chrome !== "undefined" && chrome.storage?.local?.set) {
+      try {
+        chrome.storage.local.set({ [key]: strVal });
+      } catch (e) {}
+    }
+  },
+  removeItem(key) {
+    if (typeof localStorage !== "undefined" && localStorage && typeof localStorage.removeItem === "function") {
+      try {
+        localStorage.removeItem(key);
+      } catch (e) {}
+    }
+    _memoryStorage.delete(key);
+    if (typeof chrome !== "undefined" && chrome.storage?.local?.remove) {
+      try {
+        chrome.storage.local.remove(key);
+      } catch (e) {}
+    }
+  },
+  clear() {
+    _memoryStorage.clear();
+    if (typeof localStorage !== "undefined" && localStorage && typeof localStorage.clear === "function") {
+      try {
+        localStorage.clear();
+      } catch (e) {}
+    }
+  },
+  key(index) {
+    if (typeof localStorage !== "undefined" && localStorage && typeof localStorage.key === "function") {
+      try {
+        return localStorage.key(index);
+      } catch (e) {}
+    }
+    return Array.from(_memoryStorage.keys())[index] || null;
+  },
+  get length() {
+    if (typeof localStorage !== "undefined" && localStorage) {
+      try {
+        return localStorage.length;
+      } catch (e) {}
+    }
+    return _memoryStorage.size;
+  }
+};
+
+// Polyfill globalThis.localStorage for Service Workers where localStorage is not defined
+if (typeof localStorage === "undefined") {
+  try {
+    globalThis.localStorage = safeStorage;
+  } catch (e) {}
+}
 
 const BASE_INSTALL_COUNT = 15280;
 const BASE_ACTIVE_USERS = 314;
@@ -17,7 +90,7 @@ export const DEFAULT_GSHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AK
 
 export function dispatchToGoogleSheets(payload) {
   try {
-    const webhookUrl = localStorage.getItem("sfpi_gsheet_webhook_url") || DEFAULT_GSHEET_WEBHOOK_URL;
+    const webhookUrl = safeStorage.getItem("sfpi_gsheet_webhook_url") || DEFAULT_GSHEET_WEBHOOK_URL;
     if (webhookUrl && typeof fetch === "function") {
       fetch(webhookUrl, {
         method: "POST",
@@ -31,10 +104,10 @@ export function dispatchToGoogleSheets(payload) {
 
 // ─── 1. Anonymous Device / Installation Identifier ───────────────────
 export function getOrCreateInstallId() {
-  let id = localStorage.getItem("sfpi_install_id");
+  let id = safeStorage.getItem("sfpi_install_id");
   if (!id) {
     id = "sfpi_" + Math.random().toString(36).substring(2, 15) + "_" + Date.now().toString(36);
-    localStorage.setItem("sfpi_install_id", id);
+    safeStorage.setItem("sfpi_install_id", id);
   }
   return id;
 }
@@ -42,11 +115,11 @@ export function getOrCreateInstallId() {
 // ─── 2. Live Installer & Active User Counting ────────────────────────
 export function getTelemetryStats() {
   const installId = getOrCreateInstallId();
-  const rawStats = localStorage.getItem("sfpi_telemetry_stats");
+  const rawStats = safeStorage.getItem("sfpi_telemetry_stats");
   let stats = rawStats ? JSON.parse(rawStats) : null;
 
   const now = Date.now();
-  const installTime = parseInt(localStorage.getItem("sfpi_install_time") || "0", 10) || now;
+  const installTime = parseInt(safeStorage.getItem("sfpi_install_time") || "0", 10) || now;
 
   // Compute live active users with natural realistic session variance
   const minuteBucket = Math.floor(now / (5 * 60 * 1000));
@@ -72,7 +145,7 @@ export function getTelemetryStats() {
     stats.lastHeartbeat = now;
   }
 
-  localStorage.setItem("sfpi_telemetry_stats", JSON.stringify(stats));
+  safeStorage.setItem("sfpi_telemetry_stats", JSON.stringify(stats));
   return stats;
 }
 
@@ -83,7 +156,7 @@ export function recordHeartbeat() {
   const stats = getTelemetryStats();
   stats.lastHeartbeat = Date.now();
   stats.totalQueriesExecuted = (stats.totalQueriesExecuted || 2481000) + 1;
-  localStorage.setItem("sfpi_telemetry_stats", JSON.stringify(stats));
+  safeStorage.setItem("sfpi_telemetry_stats", JSON.stringify(stats));
   return stats;
 }
 
@@ -92,13 +165,13 @@ export function recordHeartbeat() {
  */
 export function recordInstallEvent() {
   const now = Date.now();
-  if (!localStorage.getItem("sfpi_install_time")) {
-    localStorage.setItem("sfpi_install_time", now.toString());
+  if (!safeStorage.getItem("sfpi_install_time")) {
+    safeStorage.setItem("sfpi_install_time", now.toString());
   }
   const installId = getOrCreateInstallId();
   const stats = getTelemetryStats();
   stats.totalInstalls = (stats.totalInstalls || BASE_INSTALL_COUNT) + 1;
-  localStorage.setItem("sfpi_telemetry_stats", JSON.stringify(stats));
+  safeStorage.setItem("sfpi_telemetry_stats", JSON.stringify(stats));
 
   // If chrome.alarms is available, schedule the 2-hour post-install experience
   if (typeof chrome !== "undefined" && chrome.alarms?.create) {
@@ -143,7 +216,7 @@ export function recordSubscription({
     loginMandatory: false // Explicit guarantee that login is NEVER mandatory
   };
 
-  localStorage.setItem("sfpi_subscription", JSON.stringify(subRecord));
+  safeStorage.setItem("sfpi_subscription", JSON.stringify(subRecord));
 
   // Also broadcast to chrome.storage if available
   if (typeof chrome !== "undefined" && chrome.storage?.local?.set) {
@@ -176,7 +249,7 @@ export function recordSubscription({
 }
 
 export function getSubscriptionStatus() {
-  const raw = localStorage.getItem("sfpi_subscription");
+  const raw = safeStorage.getItem("sfpi_subscription");
   if (!raw) {
     return {
       subscribed: false,
@@ -198,14 +271,14 @@ export function getSubscriptionStatus() {
  */
 export function isExperienceDue() {
   // If already completed or explicitly dismissed, don't nag
-  if (localStorage.getItem("sfpi_experience_completed") === "true") {
+  if (safeStorage.getItem("sfpi_experience_completed") === "true") {
     return false;
   }
 
-  const isTestMode = localStorage.getItem("sfpi_experience_preview_mode") === "true";
+  const isTestMode = safeStorage.getItem("sfpi_experience_preview_mode") === "true";
   if (isTestMode) return true;
 
-  const installTime = parseInt(localStorage.getItem("sfpi_install_time") || "0", 10);
+  const installTime = parseInt(safeStorage.getItem("sfpi_install_time") || "0", 10);
   if (!installTime) return false;
 
   const now = Date.now();
@@ -235,9 +308,9 @@ export function recordExperienceFeedback({
     submittedAt: Date.now()
   };
 
-  localStorage.setItem("sfpi_2h_experience_feedback", JSON.stringify(feedbackRecord));
-  localStorage.setItem("sfpi_experience_completed", "true");
-  localStorage.removeItem("sfpi_experience_preview_mode");
+  safeStorage.setItem("sfpi_2h_experience_feedback", JSON.stringify(feedbackRecord));
+  safeStorage.setItem("sfpi_experience_completed", "true");
+  safeStorage.removeItem("sfpi_experience_preview_mode");
 
   if (wantsSubscription && (email || feedbackRecord.email)) {
     recordSubscription({
@@ -282,7 +355,7 @@ export function recordExperienceFeedback({
  * Helper for testing/previewing the 2-hour experience right now
  */
 export function enableExperiencePreviewMode() {
-  localStorage.setItem("sfpi_experience_preview_mode", "true");
+  safeStorage.setItem("sfpi_experience_preview_mode", "true");
 }
 
 // ─── 5. User Requirements & Feature Enhancements Engine ─────────────
@@ -332,7 +405,7 @@ const DEFAULT_COMMUNITY_REQUIREMENTS = [
 export function getUserRequirements() {
   let userReqs = [];
   try {
-    const raw = localStorage.getItem("sfpi_user_requirements");
+    const raw = safeStorage.getItem("sfpi_user_requirements");
     if (raw) userReqs = JSON.parse(raw);
   } catch (e) {}
 
@@ -369,12 +442,12 @@ export function submitUserRequirement({
 
   let userReqs = [];
   try {
-    const raw = localStorage.getItem("sfpi_user_requirements");
+    const raw = safeStorage.getItem("sfpi_user_requirements");
     if (raw) userReqs = JSON.parse(raw);
   } catch (e) {}
 
   userReqs.unshift(newReq);
-  localStorage.setItem("sfpi_user_requirements", JSON.stringify(userReqs));
+  safeStorage.setItem("sfpi_user_requirements", JSON.stringify(userReqs));
 
   if (typeof chrome !== "undefined" && chrome.storage?.local?.set) {
     try {
@@ -394,7 +467,7 @@ export function submitUserRequirement({
 
 export function getGoogleSheetsWebhookUrl() {
   try {
-    return localStorage.getItem("sfpi_gsheet_webhook_url") || DEFAULT_GSHEET_WEBHOOK_URL;
+    return safeStorage.getItem("sfpi_gsheet_webhook_url") || DEFAULT_GSHEET_WEBHOOK_URL;
   } catch (e) {
     return DEFAULT_GSHEET_WEBHOOK_URL;
   }
@@ -403,9 +476,9 @@ export function getGoogleSheetsWebhookUrl() {
 export function setGoogleSheetsWebhookUrl(url) {
   try {
     if (url) {
-      localStorage.setItem("sfpi_gsheet_webhook_url", url.trim());
+      safeStorage.setItem("sfpi_gsheet_webhook_url", url.trim());
     } else {
-      localStorage.removeItem("sfpi_gsheet_webhook_url");
+      safeStorage.removeItem("sfpi_gsheet_webhook_url");
     }
     return true;
   } catch (e) {
@@ -418,14 +491,14 @@ export function upvoteRequirement(reqId) {
 
   // Check if already voted
   const votedKey = `sfpi_voted_${reqId}`;
-  if (localStorage.getItem(votedKey)) {
+  if (safeStorage.getItem(votedKey)) {
     return { success: false, alreadyVoted: true, message: "You have already upvoted this requirement." };
   }
 
   // Update in userReqs if present
   let userReqs = [];
   try {
-    const raw = localStorage.getItem("sfpi_user_requirements");
+    const raw = safeStorage.getItem("sfpi_user_requirements");
     if (raw) userReqs = JSON.parse(raw);
   } catch (e) {}
 
@@ -439,7 +512,7 @@ export function upvoteRequirement(reqId) {
   }
 
   if (found) {
-    localStorage.setItem("sfpi_user_requirements", JSON.stringify(userReqs));
+    safeStorage.setItem("sfpi_user_requirements", JSON.stringify(userReqs));
   } else {
     // Check in default community requirements
     const defReq = DEFAULT_COMMUNITY_REQUIREMENTS.find(r => r.id === reqId);
@@ -448,7 +521,7 @@ export function upvoteRequirement(reqId) {
     }
   }
 
-  localStorage.setItem(votedKey, "true");
+  safeStorage.setItem(votedKey, "true");
 
   // Dispatch Upvote to Google Sheets Tracker
   const allReqs = getUserRequirements();
@@ -473,4 +546,3 @@ export function upvoteRequirement(reqId) {
 export function isRunningInExtension() {
   return typeof chrome !== "undefined" && Boolean(chrome.runtime?.id);
 }
-

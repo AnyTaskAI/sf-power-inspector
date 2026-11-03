@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +13,9 @@
       --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
       --accent-glow: rgba(59, 130, 246, 0.25);
     }
-    html, body {
+
+    html,
+    body {
       background: var(--bg-body, #0b1120);
       color: var(--text-main, #f8fafc);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -25,6 +28,7 @@
       display: flex;
       flex-direction: column;
     }
+
     /* Clean, Modern Header */
     .landing-header {
       position: sticky;
@@ -36,6 +40,7 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       padding: 0;
     }
+
     .header-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -46,6 +51,7 @@
       box-sizing: border-box;
       gap: 20px;
     }
+
     .brand-title {
       font-size: 17px;
       font-weight: 700;
@@ -57,11 +63,13 @@
       letter-spacing: -0.2px;
       flex-shrink: 0;
     }
+
     .brand-bolt {
       font-size: 20px;
       color: #38bdf8;
       filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
     }
+
     .pro-tag {
       background: rgba(2, 132, 199, 0.2);
       color: #38bdf8;
@@ -72,11 +80,13 @@
       border-radius: 4px;
       letter-spacing: 0.5px;
     }
+
     .header-nav {
       display: flex;
       align-items: center;
       gap: 28px;
     }
+
     .header-nav .nav-link {
       color: #94a3b8;
       font-size: 13.5px;
@@ -84,15 +94,18 @@
       text-decoration: none;
       transition: color 0.15s ease;
     }
+
     .header-nav .nav-link:hover {
       color: #f8fafc;
     }
+
     .header-cta-group {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-shrink: 0;
     }
+
     .btn-header-ghost {
       background: transparent;
       color: #cbd5e1 !important;
@@ -108,11 +121,13 @@
       transition: all 0.15s ease;
       text-decoration: none;
     }
+
     .btn-header-ghost:hover {
       background: rgba(255, 255, 255, 0.05);
       border-color: rgba(148, 163, 184, 0.5);
       color: #f8fafc !important;
     }
+
     .btn-header-cta {
       background: #0284c7;
       color: #ffffff !important;
@@ -129,11 +144,13 @@
       transition: all 0.15s ease;
       text-decoration: none;
     }
+
     .btn-header-cta:hover {
       background: #0369a1;
       border-color: #7dd3fc;
       box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4);
     }
+
     .btn-header-theme {
       background: transparent;
       border: 1px solid rgba(148, 163, 184, 0.2);
@@ -145,18 +162,31 @@
       transition: all 0.15s ease;
       line-height: 1;
     }
+
     .btn-header-theme:hover {
       background: rgba(255, 255, 255, 0.05);
       color: #f8fafc;
       border-color: rgba(148, 163, 184, 0.4);
     }
+
     @media (max-width: 860px) {
-      .header-nav { display: none; }
+      .header-nav {
+        display: none;
+      }
     }
+
     @media (max-width: 580px) {
-      .btn-header-ghost { display: none; }
-      .brand-title .brand-name { font-size: 15px; }
-      .header-container { padding: 10px 16px; }
+      .btn-header-ghost {
+        display: none;
+      }
+
+      .brand-title .brand-name {
+        font-size: 15px;
+      }
+
+      .header-container {
+        padding: 10px 16px;
+      }
     }
 
     /* Fast Install Modal Styles */
@@ -177,10 +207,17 @@
       box-sizing: border-box;
       animation: fadeIn 0.15s ease-out;
     }
+
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
+
     .install-modal-card {
       background: #0f172a;
       border: 1px solid #38bdf8;
@@ -191,10 +228,19 @@
       overflow: hidden;
       animation: scaleUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
+
     @keyframes scaleUp {
-      from { transform: scale(0.96); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+      from {
+        transform: scale(0.96);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
+
     .modal-header {
       padding: 20px 24px;
       background: rgba(30, 41, 59, 0.5);
@@ -203,6 +249,7 @@
       justify-content: space-between;
       align-items: center;
     }
+
     .modal-close-btn {
       background: rgba(51, 65, 85, 0.5);
       border: 1px solid #475569;
@@ -217,23 +264,27 @@
       font-size: 15px;
       transition: all 0.15s;
     }
+
     .modal-close-btn:hover {
       background: #dc2626;
       border-color: #ef4444;
       color: #fff;
     }
+
     .modal-body {
       padding: 24px;
       display: flex;
       flex-direction: column;
       gap: 18px;
     }
+
     .download-action-box {
       background: linear-gradient(135deg, rgba(2, 132, 199, 0.15) 0%, rgba(30, 58, 138, 0.2) 100%);
       border: 1px solid #0284c7;
       border-radius: 12px;
       padding: 18px 20px;
     }
+
     .btn-modal-download {
       background: #0284c7;
       color: #fff !important;
@@ -249,10 +300,12 @@
       box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
       transition: all 0.2s;
     }
+
     .btn-modal-download:hover {
       background: #0369a1;
       transform: translateY(-1.5px);
     }
+
     .btn-modal-github {
       background: rgba(30, 41, 59, 0.9);
       color: #cbd5e1 !important;
@@ -267,15 +320,18 @@
       text-decoration: none;
       transition: all 0.2s;
     }
+
     .btn-modal-github:hover {
       background: #334155;
       color: #fff !important;
     }
+
     .modal-steps-container {
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
+
     .modal-step-item {
       display: flex;
       align-items: flex-start;
@@ -285,6 +341,7 @@
       border-radius: 10px;
       padding: 12px 16px;
     }
+
     .modal-step-number {
       width: 26px;
       height: 26px;
@@ -298,20 +355,24 @@
       justify-content: center;
       flex-shrink: 0;
     }
+
     .modal-step-info {
       flex: 1;
     }
+
     .modal-step-title {
       font-weight: 700;
       font-size: 14px;
       color: #f1f5f9;
       margin-bottom: 3px;
     }
+
     .modal-step-desc {
       font-size: 12.5px;
       color: #94a3b8;
       line-height: 1.5;
     }
+
     .modal-step-desc code {
       background: #0b1120;
       color: #38bdf8;
@@ -320,6 +381,7 @@
       font-size: 12px;
       border: 1px solid #334155;
     }
+
     .btn-copy-inline {
       background: rgba(14, 165, 233, 0.15);
       border: 1px solid #0284c7;
@@ -332,10 +394,12 @@
       margin-left: 6px;
       transition: all 0.15s;
     }
+
     .btn-copy-inline:hover {
       background: #0284c7;
       color: #fff;
     }
+
     .modal-footer {
       padding: 16px 24px;
       background: rgba(30, 41, 59, 0.4);
@@ -344,6 +408,7 @@
       justify-content: space-between;
       align-items: center;
     }
+
     /* ═══════════════════════════════════════════════════════════════ */
     /* MODERN HIGH-CONVERTING HERO & ANIMATED SHOWCASE                 */
     /* ═══════════════════════════════════════════════════════════════ */
@@ -354,7 +419,7 @@
       margin: 0 auto;
       position: relative;
     }
-    
+
     /* Ambient Glow Behind Hero */
     .hero-section::before {
       content: "";
@@ -384,15 +449,18 @@
       margin-bottom: 20px;
       transition: all 0.3s ease;
     }
+
     .hero-pill-badge:hover {
       border-color: #38bdf8;
       box-shadow: 0 0 24px rgba(14, 165, 233, 0.35);
       transform: translateY(-1px);
     }
+
     .pill-sparkle {
       font-size: 14px;
       filter: drop-shadow(0 0 4px #facc15);
     }
+
     .pill-text {
       font-size: 11.5px;
       font-weight: 800;
@@ -400,6 +468,7 @@
       color: #e0f2fe;
       text-transform: uppercase;
     }
+
     .pill-live-dot {
       width: 6px;
       height: 6px;
@@ -419,12 +488,14 @@
       letter-spacing: -0.8px;
       color: #ffffff;
     }
+
     .hero-title .gradient-text {
       background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       display: inline-block;
     }
+
     .hero-desc {
       position: relative;
       z-index: 1;
@@ -445,6 +516,7 @@
       gap: 14px;
       margin-bottom: 20px;
     }
+
     .hero-actions-main {
       display: flex;
       gap: 14px;
@@ -467,6 +539,7 @@
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       cursor: pointer;
     }
+
     .btn-hero-primary-glow:hover {
       background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
       transform: translateY(-2px);
@@ -489,6 +562,7 @@
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       cursor: pointer;
     }
+
     .btn-hero-secondary-glow:hover {
       background: rgba(51, 65, 85, 0.95);
       border-color: #a855f7;
@@ -504,6 +578,7 @@
       flex-wrap: wrap;
       justify-content: center;
     }
+
     .btn-hero-aux {
       background: transparent;
       border: 1px solid rgba(148, 163, 184, 0.2);
@@ -519,6 +594,7 @@
       text-decoration: none;
       transition: all 0.2s ease;
     }
+
     .btn-hero-aux:hover {
       background: rgba(255, 255, 255, 0.05);
       color: #f8fafc !important;
@@ -546,9 +622,11 @@
       letter-spacing: 0.2px;
       box-sizing: border-box;
     }
+
     .btn-hero:hover {
       transform: translateY(-2px);
     }
+
     .btn-hero:active {
       transform: scale(0.97);
     }
@@ -559,6 +637,7 @@
       border: 1px solid rgba(56, 189, 248, 0.4);
       box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
     }
+
     .btn-hero-primary:hover {
       background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
       box-shadow: 0 8px 24px rgba(14, 165, 233, 0.45);
@@ -572,6 +651,7 @@
       color: #38bdf8 !important;
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     }
+
     .btn-hero-secondary:hover {
       background: rgba(14, 165, 233, 0.18);
       border-color: #38bdf8;
@@ -586,6 +666,7 @@
       box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
       font-weight: 800;
     }
+
     .btn-hero-amber:hover {
       background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
       box-shadow: 0 8px 24px rgba(245, 158, 11, 0.5);
@@ -610,6 +691,7 @@
       backdrop-filter: blur(10px);
       max-width: 680px;
     }
+
     .context-pill-title {
       font-weight: 700;
       color: #38bdf8;
@@ -618,9 +700,11 @@
       gap: 5px;
       flex-shrink: 0;
     }
+
     .context-pill-separator {
       color: #475569;
     }
+
     .context-pill-desc {
       color: #cbd5e1;
       white-space: nowrap;
@@ -641,18 +725,22 @@
       font-size: 13px;
       color: #94a3b8;
     }
+
     .trust-item {
       display: inline-flex;
       align-items: center;
       gap: 6px;
     }
+
     .trust-item strong {
       color: #e2e8f0;
       font-weight: 600;
     }
+
     .trust-icon {
       font-size: 15px;
     }
+
     .trust-separator {
       color: #475569;
     }
@@ -681,9 +769,11 @@
       z-index: 2;
       transition: border-color 0.3s ease;
     }
+
     .hero-card-window:hover {
       border-color: rgba(56, 189, 248, 0.45);
     }
+
     .hero-card-header {
       background: #0b1120;
       padding: 12px 18px;
@@ -692,15 +782,18 @@
       align-items: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
+
     .hero-card-dots {
       display: flex;
       gap: 6px;
     }
+
     .card-dot {
       width: 10px;
       height: 10px;
       border-radius: 50%;
     }
+
     .hero-card-title {
       font-size: 12.5px;
       font-weight: 600;
@@ -708,6 +801,7 @@
       display: flex;
       align-items: center;
     }
+
     .hero-card-badge {
       display: inline-flex;
       align-items: center;
@@ -727,6 +821,7 @@
       flex-direction: column;
       gap: 16px;
     }
+
     .hero-record-top {
       display: flex;
       justify-content: space-between;
@@ -736,11 +831,13 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       padding-bottom: 14px;
     }
+
     .hero-record-entity {
       display: flex;
       align-items: center;
       gap: 12px;
     }
+
     .entity-icon {
       font-size: 26px;
       background: rgba(2, 132, 199, 0.15);
@@ -752,32 +849,38 @@
       align-items: center;
       justify-content: center;
     }
+
     .entity-name {
       font-size: 15px;
       font-weight: 800;
       color: #f8fafc;
     }
+
     .entity-sub {
       font-size: 12px;
       color: #94a3b8;
       font-family: var(--font-mono, monospace);
       margin-top: 2px;
     }
+
     .hero-record-badges {
       display: flex;
       gap: 8px;
     }
+
     .mini-chip {
       font-size: 11.5px;
       font-weight: 700;
       padding: 4px 10px;
       border-radius: 6px;
     }
+
     .chip-green {
       background: rgba(34, 197, 94, 0.15);
       border: 1px solid rgba(34, 197, 94, 0.3);
       color: #86efac;
     }
+
     .chip-purple {
       background: rgba(139, 92, 246, 0.18);
       border: 1px solid rgba(139, 92, 246, 0.35);
@@ -789,6 +892,7 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
     }
+
     .hero-field-cell {
       background: #0b1120;
       border: 1px solid rgba(255, 255, 255, 0.05);
@@ -798,6 +902,7 @@
       flex-direction: column;
       gap: 4px;
     }
+
     .field-label {
       font-size: 11px;
       color: #64748b;
@@ -805,6 +910,7 @@
       text-transform: uppercase;
       letter-spacing: 0.4px;
     }
+
     .field-val {
       font-size: 13px;
       color: #f1f5f9;
@@ -824,19 +930,23 @@
       gap: 14px;
       justify-content: space-between;
     }
+
     .agentforce-callout-icon {
       font-size: 22px;
       flex-shrink: 0;
     }
+
     .agentforce-callout-text {
       font-size: 12.5px;
       color: #e2e8f0;
       line-height: 1.4;
       flex-grow: 1;
     }
+
     .agentforce-callout-text strong {
       color: #c4b5fd;
     }
+
     .hero-jump-btn {
       display: inline-flex;
       align-items: center;
@@ -852,6 +962,7 @@
       flex-shrink: 0;
       transition: all 0.2s ease;
     }
+
     .hero-jump-btn:hover {
       background: #7c3aed;
       color: #ffffff !important;
@@ -875,6 +986,7 @@
       pointer-events: none;
       transition: all 0.3s ease;
     }
+
     .floating-badge-icon {
       width: 32px;
       height: 32px;
@@ -885,11 +997,13 @@
       font-size: 16px;
       flex-shrink: 0;
     }
+
     .floating-badge-label {
       font-size: 11px;
       color: #94a3b8;
       font-weight: 600;
     }
+
     .floating-badge-status {
       font-size: 12px;
       font-weight: 700;
@@ -905,16 +1019,19 @@
       left: -8px;
       animation: floatSlow 4s ease-in-out infinite alternate;
     }
+
     .badge-top-right {
       top: 0px;
       right: -8px;
       animation: floatSlow 4.5s ease-in-out infinite alternate-reverse;
     }
+
     .badge-bottom-left {
       bottom: -10px;
       left: 10px;
       animation: floatSlow 3.8s ease-in-out infinite alternate-reverse;
     }
+
     .badge-bottom-right {
       bottom: -6px;
       right: 10px;
@@ -922,12 +1039,27 @@
     }
 
     @keyframes floatSlow {
-      0% { transform: translateY(0px); }
-      100% { transform: translateY(-8px); }
+      0% {
+        transform: translateY(0px);
+      }
+
+      100% {
+        transform: translateY(-8px);
+      }
     }
+
     @keyframes pulseGreen {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.85);
+      }
     }
 
     /* Responsive Adaptation */
@@ -935,26 +1067,33 @@
       .hero-floating-badge {
         display: none;
       }
+
       .hero-fields-grid {
         grid-template-columns: repeat(2, 1fr);
       }
+
       .hero-title {
         font-size: 36px;
       }
     }
+
     @media (max-width: 640px) {
       .hero-fields-grid {
         grid-template-columns: 1fr;
       }
+
       .hero-actions-main {
         flex-direction: column;
         width: 100%;
       }
-      .btn-hero-primary-glow, .btn-hero-secondary-glow {
+
+      .btn-hero-primary-glow,
+      .btn-hero-secondary-glow {
         width: 100%;
         justify-content: center;
       }
     }
+
     .metrics-ribbon {
       display: flex;
       justify-content: center;
@@ -963,6 +1102,7 @@
       max-width: 900px;
       flex-wrap: wrap;
     }
+
     .metric-card {
       background: rgba(30, 41, 59, 0.5);
       border: 1px solid #334155;
@@ -972,11 +1112,13 @@
       min-width: 180px;
       flex: 1;
     }
+
     .metric-value {
       font-size: 28px;
       font-weight: 900;
       color: #38bdf8;
     }
+
     .metric-label {
       font-size: 12px;
       font-weight: 600;
@@ -985,21 +1127,27 @@
       letter-spacing: 0.5px;
       margin-top: 4px;
     }
+
     .subscription-container {
       max-width: 960px;
       margin: 40px auto;
       padding: 0 20px;
       width: 100%;
     }
+
     .sub-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 24px;
       margin-top: 24px;
     }
+
     @media (max-width: 768px) {
-      .sub-grid { grid-template-columns: 1fr; }
+      .sub-grid {
+        grid-template-columns: 1fr;
+      }
     }
+
     .sub-card {
       background: rgba(15, 23, 42, 0.7);
       border: 1px solid #334155;
@@ -1010,10 +1158,12 @@
       gap: 16px;
       position: relative;
     }
+
     .sub-card.highlight {
       border-color: #38bdf8;
       box-shadow: 0 0 24px rgba(56, 189, 248, 0.15);
     }
+
     .sub-badge {
       display: inline-block;
       padding: 4px 10px;
@@ -1023,8 +1173,17 @@
       text-transform: uppercase;
       width: fit-content;
     }
-    .sub-badge-open { background: #166534; color: #86efac; }
-    .sub-badge-sf { background: #1e3a8a; color: #93c5fd; }
+
+    .sub-badge-open {
+      background: #166534;
+      color: #86efac;
+    }
+
+    .sub-badge-sf {
+      background: #1e3a8a;
+      color: #93c5fd;
+    }
+
     .feature-list {
       list-style: none;
       padding: 0;
@@ -1035,11 +1194,13 @@
       font-size: 13px;
       color: #cbd5e1;
     }
+
     .feature-list li {
       display: flex;
       align-items: center;
       gap: 8px;
     }
+
     .sub-input {
       background: rgba(30, 41, 59, 0.9);
       border: 1px solid #475569;
@@ -1050,10 +1211,12 @@
       width: 100%;
       box-sizing: border-box;
     }
+
     .sub-input:focus {
       outline: none;
       border-color: #38bdf8;
     }
+
     .experience-banner {
       background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
       border: 1px solid #f59e0b;
@@ -1067,6 +1230,7 @@
       flex-wrap: wrap;
       gap: 16px;
     }
+
     .toast-popup {
       position: fixed;
       bottom: 24px;
@@ -1076,12 +1240,13 @@
       color: #f8fafc;
       padding: 14px 20px;
       border-radius: 10px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
       display: none;
       z-index: 1000;
       font-size: 14px;
       font-weight: 600;
     }
+
     /* User Requirements & Live Install Styles */
     .req-section {
       max-width: 960px;
@@ -1090,15 +1255,20 @@
       width: 100%;
       box-sizing: border-box;
     }
+
     .req-card-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 24px;
       margin-top: 20px;
     }
+
     @media (max-width: 768px) {
-      .req-card-grid { grid-template-columns: 1fr; }
+      .req-card-grid {
+        grid-template-columns: 1fr;
+      }
     }
+
     .req-box {
       background: rgba(15, 23, 42, 0.7);
       border: 1px solid #334155;
@@ -1108,6 +1278,7 @@
       flex-direction: column;
       gap: 14px;
     }
+
     .req-item-card {
       background: rgba(30, 41, 59, 0.7);
       border: 1px solid #334155;
@@ -1119,9 +1290,11 @@
       gap: 12px;
       transition: border-color 0.15s;
     }
+
     .req-item-card:hover {
       border-color: #38bdf8;
     }
+
     .btn-upvote {
       background: rgba(14, 165, 233, 0.15);
       border: 1px solid rgba(56, 189, 248, 0.35);
@@ -1138,6 +1311,7 @@
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       user-select: none;
     }
+
     .btn-upvote:hover {
       background: #0284c7;
       border-color: #38bdf8;
@@ -1145,6 +1319,7 @@
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
     }
+
     .btn-upvote:active {
       transform: scale(0.94);
     }
@@ -1157,19 +1332,25 @@
       width: 100%;
       box-sizing: border-box;
     }
+
     .guide-title-block {
       text-align: center;
       margin-bottom: 32px;
     }
+
     .steps-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       margin-bottom: 48px;
     }
+
     @media (max-width: 820px) {
-      .steps-grid { grid-template-columns: 1fr; }
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
     }
+
     .step-card {
       background: rgba(15, 23, 42, 0.75);
       border: 1px solid #334155;
@@ -1181,11 +1362,13 @@
       gap: 12px;
       transition: all 0.2s ease;
     }
+
     .step-card:hover {
       border-color: #38bdf8;
       transform: translateY(-3px);
       box-shadow: 0 10px 25px rgba(56, 189, 248, 0.12);
     }
+
     .step-num-badge {
       display: inline-flex;
       align-items: center;
@@ -1199,23 +1382,27 @@
       font-size: 15px;
       box-shadow: 0 0 12px rgba(2, 132, 199, 0.5);
     }
+
     .step-title {
       font-size: 17px;
       font-weight: 800;
       color: #f8fafc;
       margin: 0;
     }
+
     .step-desc {
       font-size: 13.5px;
       color: #94a3b8;
       line-height: 1.5;
       margin: 0;
     }
+
     .feature-showcase-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
     }
+
     .feature-highlight-card {
       background: rgba(15, 23, 42, 0.7);
       border: 1px solid #334155;
@@ -1226,11 +1413,13 @@
       gap: 10px;
       transition: all 0.2s ease;
     }
+
     .feature-highlight-card:hover {
       border-color: #38bdf8;
       background: rgba(30, 41, 59, 0.75);
       transform: translateY(-2px);
     }
+
     .feature-icon-badge {
       font-size: 26px;
       width: 48px;
@@ -1242,12 +1431,14 @@
       align-items: center;
       justify-content: center;
     }
+
     .feature-card-title {
       font-size: 16px;
       font-weight: 800;
       color: #f1f5f9;
       margin: 0;
     }
+
     /* ═══════════════════════════════════════════════════════════════ */
     /* INTERACTIVE PLAYGROUND SIMULATOR STYLES                        */
     /* ═══════════════════════════════════════════════════════════════ */
@@ -1258,10 +1449,12 @@
       width: 100%;
       box-sizing: border-box;
     }
+
     .playground-header-block {
       text-align: center;
       margin-bottom: 24px;
     }
+
     .playground-window {
       background: #090e1a;
       border: 1px solid rgba(56, 189, 248, 0.35);
@@ -1272,6 +1465,7 @@
       flex-direction: column;
       position: relative;
     }
+
     .playground-window::before {
       content: '';
       position: absolute;
@@ -1283,10 +1477,17 @@
       background-size: 200% 100%;
       animation: gradientSlide 4s linear infinite;
     }
+
     @keyframes gradientSlide {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 200% 50%; }
+      0% {
+        background-position: 0% 50%;
+      }
+
+      100% {
+        background-position: 200% 50%;
+      }
     }
+
     .window-titlebar {
       background: #0d1527;
       padding: 12px 18px;
@@ -1297,19 +1498,31 @@
       gap: 12px;
       flex-wrap: wrap;
     }
+
     .window-dots {
       display: flex;
       gap: 7px;
       align-items: center;
     }
+
     .dot {
       width: 11px;
       height: 11px;
       border-radius: 50%;
     }
-    .dot-red { background: #ef4444; }
-    .dot-yellow { background: #eab308; }
-    .dot-green { background: #22c55e; }
+
+    .dot-red {
+      background: #ef4444;
+    }
+
+    .dot-yellow {
+      background: #eab308;
+    }
+
+    .dot-green {
+      background: #22c55e;
+    }
+
     .window-title {
       font-size: 13px;
       font-weight: 700;
@@ -1318,6 +1531,7 @@
       align-items: center;
       gap: 8px;
     }
+
     .window-org-pill {
       background: rgba(34, 197, 94, 0.12);
       border: 1px solid rgba(34, 197, 94, 0.3);
@@ -1330,6 +1544,7 @@
       align-items: center;
       gap: 6px;
     }
+
     .playground-tabs-bar {
       background: #0a1122;
       border-bottom: 1px solid #1e293b;
@@ -1338,6 +1553,7 @@
       padding: 8px 14px 0 14px;
       overflow-x: auto;
     }
+
     .sim-tab-btn {
       background: transparent;
       border: 1px solid transparent;
@@ -1354,40 +1570,58 @@
       transition: all 0.15s ease;
       white-space: nowrap;
     }
+
     .sim-tab-btn:hover {
       color: #f8fafc;
       background: rgba(255, 255, 255, 0.04);
     }
+
     .sim-tab-btn.active {
       background: #0f172a;
       border-color: #334155;
       border-bottom: 2px solid #38bdf8;
       color: #38bdf8;
     }
+
     .playground-body {
       padding: 24px;
       min-height: 420px;
       background: #0f172a;
     }
+
     .sim-panel {
       display: none;
       animation: fadeIn 0.2s ease-out;
     }
+
     .sim-panel.active {
       display: block;
     }
+
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
+
     .sim-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
     }
+
     @media (max-width: 820px) {
-      .sim-grid { grid-template-columns: 1fr; }
+      .sim-grid {
+        grid-template-columns: 1fr;
+      }
     }
+
     .sim-card {
       background: rgba(30, 41, 59, 0.6);
       border: 1px solid #334155;
@@ -1397,6 +1631,7 @@
       flex-direction: column;
       gap: 12px;
     }
+
     .sim-console {
       background: #0b1120;
       border: 1px solid #1e293b;
@@ -1409,6 +1644,7 @@
       line-height: 1.6;
       overflow-y: auto;
     }
+
     .chip-btn {
       background: rgba(30, 41, 59, 0.85);
       border: 1px solid rgba(56, 189, 248, 0.3);
@@ -1424,6 +1660,7 @@
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     }
+
     .chip-btn:hover {
       background: #0284c7;
       border-color: #38bdf8;
@@ -1431,14 +1668,17 @@
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
     }
+
     .chip-btn:active {
       transform: scale(0.96);
     }
+
     .sim-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 12px;
     }
+
     .sim-table th {
       text-align: left;
       padding: 8px 10px;
@@ -1447,14 +1687,17 @@
       border-bottom: 1px solid #334155;
       font-weight: 700;
     }
+
     .sim-table td {
       padding: 8px 10px;
       border-bottom: 1px solid #1e293b;
       color: #f8fafc;
     }
+
     .sim-table tr:hover {
       background: rgba(255, 255, 255, 0.03);
     }
+
     .progress-bar-wrap {
       background: #1e293b;
       border-radius: 20px;
@@ -1462,6 +1705,7 @@
       overflow: hidden;
       width: 100%;
     }
+
     .progress-bar-fill {
       height: 100%;
       transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.8s;
@@ -1474,6 +1718,7 @@
       gap: 20px;
       margin-top: 24px;
     }
+
     .pillar-card {
       background: rgba(15, 23, 42, 0.7);
       border: 1px solid #334155;
@@ -1484,11 +1729,13 @@
       gap: 12px;
       transition: all 0.2s;
     }
+
     .pillar-card:hover {
       border-color: #38bdf8;
       transform: translateY(-3px);
       box-shadow: 0 10px 30px rgba(56, 189, 248, 0.15);
     }
+
     .persona-tab-bar {
       display: flex;
       justify-content: center;
@@ -1496,6 +1743,7 @@
       margin: 20px 0 28px 0;
       flex-wrap: wrap;
     }
+
     .persona-btn {
       background: rgba(30, 41, 59, 0.7);
       border: 1px solid #334155;
@@ -1507,16 +1755,19 @@
       cursor: pointer;
       transition: all 0.15s;
     }
+
     .persona-btn:hover {
       color: #fff;
       border-color: #38bdf8;
     }
+
     .persona-btn.active {
       background: #0284c7;
       color: #fff;
       border-color: #38bdf8;
       box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4);
     }
+
     .persona-content-box {
       background: rgba(15, 23, 42, 0.75);
       border: 1px solid #334155;
@@ -1527,6 +1778,7 @@
     }
   </style>
 </head>
+
 <body class="page-scrollable page-welcome">
 
   <!-- Clean, Elegant Header -->
@@ -1571,26 +1823,34 @@
 
       <!-- Main High-Impact Title -->
       <h1 class="hero-title">
-        Reverse Engineer, Inspect & Optimize Any <span class="gradient-text">Salesforce Org</span>
+        Understand, Inspect & Optimize Every Layer of Your <span class="gradient-text">Salesforce Org</span>
       </h1>
       <p class="hero-desc">
-        Inspect live records, debug SOQL in milliseconds, audit Agentforce AI prompts, and reclaim gigabytes of sandbox storage — with 100% client-side privacy.
+        Inspect live records, debug SOQL in milliseconds, audit Agentforce AI prompts, and reclaim gigabytes of sandbox
+        storage — with 100% client-side privacy.
       </p>
 
       <!-- Unified Action Hub -->
       <div class="hero-cta-wrapper">
         <div class="hero-actions-main">
           <a href="#" id="btn-web-install" class="btn-hero-primary-glow" title="Add to Chrome, Edge, Brave, or Opera">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            <span style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; line-height:1.2;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span
+              style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; line-height:1.2;">
               <strong style="font-size:15px;">Add Extension to Chrome</strong>
               <span style="font-size:11px; opacity:0.85; font-weight:500;">Free • 1-Click Install • Chrome & Edge</span>
             </span>
           </a>
 
-          <a href="#interactive-demo" class="btn-hero-secondary-glow" title="Test drive features in the live interactive sandbox below">
+          <a href="#interactive-demo" class="btn-hero-secondary-glow"
+            title="Test drive features in the live interactive sandbox below">
             <span style="font-size:19px;">🎮</span>
-            <span style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; line-height:1.2;">
+            <span
+              style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; line-height:1.2;">
               <strong style="font-size:15px;">Play with Live Sandbox</strong>
               <span style="font-size:11px; opacity:0.85; font-weight:500;">Interactive Demo • No Login Required</span>
             </span>
@@ -1649,7 +1909,7 @@
       <!-- ANIMATED HERO SHOWCASE: SALESFORCE 360° AI COCKPIT PREVIEW     -->
       <!-- ═══════════════════════════════════════════════════════════════ -->
       <div class="hero-showcase-container">
-        
+
         <!-- Floating Micro-Badge 1: Agentforce Copilot (Top Left) -->
         <div class="hero-floating-badge badge-top-left">
           <div class="floating-badge-icon" style="background: rgba(139, 92, 246, 0.2); color: #c4b5fd;">🤖</div>
@@ -1704,7 +1964,8 @@
               <span class="card-dot dot-green"></span>
             </div>
             <div class="hero-card-title">
-              <img src="favicon.svg" width="16" height="16" alt="SFPI Logo" style="vertical-align:middle; margin-right:6px;">
+              <img src="favicon.svg" width="16" height="16" alt="SFPI Logo"
+                style="vertical-align:middle; margin-right:6px;">
               <span>Salesforce Lightning Inspector — Active Record 360°</span>
             </div>
             <div class="hero-card-badge">
@@ -1752,7 +2013,8 @@
             <div class="hero-agentforce-callout">
               <div class="agentforce-callout-icon">🤖</div>
               <div class="agentforce-callout-text">
-                <strong>Agentforce Action Recommended:</strong> Opportunity grounded with 4 decision-makers. All contact PII masked via Einstein Trust Shield.
+                <strong>Agentforce Action Recommended:</strong> Opportunity grounded with 4 decision-makers. All contact
+                PII masked via Einstein Trust Shield.
               </div>
               <a href="#interactive-demo" class="hero-jump-btn">
                 <span>Play in Sandbox</span>
@@ -1773,9 +2035,12 @@
         <span class="hero-badge" style="background: rgba(139, 92, 246, 0.15); border-color: #8b5cf6; color: #c4b5fd;">
           🎮 INTERACTIVE LIVE PLAYGROUND — NO SALESFORCE LOGIN REQUIRED
         </span>
-        <h2 style="font-size: 34px; font-weight: 900; margin: 8px 0 12px 0;">Test Drive SF Power Inspector Right Now</h2>
+        <h2 style="font-size: 34px; font-weight: 900; margin: 8px 0 12px 0;">Test Drive SF Power Inspector Right Now
+        </h2>
         <p style="color: #94a3b8; font-size: 15px; margin: 0 auto; max-width: 680px;">
-          Click the tabs below to play with our live simulation. See how our <strong>Agentforce AI</strong>, <strong>Record Inspector</strong>, <strong>SOQL Engine</strong>, and <strong>Storage Cleaner</strong> work in real time!
+          Click the tabs below to play with our live simulation. See how our <strong>Agentforce AI</strong>,
+          <strong>Record Inspector</strong>, <strong>SOQL Engine</strong>, and <strong>Storage Cleaner</strong> work in
+          real time!
         </p>
       </div>
 
@@ -1817,7 +2082,7 @@
 
         <!-- Playground Body -->
         <div class="playground-body">
-          
+
           <!-- ─── Tab 1: Agentforce & AI Studio ─── -->
           <div class="sim-panel active" id="sim-panel-agentforce">
             <div class="sim-grid">
@@ -1826,7 +2091,8 @@
                   <strong style="font-size:14px; color:#f8fafc; display:flex; align-items:center; gap:6px;">
                     <span>🤖</span> Agentforce Prompt & Action Playground
                   </strong>
-                  <span class="badge" style="background:rgba(139,92,246,0.2); color:#c4b5fd; border:1px solid rgba(139,92,246,0.3);">
+                  <span class="badge"
+                    style="background:rgba(139,92,246,0.2); color:#c4b5fd; border:1px solid rgba(139,92,246,0.3);">
                     Copilot Invocations
                   </span>
                 </div>
@@ -1838,12 +2104,14 @@
                   <button class="chip-btn" id="chip-prompt-2">🛡️ Security Injection Audit</button>
                   <button class="chip-btn" id="chip-prompt-3">⚡ Action Invocation</button>
                 </div>
-                <textarea id="sim-prompt-input" class="sub-input" style="height:90px; resize:none; font-size:12.5px; font-family:var(--font-mono); line-height:1.5;">Evaluate Opportunity Acme Corp ($450k) with Account Contact parrot@acme.com and recommend next best action for Q4 closing.</textarea>
+                <textarea id="sim-prompt-input" class="sub-input"
+                  style="height:90px; resize:none; font-size:12.5px; font-family:var(--font-mono); line-height:1.5;">Evaluate Opportunity Acme Corp ($450k) with Account Contact parrot@acme.com and recommend next best action for Q4 closing.</textarea>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                   <span style="font-size:11px; color:#38bdf8; display:flex; align-items:center; gap:4px;">
                     <span>🛡️</span> Einstein Trust Shield: PII Masking Active
                   </span>
-                  <button id="btn-run-sim-ai" class="btn btn-primary" style="padding:7px 16px; font-size:12.5px; font-weight:700;">
+                  <button id="btn-run-sim-ai" class="btn btn-primary"
+                    style="padding:7px 16px; font-size:12.5px; font-weight:700;">
                     ⚡ Run Agentforce Simulation
                   </button>
                 </div>
@@ -1857,7 +2125,8 @@
                   <span id="sim-ai-status-badge" class="badge" style="background:#166534; color:#86efac;">Ready</span>
                 </div>
                 <div class="sim-console" id="sim-ai-output">
-                  <div style="color:#64748b;">// Click "Run Agentforce Simulation" to observe real-time grounding, PII masking, and topic routing...</div>
+                  <div style="color:#64748b;">// Click "Run Agentforce Simulation" to observe real-time grounding, PII
+                    masking, and topic routing...</div>
                 </div>
               </div>
             </div>
@@ -1865,20 +2134,27 @@
 
           <!-- ─── Tab 2: Record 360° Inspector ─── -->
           <div class="sim-panel" id="sim-panel-record">
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+            <div
+              style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
               <div>
-                <div style="font-size:15px; font-weight:800; color:#f8fafc;">Opportunity: Acme Corp — 1,000 Enterprise Licenses</div>
-                <div style="font-size:12px; color:#94a3b8; font-family:var(--font-mono);">ID: 006Hu000010xKzYIAU • SObject: Opportunity</div>
+                <div style="font-size:15px; font-weight:800; color:#f8fafc;">Opportunity: Acme Corp — 1,000 Enterprise
+                  Licenses</div>
+                <div style="font-size:12px; color:#94a3b8; font-family:var(--font-mono);">ID: 006Hu000010xKzYIAU •
+                  SObject: Opportunity</div>
               </div>
               <div style="display:flex; gap:8px;">
-                <button id="btn-sim-copy-id" class="chip-btn" style="background:#0284c7; color:#fff;">📋 Copy ID</button>
-                <button id="btn-sim-toggle-stage" class="chip-btn" style="background:#16a34a; color:#fff;">✏️ Inline Edit: Close Won</button>
+                <button id="btn-sim-copy-id" class="chip-btn" style="background:#0284c7; color:#fff;">📋 Copy
+                  ID</button>
+                <button id="btn-sim-toggle-stage" class="chip-btn" style="background:#16a34a; color:#fff;">✏️ Inline
+                  Edit: Close Won</button>
                 <button id="btn-sim-export-json" class="chip-btn">📄 Export JSON</button>
               </div>
             </div>
 
-            <div id="sim-patch-alert" style="display:none; background:rgba(34,197,94,0.15); border:1px solid #16a34a; color:#86efac; padding:8px 14px; border-radius:6px; font-size:12px; margin-bottom:10px;">
-              ✓ Instant REST PATCH 204 No Content synchronized! Field <code>StageName</code> updated to <strong>Closed Won</strong>.
+            <div id="sim-patch-alert"
+              style="display:none; background:rgba(34,197,94,0.15); border:1px solid #16a34a; color:#86efac; padding:8px 14px; border-radius:6px; font-size:12px; margin-bottom:10px;">
+              ✓ Instant REST PATCH 204 No Content synchronized! Field <code>StageName</code> updated to <strong>Closed
+                Won</strong>.
             </div>
 
             <div style="overflow-x:auto;">
@@ -1904,7 +2180,8 @@
                     <td><strong>Stage</strong></td>
                     <td><code>StageName</code></td>
                     <td>Picklist</td>
-                    <td><span id="val-sim-stage" class="badge" style="background:#f59e0b; color:#fff;">Negotiation/Review</span></td>
+                    <td><span id="val-sim-stage" class="badge"
+                        style="background:#f59e0b; color:#fff;">Negotiation/Review</span></td>
                     <td><span class="badge" style="background:#1e3a8a; color:#93c5fd;">Editable</span></td>
                   </tr>
                   <tr>
@@ -1919,7 +2196,8 @@
                     <td><code>Agentforce_Score__c</code></td>
                     <td>Percent(3,1)</td>
                     <td><span style="color:#38bdf8; font-weight:700;">98.4%</span></td>
-                    <td><span class="badge" style="background:rgba(139,92,246,0.2); color:#c4b5fd;">AI Grounded</span></td>
+                    <td><span class="badge" style="background:rgba(139,92,246,0.2); color:#c4b5fd;">AI Grounded</span>
+                    </td>
                   </tr>
                   <tr>
                     <td><strong>Created By</strong></td>
@@ -1944,15 +2222,18 @@
               </div>
             </div>
 
-            <textarea id="sim-soql-input" class="sub-input" style="height:70px; font-family:var(--font-mono); font-size:12.5px; resize:none;">SELECT Id, Name, StageName, Amount, CloseDate, Account.Name FROM Opportunity WHERE Amount > 100000 ORDER BY Amount DESC LIMIT 5</textarea>
+            <textarea id="sim-soql-input" class="sub-input"
+              style="height:70px; font-family:var(--font-mono); font-size:12.5px; resize:none;">SELECT Id, Name, StageName, Amount, CloseDate, Account.Name FROM Opportunity WHERE Amount > 100000 ORDER BY Amount DESC LIMIT 5</textarea>
 
             <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0 14px 0;">
               <div style="font-size:12px; color:#38bdf8;" id="sim-soql-stats">
                 ⚡ 5 records returned in 18ms • Query Plan Cost: 0.08 • Index Used: Amount__c (Selectivity: 0.002)
               </div>
               <div style="display:flex; gap:8px;">
-                <button id="btn-run-sim-soql" class="btn btn-primary" style="padding:6px 14px; font-size:12px;">▶ Run Query</button>
-                <button id="btn-sim-query-plan" class="btn btn-secondary" style="padding:6px 14px; font-size:12px;">📊 Query Plan</button>
+                <button id="btn-run-sim-soql" class="btn btn-primary" style="padding:6px 14px; font-size:12px;">▶ Run
+                  Query</button>
+                <button id="btn-sim-query-plan" class="btn btn-secondary" style="padding:6px 14px; font-size:12px;">📊
+                  Query Plan</button>
               </div>
             </div>
 
@@ -2004,9 +2285,10 @@
               <div class="sim-card">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                   <strong style="font-size:14px; color:#f8fafc;">📊 Sandbox Storage Capacity</strong>
-                  <span id="sim-storage-status-pill" class="badge" style="background:#ef4444; color:#fff;">92% Full (CRITICAL)</span>
+                  <span id="sim-storage-status-pill" class="badge" style="background:#ef4444; color:#fff;">92% Full
+                    (CRITICAL)</span>
                 </div>
-                
+
                 <div style="margin: 6px 0;">
                   <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
                     <span id="sim-storage-used-txt">Used: 4.60 GB of 5.00 GB</span>
@@ -2023,10 +2305,12 @@
                 <div style="display:flex; gap:6px; flex-wrap:wrap;">
                   <button class="chip-btn" id="chip-period-7">Last 7 Days</button>
                   <button class="chip-btn" id="chip-period-30">Last 1 Month</button>
-                  <button class="chip-btn" id="chip-period-all" style="background:#0284c7; color:#fff;">All Time (Recommended)</button>
+                  <button class="chip-btn" id="chip-period-all" style="background:#0284c7; color:#fff;">All Time
+                    (Recommended)</button>
                 </div>
 
-                <button id="btn-run-sim-clean" class="btn btn-danger" style="padding:9px 16px; font-weight:700; font-size:13px; margin-top:8px;">
+                <button id="btn-run-sim-clean" class="btn btn-danger"
+                  style="padding:9px 16px; font-weight:700; font-size:13px; margin-top:8px;">
                   🧹 Free Up Sandbox Space (Simulate)
                 </button>
               </div>
@@ -2034,21 +2318,26 @@
               <div class="sim-card">
                 <strong style="font-size:14px; color:#f8fafc;">Reclaimable Storage Entities</strong>
                 <div style="display:flex; flex-direction:column; gap:10px; font-size:12px;">
-                  <div style="display:flex; justify-content:space-between; padding:8px; background:#0b1120; border-radius:6px;">
+                  <div
+                    style="display:flex; justify-content:space-between; padding:8px; background:#0b1120; border-radius:6px;">
                     <span>📜 Apex Debug Logs (<code>ApexLog</code>)</span>
                     <span style="color:#38bdf8; font-weight:700;">1,420 files (1.85 GB)</span>
                   </div>
-                  <div style="display:flex; justify-content:space-between; padding:8px; background:#0b1120; border-radius:6px;">
+                  <div
+                    style="display:flex; justify-content:space-between; padding:8px; background:#0b1120; border-radius:6px;">
                     <span>🛡️ Setup Audit Trail History</span>
                     <span style="color:#38bdf8; font-weight:700;">3,200 rows (420 MB)</span>
                   </div>
-                  <div style="display:flex; justify-content:space-between; padding:8px; background:#0b1120; border-radius:6px;">
+                  <div
+                    style="display:flex; justify-content:space-between; padding:8px; background:#0b1120; border-radius:6px;">
                     <span>📎 Obsolete Test Attachments</span>
                     <span style="color:#38bdf8; font-weight:700;">480 files (480 MB)</span>
                   </div>
                 </div>
-                <div id="sim-clean-success-msg" style="display:none; background:rgba(34,197,94,0.15); border:1px solid #16a34a; color:#86efac; padding:10px; border-radius:6px; font-size:12px; line-height:1.4;">
-                  🎉 <strong>Successfully Reclaimed 2.75 GB!</strong><br>Sandbox storage is now at 37% and completely safe from limit exhaustion.
+                <div id="sim-clean-success-msg"
+                  style="display:none; background:rgba(34,197,94,0.15); border:1px solid #16a34a; color:#86efac; padding:10px; border-radius:6px; font-size:12px; line-height:1.4;">
+                  🎉 <strong>Successfully Reclaimed 2.75 GB!</strong><br>Sandbox storage is now at 37% and completely
+                  safe from limit exhaustion.
                 </div>
               </div>
             </div>
@@ -2062,7 +2351,7 @@
                 <div style="font-size:12px; color:#94a3b8;">
                   Test field-level security and permission sets without logging out of your admin account:
                 </div>
-                
+
                 <div style="display:flex; flex-direction:column; gap:8px;">
                   <label class="feature-tag-item" style="margin:0;">
                     <input type="radio" name="sim-user-radio" value="sarah" checked>
@@ -2087,7 +2376,8 @@
                   </label>
                 </div>
 
-                <button id="btn-sim-run-impersonate" class="btn btn-primary" style="padding:8px 16px; font-size:13px; font-weight:700; margin-top:6px;">
+                <button id="btn-sim-run-impersonate" class="btn btn-primary"
+                  style="padding:8px 16px; font-size:13px; font-weight:700; margin-top:6px;">
                   ⚡ Simulate Private Incognito Launch
                 </button>
               </div>
@@ -2100,7 +2390,8 @@
                   <div>• Permission Sets: Agentforce_Admin, Storage_Manager</div>
                   <div>• Opportunity Object CRUD: [Create: Yes, Read: Yes, Edit: Yes, Delete: Yes]</div>
                   <div>• Field Level Security (FLS): Full access to Custom_Discount__c</div>
-                  <div style="margin-top:8px; color:#86efac;">Status: Incognito window prepared with isolated session cookies.</div>
+                  <div style="margin-top:8px; color:#86efac;">Status: Incognito window prepared with isolated session
+                    cookies.</div>
                 </div>
               </div>
             </div>
@@ -2118,7 +2409,8 @@
         <span class="hero-badge" style="background:rgba(2,132,199,0.15); border-color:#0284c7; color:#38bdf8;">
           🏢 ENTERPRISE ARCHITECTURE STANDARDS
         </span>
-        <h2 style="font-size:32px; font-weight:900; margin:0 0 10px 0;">Why Salesforce HQ & Enterprise CTAs Love SF Power Inspector</h2>
+        <h2 style="font-size:32px; font-weight:900; margin:0 0 10px 0;">Why Salesforce HQ & Enterprise CTAs Love SF
+          Power Inspector</h2>
         <p style="color:#94a3b8; font-size:15px; margin:0 auto; max-width:700px;">
           Engineered to satisfy the world's most rigorous enterprise security, compliance, and governance benchmarks.
         </p>
@@ -2129,7 +2421,8 @@
           <div style="font-size:32px; margin-bottom:4px;">🛡️</div>
           <strong style="font-size:16px; color:#f8fafc;">100% Client-Side Privacy</strong>
           <p style="font-size:13px; color:#94a3b8; line-height:1.5; margin:0;">
-            Zero third-party proxies. All API calls execute directly between Chrome and your Salesforce domain via native session cookies. GDPR & CCPA compliant.
+            Zero third-party proxies. All API calls execute directly between Chrome and your Salesforce domain via
+            native session cookies. GDPR & CCPA compliant.
           </p>
         </div>
 
@@ -2137,7 +2430,8 @@
           <div style="font-size:32px; margin-bottom:4px;">🤖</div>
           <strong style="font-size:16px; color:#f8fafc;">Native Agentforce & AI Suite</strong>
           <p style="font-size:13px; color:#94a3b8; line-height:1.5; margin:0;">
-            Inspect Einstein Copilots, verify Agentforce topic routing, ground Prompt Templates, and test generative actions safely before deployment.
+            Inspect Einstein Copilots, verify Agentforce topic routing, ground Prompt Templates, and test generative
+            actions safely before deployment.
           </p>
         </div>
 
@@ -2145,7 +2439,8 @@
           <div style="font-size:32px; margin-bottom:4px;">🧹</div>
           <strong style="font-size:16px; color:#f8fafc;">Prevent Costly Storage Limits</strong>
           <p style="font-size:13px; color:#94a3b8; line-height:1.5; margin:0;">
-            Saves enterprise organizations thousands of dollars by reclaiming gigabytes of obsolete Apex logs, audit trails, and test attachments in 1-click.
+            Saves enterprise organizations thousands of dollars by reclaiming gigabytes of obsolete Apex logs, audit
+            trails, and test attachments in 1-click.
           </p>
         </div>
 
@@ -2153,7 +2448,8 @@
           <div style="font-size:32px; margin-bottom:4px;">⚡</div>
           <strong style="font-size:16px; color:#f8fafc;">Sub-Second Query Plan Optimization</strong>
           <p style="font-size:13px; color:#94a3b8; line-height:1.5; margin:0;">
-            Detect expensive full-table scans on Large Data Volumes (LDV) instantly with automated index selectivity scoring and visual cardinality graphs.
+            Detect expensive full-table scans on Large Data Volumes (LDV) instantly with automated index selectivity
+            scoring and visual cardinality graphs.
           </p>
         </div>
       </div>
@@ -2223,7 +2519,8 @@
           </div>
           <h3 class="step-title">Add to Chrome / Edge</h3>
           <p class="step-desc">
-            Click <strong>"Add Extension to Chrome"</strong>. Pin the ⚡ icon to your browser toolbar for instant 1-click access anytime.
+            Click <strong>"Add Extension to Chrome"</strong>. Pin the ⚡ icon to your browser toolbar for instant 1-click
+            access anytime.
           </p>
         </div>
 
@@ -2234,7 +2531,8 @@
           </div>
           <h3 class="step-title">Open Any Salesforce Tab</h3>
           <p class="step-desc">
-            Navigate to any Salesforce Lightning, Classic, Sandbox, or Developer Edition org. The extension automatically detects your session.
+            Navigate to any Salesforce Lightning, Classic, Sandbox, or Developer Edition org. The extension
+            automatically detects your session.
           </p>
         </div>
 
@@ -2245,53 +2543,62 @@
           </div>
           <h3 class="step-title">Click ⚡ or Press Alt+Shift+I</h3>
           <p class="step-desc">
-            Instantly inspect records, run SOQL, clean sandbox storage, or impersonate users without interrupting your admin workflow.
+            Instantly inspect records, run SOQL, clean sandbox storage, or impersonate users without interrupting your
+            admin workflow.
           </p>
         </div>
       </div>
 
       <!-- Feature Highlights -->
       <div class="guide-title-block" style="margin-top: 20px;">
-        <span class="hero-badge" style="background: rgba(34, 197, 94, 0.15); border-color: #16a34a; color: #4ade80;">🌟 BUILT FOR EVERY SALESFORCE USER</span>
+        <span class="hero-badge" style="background: rgba(34, 197, 94, 0.15); border-color: #16a34a; color: #4ade80;">🌟
+          BUILT FOR EVERY SALESFORCE USER</span>
         <h2 style="font-size: 28px; font-weight: 800; margin: 0 0 10px 0;">Key Highlights & Capabilities</h2>
-        <p style="color: #94a3b8; font-size: 14px; margin: 0;">Everything Admins, Developers, and Architects need in one unified panel.</p>
+        <p style="color: #94a3b8; font-size: 14px; margin: 0;">Everything Admins, Developers, and Architects need in one
+          unified panel.</p>
       </div>
 
       <div class="feature-showcase-grid">
         <div class="feature-highlight-card">
           <div class="feature-icon-badge">🔍</div>
           <h4 class="feature-card-title">Show All Data (Inspect Records)</h4>
-          <p class="feature-card-desc">Inspect all fields on any record — including hidden, system, and formula fields. Edit field values inline on the fly.</p>
+          <p class="feature-card-desc">Inspect all fields on any record — including hidden, system, and formula fields.
+            Edit field values inline on the fly.</p>
         </div>
 
         <div class="feature-highlight-card">
           <div class="feature-icon-badge">🧹</div>
           <h4 class="feature-card-title">1-Click Sandbox Storage Cleaner</h4>
-          <p class="feature-card-desc">Avoid sandbox storage limits! Safely purge old Apex debug logs, audit trails, and unused files with smart date filters.</p>
+          <p class="feature-card-desc">Avoid sandbox storage limits! Safely purge old Apex debug logs, audit trails, and
+            unused files with smart date filters.</p>
         </div>
 
         <div class="feature-highlight-card">
           <div class="feature-icon-badge">⚡</div>
           <h4 class="feature-card-title">High-Speed SOQL Explorer</h4>
-          <p class="feature-card-desc">Execute SOQL queries with intelligent auto-complete, query plan optimizer, and 1-click export to Excel, CSV, or JSON.</p>
+          <p class="feature-card-desc">Execute SOQL queries with intelligent auto-complete, query plan optimizer, and
+            1-click export to Excel, CSV, or JSON.</p>
         </div>
 
         <div class="feature-highlight-card">
           <div class="feature-icon-badge">👤</div>
           <h4 class="feature-card-title">Login As Any User (Incognito)</h4>
-          <p class="feature-card-desc">Impersonate any active user in a private Incognito window to test permissions without ending your admin session.</p>
+          <p class="feature-card-desc">Impersonate any active user in a private Incognito window to test permissions
+            without ending your admin session.</p>
         </div>
 
         <div class="feature-highlight-card">
           <div class="feature-icon-badge">🔐</div>
           <h4 class="feature-card-title">FLS & Permissions Checker</h4>
-          <p class="feature-card-desc">Diagnose "Why can't user X edit this field?" in seconds by scanning Profiles, Permission Sets, and Object CRUD gates.</p>
+          <p class="feature-card-desc">Diagnose "Why can't user X edit this field?" in seconds by scanning Profiles,
+            Permission Sets, and Object CRUD gates.</p>
         </div>
 
         <div class="feature-highlight-card">
           <div class="feature-icon-badge">🤖</div>
           <h4 class="feature-card-title">Agentforce & AI Studio</h4>
-          <p class="feature-card-desc">Audit Apex security, prevent SOQL injection, and test Einstein Copilots and Prompt Builder with zero data retention.</p>
+          <p class="feature-card-desc">Audit Apex security, prevent SOQL injection, and test Einstein Copilots and
+            Prompt Builder with zero data retention.</p>
         </div>
       </div>
     </section>
@@ -2303,7 +2610,8 @@
           <span>⭐</span> 2-Hour Post-Installation Experience & Review
         </div>
         <div style="font-size: 13px; color: #cbd5e1; margin-top: 6px; line-height: 1.5;">
-          Our automated 2-hour experience tracker invites feedback after you've had time to inspect your org. You can also preview and share your rating right now to shape future updates!
+          Our automated 2-hour experience tracker invites feedback after you've had time to inspect your org. You can
+          also preview and share your rating right now to shape future updates!
         </div>
       </div>
       <button id="btn-open-experience" class="btn-hero btn-hero-amber" style="padding: 10px 22px;">
@@ -2315,11 +2623,12 @@
     <section class="subscription-container" id="subscribe-section">
       <div style="text-align: center; margin-bottom: 24px;">
         <h2 style="font-size: 28px; font-weight: 800; margin: 0 0 8px 0;">Subscribe for Updates & Advisory Drops</h2>
-        <p style="color: #94a3b8; font-size: 14px; margin: 0;">Choose how you want to subscribe. Both paths are completely free and non-intrusive.</p>
+        <p style="color: #94a3b8; font-size: 14px; margin: 0;">Choose how you want to subscribe. Both paths are
+          completely free and non-intrusive.</p>
       </div>
 
       <div class="sub-grid">
-        
+
         <!-- Path 1: Without Login (Anonymous / Direct Email) -->
         <div class="sub-card highlight">
           <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -2340,10 +2649,12 @@
 
           <div style="display: flex; flex-direction: column; gap: 10px; margin-top: auto;">
             <input type="email" id="sub-email-input" class="sub-input" placeholder="Enter your email (optional)">
-            <button id="btn-sub-without-login" class="btn-hero btn-hero-primary" style="justify-content: center; width: 100%; padding: 12px;">
+            <button id="btn-sub-without-login" class="btn-hero btn-hero-primary"
+              style="justify-content: center; width: 100%; padding: 12px;">
               <span>📬</span> Subscribe Without Login
             </button>
-            <div id="sub-status-without" style="font-size: 12px; text-align: center; color: #86efac; min-height: 18px;"></div>
+            <div id="sub-status-without" style="font-size: 12px; text-align: center; color: #86efac; min-height: 18px;">
+            </div>
           </div>
         </div>
 
@@ -2366,13 +2677,16 @@
           </ul>
 
           <div style="display: flex; flex-direction: column; gap: 10px; margin-top: auto;">
-            <div id="detected-org-box" style="background: rgba(30, 41, 59, 0.8); border: 1px solid #334155; padding: 10px; border-radius: 8px; font-size: 12px; color: #94a3b8;">
+            <div id="detected-org-box"
+              style="background: rgba(30, 41, 59, 0.8); border: 1px solid #334155; padding: 10px; border-radius: 8px; font-size: 12px; color: #94a3b8;">
               <span id="detected-org-status">Detecting active Salesforce session...</span>
             </div>
-            <button id="btn-sub-with-login" class="btn-hero btn-hero-secondary" style="justify-content: center; width: 100%; padding: 12px;">
+            <button id="btn-sub-with-login" class="btn-hero btn-hero-secondary"
+              style="justify-content: center; width: 100%; padding: 12px;">
               <span>⚡</span> Subscribe with Salesforce Identity
             </button>
-            <div id="sub-status-with" style="font-size: 12px; text-align: center; color: #93c5fd; min-height: 18px;"></div>
+            <div id="sub-status-with" style="font-size: 12px; text-align: center; color: #93c5fd; min-height: 18px;">
+            </div>
           </div>
         </div>
 
@@ -2382,27 +2696,35 @@
     <!-- User Requirements & Feature Enhancements Portal -->
     <section class="req-section" id="requirements-section">
       <div style="text-align: center; margin-bottom: 24px;">
-        <span class="hero-badge" style="background: rgba(168, 85, 247, 0.15); border-color: #a855f7; color: #c084fc;">💡 COMMUNITY ROADMAP & ENHANCEMENTS</span>
+        <span class="hero-badge" style="background: rgba(168, 85, 247, 0.15); border-color: #a855f7; color: #c084fc;">💡
+          COMMUNITY ROADMAP & ENHANCEMENTS</span>
         <h2 style="font-size: 28px; font-weight: 800; margin: 0 0 8px 0;">Request a New Feature or Enhancement</h2>
-        <p style="color: #94a3b8; font-size: 14px; margin: 0;">Have a new requirement or custom tool idea for your org? Submit it below. Our CTA architect team reviews and implements top-voted features weekly.</p>
+        <p style="color: #94a3b8; font-size: 14px; margin: 0;">Have a new requirement or custom tool idea for your org?
+          Submit it below. Our CTA architect team reviews and implements top-voted features weekly.</p>
       </div>
 
       <div class="req-card-grid">
         <!-- Submit Requirement Form -->
         <div class="req-box">
-          <h3 style="margin: 0; font-size: 18px; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
+          <h3
+            style="margin: 0; font-size: 18px; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
             <span>✍️</span> Submit Your Requirement
           </h3>
-          <p style="font-size: 13px; color: #94a3b8; margin: 0;">Login is not required. Share your use case or workflow pain point.</p>
+          <p style="font-size: 13px; color: #94a3b8; margin: 0;">Login is not required. Share your use case or workflow
+            pain point.</p>
 
           <div>
-            <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Requirement / Feature Title *</label>
-            <input type="text" id="req-title-input" class="sub-input" placeholder="e.g. Export Schema to PlantUML / Mermaid">
+            <label
+              style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Requirement
+              / Feature Title *</label>
+            <input type="text" id="req-title-input" class="sub-input"
+              placeholder="e.g. Export Schema to PlantUML / Mermaid">
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
             <div>
-              <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Category</label>
+              <label
+                style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Category</label>
               <select id="req-category-select" class="sub-input" style="cursor: pointer;">
                 <option value="New Feature Request">New Feature Request</option>
                 <option value="Existing Tool Enhancement">Tool Enhancement</option>
@@ -2414,7 +2736,9 @@
               </select>
             </div>
             <div>
-              <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Impact / Priority</label>
+              <label
+                style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Impact /
+                Priority</label>
               <select id="req-priority-select" class="sub-input" style="cursor: pointer;">
                 <option value="Critical (Enterprise Need)">Critical (Enterprise Need)</option>
                 <option value="High (Very Helpful)" selected>High (Very Helpful)</option>
@@ -2424,16 +2748,21 @@
           </div>
 
           <div>
-            <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Description & Expected Workflow</label>
-            <textarea id="req-desc-input" class="sub-input" style="min-height: 80px; resize: vertical;" placeholder="Describe how this feature will help your team or what steps you'd like it to automate..."></textarea>
+            <label
+              style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Description
+              & Expected Workflow</label>
+            <textarea id="req-desc-input" class="sub-input" style="min-height: 80px; resize: vertical;"
+              placeholder="Describe how this feature will help your team or what steps you'd like it to automate..."></textarea>
           </div>
 
           <div>
-            <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Email for Status Updates (Optional)</label>
+            <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px;">Email
+              for Status Updates (Optional)</label>
             <input type="email" id="req-email-input" class="sub-input" placeholder="architect@company.com">
           </div>
 
-          <button id="btn-submit-req" class="btn-hero btn-hero-primary" style="justify-content: center; width: 100%; padding: 13px;">
+          <button id="btn-submit-req" class="btn-hero btn-hero-primary"
+            style="justify-content: center; width: 100%; padding: 13px;">
             <span>🚀</span> Submit Requirement to Roadmap
           </button>
         </div>
@@ -2441,13 +2770,15 @@
         <!-- Community Trending Requirements List -->
         <div class="req-box">
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="margin: 0; font-size: 18px; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
+            <h3
+              style="margin: 0; font-size: 18px; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
               <span>🔥</span> Trending Community Ideas
             </h3>
             <span style="font-size: 12px; color: #94a3b8;">Click ▲ to upvote</span>
           </div>
 
-          <div id="requirements-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 440px; overflow-y: auto; padding-right: 4px;">
+          <div id="requirements-list"
+            style="display: flex; flex-direction: column; gap: 10px; max-height: 440px; overflow-y: auto; padding-right: 4px;">
             <!-- Rendered dynamically by welcome.js -->
           </div>
         </div>
@@ -2456,7 +2787,8 @@
   </main>
 
   <!-- Footer -->
-  <footer style="margin-top: auto; border-top: 1px solid #1e293b; padding: 28px 20px; text-align: center; font-size: 13px; color: #64748b;">
+  <footer
+    style="margin-top: auto; border-top: 1px solid #1e293b; padding: 28px 20px; text-align: center; font-size: 13px; color: #64748b;">
     <div style="margin-bottom: 8px; color: #94a3b8; font-weight: 600;">
       ⚡ SF Power Inspector PRO • Open & Independent Salesforce Developer Toolkit
     </div>
@@ -2484,7 +2816,8 @@
           <span style="font-size: 26px;">⚡</span>
           <div>
             <div style="font-weight: 800; font-size: 18px; color: #f8fafc;">Install SF Power Inspector PRO</div>
-            <div style="font-size: 12.5px; color: #94a3b8;">1-Click Setup for Chrome, Edge, Brave & Opera (30 Seconds)</div>
+            <div style="font-size: 12.5px; color: #94a3b8;">1-Click Setup for Chrome, Edge, Brave & Opera (30 Seconds)
+            </div>
           </div>
         </div>
         <button id="btn-close-install-modal" class="modal-close-btn" title="Close modal">✕</button>
@@ -2495,7 +2828,8 @@
         <div class="download-action-box">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
             <div>
-              <div style="font-weight: 800; font-size: 15px; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+              <div
+                style="font-weight: 800; font-size: 15px; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
                 <span>📦</span> Download Ready-to-Install Extension
               </div>
               <div style="font-size: 12px; color: #cbd5e1; margin-top: 3px;">
@@ -2503,10 +2837,12 @@
               </div>
             </div>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-              <a href="../sf-power-inspector-v1.0.0.zip" download="sf-power-inspector-v1.0.0.zip" id="btn-modal-download-zip" class="btn-modal-download">
+              <a href="../sf-power-inspector-v1.0.0.zip" download="sf-power-inspector-v1.0.0.zip"
+                id="btn-modal-download-zip" class="btn-modal-download">
                 <span>⬇️</span> Download ZIP (v1.0.0)
               </a>
-              <a href="https://github.com/AnyTaskAI/sf-power-inspector/releases" target="_blank" rel="noopener" class="btn-modal-github">
+              <a href="https://github.com/AnyTaskAI/sf-power-inspector/releases" target="_blank" rel="noopener"
+                class="btn-modal-github">
                 <span>🐙</span> GitHub Release
               </a>
             </div>
@@ -2519,7 +2855,8 @@
             <div class="modal-step-number">1</div>
             <div class="modal-step-info">
               <div class="modal-step-title">Extract the ZIP File</div>
-              <div class="modal-step-desc">Right-click the downloaded <code>sf-power-inspector-v1.0.0.zip</code> and choose <strong>Extract All</strong> to any local folder.</div>
+              <div class="modal-step-desc">Right-click the downloaded <code>sf-power-inspector-v1.0.0.zip</code> and
+                choose <strong>Extract All</strong> to any local folder.</div>
             </div>
           </div>
 
@@ -2529,7 +2866,8 @@
               <div class="modal-step-title">Open Chrome Extensions Manager</div>
               <div class="modal-step-desc">
                 In your browser, visit <code id="txt-chrome-url">chrome://extensions</code>
-                <button id="btn-copy-chrome-url" class="btn-copy-inline" title="Copy URL to clipboard">📋 Copy URL</button>
+                <button id="btn-copy-chrome-url" class="btn-copy-inline" title="Copy URL to clipboard">📋 Copy
+                  URL</button>
                 and toggle <strong>Developer mode</strong> (top-right corner).
               </div>
             </div>
@@ -2539,15 +2877,21 @@
             <div class="modal-step-number">3</div>
             <div class="modal-step-info">
               <div class="modal-step-title">Click "Load Unpacked"</div>
-              <div class="modal-step-desc">Click the <strong>Load unpacked</strong> button and select the extracted <code>addon</code> folder. Done! Use shortcut <kbd style="background:#0b1120; border:1px solid #334155; padding:2px 6px; border-radius:4px; font-size:11px; color:#38bdf8;">Alt+Shift+I</kbd> on any active Salesforce tab.</div>
+              <div class="modal-step-desc">Click the <strong>Load unpacked</strong> button and select the extracted
+                <code>addon</code> folder. Done! Use shortcut <kbd
+                  style="background:#0b1120; border:1px solid #334155; padding:2px 6px; border-radius:4px; font-size:11px; color:#38bdf8;">Alt+Shift+I</kbd>
+                on any active Salesforce tab.
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="modal-footer">
-        <span style="font-size: 12px; color: #64748b;">© 2026 ParrotRakhy (Developer & Founder) • 100% Free & Open Source</span>
-        <button id="btn-modal-done" class="btn btn-primary" style="padding: 8px 18px; font-size: 13px;">Got It, Thanks! 👍</button>
+        <span style="font-size: 12px; color: #64748b;">© 2026 ParrotRakhy (Developer & Founder) • 100% Free & Open
+          Source</span>
+        <button id="btn-modal-done" class="btn btn-primary" style="padding: 8px 18px; font-size: 13px;">Got It, Thanks!
+          👍</button>
       </div>
     </div>
   </div>
@@ -2556,5 +2900,5 @@
 
   <script type="module" src="welcome.js"></script>
 </body>
-</html>
 
+</html>

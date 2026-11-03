@@ -661,7 +661,11 @@ chrome.commands?.onCommand.addListener((command, tab) => {
 
 // ─── First Install Welcome & 2-Hour Experience Scheduling ───────────
 chrome.runtime.onInstalled.addListener((details) => {
-  recordInstallEvent();
+  try {
+    recordInstallEvent();
+  } catch (err) {
+    console.warn("[SF Power Inspector] Telemetry install record non-fatal:", err);
+  }
 
   if (details.reason === "install") {
     chrome.tabs.create({
@@ -674,21 +678,25 @@ chrome.runtime.onInstalled.addListener((details) => {
 if (chrome.alarms?.onAlarm) {
   chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === "sfpi_post_install_experience_2h") {
-      if (isExperienceDue()) {
-        chrome.tabs.create({
-          url: chrome.runtime.getURL("experience.html?ref=2h_alarm"),
-        });
-        if (chrome.notifications?.create) {
-          try {
-            chrome.notifications.create("sfpi-2h-experience", {
-              type: "basic",
-              iconUrl: "images/icon128.png",
-              title: "⭐ 2 Hours with SF Power Inspector PRO",
-              message: "How has your experience been? Rate features, explore tips, or subscribe to update drops!",
-              priority: 1
-            });
-          } catch (e) {}
+      try {
+        if (isExperienceDue()) {
+          chrome.tabs.create({
+            url: chrome.runtime.getURL("experience.html?ref=2h_alarm"),
+          });
+          if (chrome.notifications?.create) {
+            try {
+              chrome.notifications.create("sfpi-2h-experience", {
+                type: "basic",
+                iconUrl: "images/icon128.png",
+                title: "⭐ 2 Hours with SF Power Inspector PRO",
+                message: "How has your experience been? Rate features, explore tips, or subscribe to update drops!",
+                priority: 1
+              });
+            } catch (e) {}
+          }
         }
+      } catch (err) {
+        console.warn("[SF Power Inspector] 2h experience check non-fatal:", err);
       }
     }
   });
