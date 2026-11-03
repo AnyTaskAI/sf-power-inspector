@@ -6,31 +6,47 @@
 
 // ─── Universal Safe Storage Adapter (Service Worker & Window Resilient) ───────
 const _aiMemStore = new Map();
+
+function getNativeStorage() {
+  try {
+    if (typeof window !== "undefined" && window && window.localStorage) {
+      return window.localStorage;
+    }
+    if (typeof globalThis !== "undefined" && globalThis.localStorage) {
+      return globalThis.localStorage;
+    }
+  } catch (e) {}
+  return null;
+}
+
 const safeStorage = {
   getItem: (k) => {
-    try {
-      if (typeof localStorage !== "undefined" && localStorage && typeof localStorage.getItem === "function") {
-        return localStorage.getItem(k);
-      }
-    } catch (e) {}
+    const native = getNativeStorage();
+    if (native && typeof native.getItem === "function") {
+      try {
+        return native.getItem(k);
+      } catch (e) {}
+    }
     return _aiMemStore.has(k) ? _aiMemStore.get(k) : null;
   },
   setItem: (k, v) => {
     const s = String(v);
+    const native = getNativeStorage();
+    if (native && typeof native.setItem === "function") {
+      try {
+        native.setItem(k, s);
+      } catch (e) {}
+    }
     _aiMemStore.set(k, s);
-    try {
-      if (typeof localStorage !== "undefined" && localStorage && typeof localStorage.setItem === "function") {
-        localStorage.setItem(k, s);
-      }
-    } catch (e) {}
   },
   removeItem: (k) => {
+    const native = getNativeStorage();
+    if (native && typeof native.removeItem === "function") {
+      try {
+        native.removeItem(k);
+      } catch (e) {}
+    }
     _aiMemStore.delete(k);
-    try {
-      if (typeof localStorage !== "undefined" && localStorage && typeof localStorage.removeItem === "function") {
-        localStorage.removeItem(k);
-      }
-    } catch (e) {}
   }
 };
 
